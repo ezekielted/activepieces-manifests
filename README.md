@@ -29,7 +29,6 @@ This repository contains a collection of JSON workflow files for Activepieces, a
 ### Data Processing & ETL
 *   **Consultancy Database**: Manages consultancy data.
 *   **Data Entry Metadata Extraction**: Extracts metadata from data entries.
-*   **Data Entry Metadata Extraction (1)**: Variant of metadata extraction.
 *   **PDF Datasource Table Extractor**: Extracts tables from PDF datasources.
 *   **Stripe Charge → QuickBooks**: Syncs Stripe charges to QuickBooks.
 *   **Webscraper**: General web scraping workflow.
@@ -37,7 +36,6 @@ This repository contains a collection of JSON workflow files for Activepieces, a
 ### Document & File Management
 *   **Convert html to pdf and save to drive**: Converts HTML content to PDF and saves it.
 *   **Download email pdf attachments then convert to Images**: Processes email attachments.
-*   **Download email pdf attachments then convert to Images (1)**: Variant of attachment processing.
 
 ### Marketing & Communications
 *   **External Newsletter**: Manages external newsletters.
