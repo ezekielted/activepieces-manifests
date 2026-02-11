@@ -1,0 +1,357 @@
+﻿{
+  "name": "Retrieve and Summarize Article Content",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-http",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-store"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "grIQFcTzvADcIGG1zCmW4"
+  },
+  "flows": [
+    {
+      "displayName": "Retrieve and Summarize Article Content",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Month",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "day_of_the_month": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "~0.1.5",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 13,
+            "day_of_the_month": 29
+          },
+          "triggerName": "every_month"
+        },
+        "nextAction": {
+          "name": "step_6",
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "url": "https://newsapi.org/v2/everything?q=healthcare%20ai&20technology%20in%20africa&pageSize=4&apiKey=d628db53655748b9b482b158cc04259a",
+              "body": {},
+              "method": "GET",
+              "headers": {},
+              "failsafe": false,
+              "body_type": "none",
+              "use_proxy": false,
+              "queryParams": {},
+              "proxy_settings": {}
+            },
+            "pieceName": "@activepieces/piece-http",
+            "pieceType": "OFFICIAL",
+            "actionName": "send_request",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.6.1",
+            "propertySettings": {
+              "url": {
+                "type": "MANUAL"
+              },
+              "body": {
+                "type": "MANUAL"
+              },
+              "method": {
+                "type": "MANUAL"
+              },
+              "headers": {
+                "type": "MANUAL"
+              },
+              "failsafe": {
+                "type": "MANUAL"
+              },
+              "body_type": {
+                "type": "MANUAL"
+              },
+              "use_proxy": {
+                "type": "MANUAL"
+              },
+              "queryParams": {
+                "type": "MANUAL"
+              },
+              "proxy_settings": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {},
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_4",
+            "type": "LOOP_ON_ITEMS",
+            "valid": true,
+            "settings": {
+              "items": "{{step_6['body']['articles']}}",
+              "propertySettings": {},
+              "sampleDataSettings": {}
+            },
+            "displayName": "Extract articles",
+            "firstLoopAction": {
+              "name": "step_8",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "url": "https://api.diffbot.com/v3/article?url={{step_4['item']['url']}}&token=REPLACE_WITH_API_KEY",
+                  "body": {},
+                  "method": "GET",
+                  "headers": {},
+                  "failsafe": false,
+                  "body_type": "none",
+                  "use_proxy": false,
+                  "queryParams": {},
+                  "proxy_settings": {}
+                },
+                "pieceName": "@activepieces/piece-http",
+                "pieceType": "OFFICIAL",
+                "actionName": "send_request",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.6.1",
+                "propertySettings": {
+                  "url": {
+                    "type": "MANUAL"
+                  },
+                  "body": {
+                    "type": "MANUAL"
+                  },
+                  "method": {
+                    "type": "MANUAL"
+                  },
+                  "headers": {
+                    "type": "MANUAL"
+                  },
+                  "failsafe": {
+                    "type": "MANUAL"
+                  },
+                  "body_type": {
+                    "type": "MANUAL"
+                  },
+                  "use_proxy": {
+                    "type": "MANUAL"
+                  },
+                  "queryParams": {
+                    "type": "MANUAL"
+                  },
+                  "proxy_settings": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {},
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_5",
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "url": "https://ollamapi.e4eweb.space/api/generate",
+                    "body": {
+                      "data": {
+                        "model": "llama3.2:3b",
+                        "prompt": "Condense the main ideas of the article into a single, concise, and well-structured paragraph. Eliminate filler, redundant, or non-essential language like 'Here is the article', and ensure the summary is presented in plain text without any numbering or formatting, focusing solely on clarity and coherence: {{step_8['body']['objects'][0]['text']}}",
+                        "stream": false,
+                        "options": {
+                          "temperature": 0.6
+                        }
+                      }
+                    },
+                    "method": "POST",
+                    "headers": {},
+                    "failsafe": false,
+                    "body_type": "json",
+                    "use_proxy": false,
+                    "queryParams": {},
+                    "proxy_settings": {}
+                  },
+                  "pieceName": "@activepieces/piece-http",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "send_request",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.6.1",
+                  "propertySettings": {
+                    "url": {
+                      "type": "MANUAL"
+                    },
+                    "body": {
+                      "type": "MANUAL"
+                    },
+                    "method": {
+                      "type": "MANUAL"
+                    },
+                    "headers": {
+                      "type": "MANUAL"
+                    },
+                    "failsafe": {
+                      "type": "MANUAL"
+                    },
+                    "body_type": {
+                      "type": "MANUAL"
+                    },
+                    "use_proxy": {
+                      "type": "MANUAL"
+                    },
+                    "queryParams": {
+                      "type": "MANUAL"
+                    },
+                    "proxy_settings": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {},
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_16",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "flavor": "github",
+                      "tables": true,
+                      "markdown": "{{step_5['body']['response']}}",
+                      "noHeaderId": false,
+                      "headerLevelStart": 1,
+                      "simpleLineBreaks": false,
+                      "openLinksInNewWindow": false
+                    },
+                    "pieceName": "@activepieces/piece-text-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "markdown_to_html",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.2.7",
+                    "propertySettings": {
+                      "flavor": {
+                        "type": "MANUAL"
+                      },
+                      "tables": {
+                        "type": "MANUAL"
+                      },
+                      "markdown": {
+                        "type": "MANUAL"
+                      },
+                      "noHeaderId": {
+                        "type": "MANUAL"
+                      },
+                      "headerLevelStart": {
+                        "type": "MANUAL"
+                      },
+                      "simpleLineBreaks": {
+                        "type": "MANUAL"
+                      },
+                      "openLinksInNewWindow": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_7",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "markdown",
+                        "value": "{{step_16}}",
+                        "store_scope": "RUN",
+                        "ignore_if_exists": false
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "add_to_list",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "~0.5.4",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "value": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "ignore_if_exists": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "displayName": "Add To List"
+                  },
+                  "displayName": "Markdown to HTML"
+                },
+                "displayName": "Summarize article content"
+              },
+              "displayName": "Get article content"
+            }
+          },
+          "displayName": "Get article links"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

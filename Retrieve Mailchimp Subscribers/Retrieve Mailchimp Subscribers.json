@@ -1,0 +1,228 @@
+﻿{
+  "name": "Retrieve Mailchimp Subscribers",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-http",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-delay"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "lFRTm3p6KIRQUcyoybPPS"
+  },
+  "flows": [
+    {
+      "displayName": "Retrieve Mailchimp Subscribers",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "~0.1.10",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_28",
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "url": "https://us11.api.mailchimp.com/3.0/lists/c25e50b70a/members?status=subscribed&count=1000",
+              "body": {},
+              "method": "GET",
+              "headers": {
+                "Authorization": "Basic REPLACE_WITH_API_KEY"
+              },
+              "failsafe": false,
+              "body_type": "none",
+              "use_proxy": false,
+              "queryParams": {},
+              "proxy_settings": {}
+            },
+            "pieceName": "@activepieces/piece-http",
+            "pieceType": "OFFICIAL",
+            "actionName": "send_request",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.6.1",
+            "propertySettings": {
+              "url": {
+                "type": "MANUAL"
+              },
+              "body": {
+                "type": "MANUAL"
+              },
+              "method": {
+                "type": "MANUAL"
+              },
+              "headers": {
+                "type": "MANUAL"
+              },
+              "failsafe": {
+                "type": "MANUAL"
+              },
+              "body_type": {
+                "type": "MANUAL"
+              },
+              "use_proxy": {
+                "type": "MANUAL"
+              },
+              "queryParams": {
+                "type": "MANUAL"
+              },
+              "proxy_settings": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {},
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_29",
+            "type": "LOOP_ON_ITEMS",
+            "valid": true,
+            "settings": {
+              "items": "{{step_28['body']['members']}}",
+              "propertySettings": {},
+              "sampleDataSettings": {}
+            },
+            "displayName": "Send out Newsletter",
+            "firstLoopAction": {
+              "name": "step_6",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "cc": [],
+                  "to": [
+                    "{{step_29['item']['email_address']}}"
+                  ],
+                  "bcc": [],
+                  "auth": "{{connections['smtp.office365.com']}}",
+                  "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Helvetica, Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #fafafa;\n        }\n        .header-section {\n            text-align: left;\n            margin-bottom: 30px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); \n            padding: 20px;\n            background-color: #ffffff;\n        }\n        .header-image {\n            max-width: 200px; \n            height: auto;\n            margin: 0 0 12px 0;\n        }\n        .header-title {\n            color: #003300;\n            font-size: 20px; \n            margin: 0;\n            line-height: 1.3;\n            font-weight: bold;\n        }\n        .green-header {\n            color: #006400; \n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .credits {\n            text-align: center; \n            display: block;\n            margin: 10px auto;\n        }\n        .section {\n            width: 100%;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 10px;\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 25px;\n            height: 25px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        .quote {\n            text-align: center;\n            margin: 20px 0;\n        }\n        .button {\n            display: inline-block;\n            padding: 8px 24px;\n            background-color: #006400;\n            color: white;\n            text-decoration: none;\n            border-radius: 4px;\n            font-weight: 500;\n            margin: 10px 0 20px;\n            border: none;\n            cursor: pointer;\n            transition: background-color 0.3s ease;\n        }\n        .button:hover {\n            background-color: #005400;\n        }\n        .button-container {\n            text-align: center;\n            margin: 20px 0;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n            .header-title {\n                font-size: 18px; \n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header-section\">\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/758ef531-0f17-44ba-9b16-dd72693e6c0f.png\" alt=\"Federal Ministry of Health\" class=\"header-image\">\n            <h1 class=\"header-title\">The Multi-Source Data Analytics and<br>Triangulation (MSDAT) Platform Update</h1>\n        </div>\n        <div class=\"section\">\n            <b class=\"green-header\"><i>Saving lives through digital health data</i></b>\n            <p>Hi {{step_29['item']['full_name']}},</p>\n            <p>I trust this meets you well.</p>\n            <p>You got this mail because you have either interacted with the MSDAT platform or the team behind it. We are excited to introduce the new MSDAT 2.6 Version</p>\n            <p>This MSDAT platform was set up by the Federal Ministry of Health (FMoH) through a collaboration with eHealth4everyone. It provides a single, transparent view of key health indicators from multiple data sources.</p>\n            <p>What this means is that you have access to different perspectives of any health indicator all in one place. By \"different perspectives,\" we mean results from various trusted health-related data collection activities that aid decision-making processes in the country.</p>\n            <p>The platform also allows the comparison of key metrics across three categories of data sources, namely; routine, surveys, and global estimates.</p>\n        </div>\n        <div class=\"main-content\">\n            <div class=\"section\">\n                <h4 class=\"green-header\">Dashboards Update</h4>\n                <p>{{trigger['body']['data'][0]['value']}} <a href=\"{{trigger['body']['data'][1]['value']}}\" target=\"#blank\">Click here.</a></p><br>\n                <img src=\"{{trigger['body']['data'][2]['value']['url']}}\" alt=\"Newsletter Image\">\n                <small class=\"credits\">{{trigger['body']['data'][3]['value']}}</small><br>\n                <h4 class=\"green-header\">Data Update</h4>\n                <p>{{trigger['body']['data'][4]['value']}}</p><br>\n                <b class=\"green-header\">Onboarding</b>\n                <p>\n                    The onboarding feature introduces you to the MSDAT and the sections of the platform. It also provides a link to a video tutorial that gives a detailed explanation of each section of the MSDAT\n                </p>\n                <div class=\"button-container\">\n                    <a href=\"https://www.youtube.com/watch?v=k75zoZ1SXgk\" class=\"button\">Watch Now</a>\n                </div>\n                <b class=\"green-header\">Tour guide</b>\n                <p>\n                    The tour guide is very interactive; it shows the basic functions and where to locate them on the platform. It usually follows after the onboarding process. However, this tour guide can be accessed at the right top corner of the page as seen below.\n                </p>\n                <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/d297d518-508f-4d8f-a54f-6a30f5618fa9.png\" alt=\"MSDAT Platform Interface\"><br><br>\n                <b class=\"green-header\">Feedback button</b>\n                <p>\n                    We love this feature, it helps us get specific feedback from users like you. The feature presents the opportunity to capture segments of the platform where you want to provide feedback. Knowing how technology can be unpredictable, it is possible users will experience unique anomalies and we would want to be able to prevent their re-occurrence. This feedback button is our mutual friend.\n                </p>\n                <div class=\"button-container\">\n                    <a href=\"https://msdat.fmohconnect.gov.ng/central_analytics\" class=\"button\">Give Feedback</a>\n                </div>\n            <div class=\"endnote\">\n             <p>In subsequent editions of this newsletter, we would discuss more features and also inform you about new developments as they are implemented on the platform. We would love to get your feedback and suggestions.\nIf you have any questions, suggestions or comments regarding the platform; or you would like to suggest the kind of content you want to see in these newsletters, kindly send an email to <a href=\"mailto:msdat@e4email.net\" target=\"_blank\">msdat@e4email.net</a></p><br>\n            <small><b>You got this mail because you either have interacted with the <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Health_Outcomes_and_Service_Coverage\" target=\"#blank\">MSDAT</a> platform or our team at a point in time.</b></small>\n            <h4 class=\"credits\">THANKS FOR READING</h4>\n            <i class=\"credits\">Best regards,<br> from the Department of Health Planning, Research and Statistics<br> for the Federal Ministry of Health</i>\n            </div>\n            </div>\n        </div>\n        <footer class=\"footer\">\n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n                <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n                </a>\n                <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n                </a>\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) 2025 Federal Ministry of Health, All rights reserved.</i>\n            \n            <div class=\"preferences\">\n               <b>Our mailing address is:</b><br>\n               Department of Health Planning Research and Statistics (DHPRS)<br>\n               New Federal Secretariat Complex, Phase III,<br>\n               Ahmadu Bello Way, Central Business District,<br>\n               FCT Abuja, Nigeria<br><br>\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=c25e50b70a&e=[UNIQID]&c=e797a0de77\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=c25e50b70a&t=b&e=[UNIQID]&c=e797a0de77\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                  "from": "automationagent@e4email.net",
+                  "subject": "{{trigger['body']['data'][5]['value']}}",
+                  "body_type": "html",
+                  "senderName": "ehealth4everyone",
+                  "customHeaders": {}
+                },
+                "pieceName": "@activepieces/piece-smtp",
+                "pieceType": "OFFICIAL",
+                "actionName": "send-email",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.2.4",
+                "propertySettings": {
+                  "cc": {
+                    "type": "MANUAL"
+                  },
+                  "to": {
+                    "type": "MANUAL"
+                  },
+                  "bcc": {
+                    "type": "MANUAL"
+                  },
+                  "auth": {
+                    "type": "MANUAL"
+                  },
+                  "body": {
+                    "type": "MANUAL"
+                  },
+                  "from": {
+                    "type": "MANUAL"
+                  },
+                  "subject": {
+                    "type": "MANUAL"
+                  },
+                  "body_type": {
+                    "type": "MANUAL"
+                  },
+                  "senderName": {
+                    "type": "MANUAL"
+                  },
+                  "customHeaders": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {},
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_22",
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "unit": "seconds",
+                    "delayFor": "2"
+                  },
+                  "pieceName": "@activepieces/piece-delay",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "delayFor",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.3.12",
+                  "propertySettings": {
+                    "unit": {
+                      "type": "MANUAL"
+                    },
+                    "delayFor": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {},
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "displayName": "Delay For"
+              },
+              "displayName": "Send Email to Audience"
+            }
+          },
+          "displayName": "Retrieve Mailchimp Audience List"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

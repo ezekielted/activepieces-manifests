@@ -1,0 +1,1311 @@
+﻿{
+  "name": "Literature Review Writing Agent",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-json",
+    "@activepieces/piece-http",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-store",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "8BDbeETncAQ0wnuSijcXN"
+  },
+  "flows": [
+    {
+      "displayName": "Literature Review Writing Agent",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New Row Added",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "auth": {
+              "type": "MANUAL"
+            },
+            "sheet_id": {
+              "type": "MANUAL"
+            },
+            "spreadsheet_id": {
+              "type": "MANUAL"
+            },
+            "include_team_drives": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-google-sheets",
+          "pieceVersion": "~0.11.14",
+          "input": {
+            "auth": "{{connections['AI-drive-GoogleSheets']}}",
+            "sheet_id": 934236656,
+            "spreadsheet_id": "1FkiWeo2uPnJGKOJWU_IWGdM3l1Z6JL66PWHAtKKtieQ",
+            "include_team_drives": true
+          },
+          "triggerName": "googlesheets_new_row_added"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "text": "{{trigger['values']['E']}}"
+            },
+            "pieceName": "@activepieces/piece-json",
+            "pieceType": "OFFICIAL",
+            "actionName": "convert_text_to_json",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.0.2",
+            "propertySettings": {
+              "text": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-01-14T13:31:13.975Z",
+              "sampleDataFileId": "FJd7NYdvMlMKSAJtPrUQQ"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_10",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                "memKey": "row_number",
+                "sheet_id": 0,
+                "startRow": 1,
+                "groupSize": "100",
+                "spreadsheet_id": "1MO1LrM2ibcJ6VF_aC1_kXz9nn1hmfIMOnCBTY8jp9WM",
+                "include_team_drives": true
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "pieceType": "OFFICIAL",
+              "actionName": "get_next_rows",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.11.14",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "memKey": {
+                  "type": "MANUAL"
+                },
+                "sheet_id": {
+                  "type": "MANUAL"
+                },
+                "startRow": {
+                  "type": "MANUAL"
+                },
+                "groupSize": {
+                  "type": "MANUAL"
+                },
+                "spreadsheet_id": {
+                  "type": "MANUAL"
+                },
+                "include_team_drives": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-01-22T11:28:08.990Z",
+                "sampleDataFileId": "M3jmuO18UrQsuIXZKEiKQ"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "skip": false,
+              "type": "LOOP_ON_ITEMS",
+              "valid": true,
+              "settings": {
+                "items": "{{step_1}}",
+                "propertySettings": {},
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-01-16T08:47:38.199Z",
+                  "sampleDataFileId": "Ugy76XUAMpIuJurwKm0pO"
+                }
+              },
+              "nextAction": {
+                "name": "step_16",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "key": "table_data5",
+                    "store_scope": "RUN",
+                    "defaultValue": "[]"
+                  },
+                  "pieceName": "@activepieces/piece-store",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "get",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.5.4",
+                  "propertySettings": {
+                    "key": {
+                      "type": "MANUAL"
+                    },
+                    "store_scope": {
+                      "type": "MANUAL"
+                    },
+                    "defaultValue": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-01-23T22:12:40.771Z",
+                    "sampleDataFileId": "4rjkMvlxA9MFbLpk0s4ak"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_23",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "texts": [
+                        "{{step_16}}"
+                      ]
+                    },
+                    "pieceName": "@activepieces/piece-text-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "concat",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.4.0",
+                    "propertySettings": {
+                      "texts": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-01-23T23:03:16.136Z",
+                      "sampleDataFileId": "Fvcsis1gSCTmkpXq7VkDZ"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_26",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "text": "{{trigger['values']['D']}}"
+                      },
+                      "pieceName": "@activepieces/piece-json",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "convert_text_to_json",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "~0.0.2",
+                      "propertySettings": {
+                        "text": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-01-24T12:42:16.300Z",
+                        "sampleDataFileId": "hzeMwUb5RGq60d3qCRJJB"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_27",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "texts": [
+                            "{{step_26}}"
+                          ]
+                        },
+                        "pieceName": "@activepieces/piece-text-helper",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "concat",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.4.0",
+                        "propertySettings": {
+                          "texts": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-01-24T12:43:00.331Z",
+                          "sampleDataFileId": "o5Jltnx6dJRyQrb8sqV1o"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_28",
+                        "skip": false,
+                        "type": "CODE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "links": "{{step_1}}"
+                          },
+                          "sourceCode": {
+                            "code": "export const code = async (inputs) => {\n  const links = inputs.links; // Assuming `inputs.links` is an array of HTTP links.\n  if (!Array.isArray(links)) {\n    throw new Error(\"Invalid input: 'links' must be an array.\");\n  }\n\n  // Generate HTML string with ordered list\n  const htmlWrappedLinks = `\n    <ol>\n      ${links.map((link) => `<li><a href=\"${link}\" target=\"_blank\">${link}</a></li>`).join(\"\\n\")}\n    </ol>\n  `;\n\n  return htmlWrappedLinks;\n};",
+                            "packageJson": "{}"
+                          },
+                          "propertySettings": {
+                            "links": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-01-26T11:13:24.807Z",
+                            "sampleDataFileId": "uQUujUj00FJwBUFWv2gtD"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_24",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Literature Review: Mapping Health Information Systems</title>\n    <style>\n        body {\n            font-family: \"Times New Roman\", Times, serif;\n            line-height: 1.5;\n            margin: 0;\n            padding: 20px;\n            font-size: 18px;\n        }\n        .title {\n            font-weight: bold;\n            margin-bottom: 20px;\n        }\n        .section {\n            margin-bottom: 15px;\n        }\n        .section-title {\n            font-weight: bold;\n            margin-bottom: 5px;\n        }\n        .table {\n            width: 100%;\n            border-collapse: collapse;\n            margin-top: 20px;\n        }\n        .table th, .table td {\n            border: 1px solid black;\n            padding: 8px;\n            vertical-align: top;\n        }\n       .columns{\n           font-weight: bold;\n       }\n        .table-title {\n            text-align: center;\n            margin-bottom: 10px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"document\">\n        <div class=\"title\">{{trigger['values']['A']}}</div>\n        <div class=\"section\">\n            <div class=\"section-title\">Introduction</div>\n            <p>\n{{trigger['values']['B']}}\n            </p>\n        </div>\n        <div class=\"section\">\n            <div class=\"section-title\">Inclusion criteria</div>\n            <p>\n                This review is aimed at establishing context on ideas for the mapping of existing HIS in Nigeria.\n            </p>\n            <p>\n                Inclusion criteria:\n            </p>\n            <ul>\n                <li>Articles written in English, peer-reviewed articles and articles relevant to the topic.</li>\n            </ul>\n        </div>\n        <div class=\"section\">\n            <div class=\"section-title\">Exclusion criteria</div>\n            <p>\n                Exclusion criteria:\n            </p>\n            <ul>\n                <li>Articles older than ten years were excluded from the study.</li>\n            </ul>\n        </div>\n        <div class=\"section\">\n            <div class=\"section-title\">Summary of findings</div>\n            <p>\n                Review of public health information covers a range of ideas, from concept to resource mapping, most of which are relevant to decision making in every form. Digital forms of mapping (the focus of this paper) are generally discussed in terms of accessibility information systems, health resource mapping and health information systems. These can be used to aid and evaluate policy development and consolidation alternatives to support efficient decision making. They can be used to aid and evaluate policy development and consolidation alternatives to support efficient decision making. They can be used to aid and evaluate project implementation (pre baseline) progress and report interventions etc) in a country as form of resource.\n            </p>\n        </div>\n        <div class=\"section\">\n            <h3 class=\"table-title\">Literature Review Table: (TITLE)</h3>\n            <table class=\"table\">\n                <tr class=\"columns\">\n                    <th>Author/Date</th>\n                    <th>Topic/Focus</th>\n                    <th>Aim/Objective(s)</th>\n                    <th>Method</th>\n                    <th>Context/Setting/ Sample</th>\n                    <th>Findings</th>\n                </tr>\n{{step_23}}\n            </table>\n        </div><br><br>\n  <div class=\"references\">\n      <p>Search engine(s) used: Google, Google Scholar</p>\n      <p>Search terms:</p>\n      <p>{{step_27}}</p><br><br>\n       <p>Links to the articles reviewed:</p>\n       {{step_28}}\n    </div>\n</body>\n</html>",
+                              "encoding": "utf8",
+                              "fileName": "{{trigger['values']['A']}}.docx"
+                            },
+                            "pieceName": "@activepieces/piece-file-helper",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "createFile",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.1.5",
+                            "propertySettings": {
+                              "content": {
+                                "type": "MANUAL"
+                              },
+                              "encoding": {
+                                "type": "MANUAL"
+                              },
+                              "fileName": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-01-24T08:50:33.289Z",
+                              "sampleDataFileId": "jTnUcikHp0e6zS61rLjFk"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_25",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['AI_google-drive']}}",
+                                "file": "{{step_24['url']}}",
+                                "fileName": "{{step_24['fileName']}}",
+                                "parentFolder": "19gNzX2wB8HITi0AnZS9t7owUxnXxf6PC",
+                                "include_team_drives": true
+                              },
+                              "pieceName": "@activepieces/piece-google-drive",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "upload_gdrive_file",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "~0.5.36",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "file": {
+                                  "type": "MANUAL"
+                                },
+                                "fileName": {
+                                  "type": "MANUAL"
+                                },
+                                "parentFolder": {
+                                  "type": "MANUAL"
+                                },
+                                "include_team_drives": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {},
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "displayName": "Upload file"
+                          },
+                          "displayName": "Create file"
+                        },
+                        "displayName": "anchor links"
+                      },
+                      "displayName": "Concatenate search terms"
+                    },
+                    "displayName": "Search terms"
+                  },
+                  "displayName": "Concatenate literature reviews"
+                },
+                "displayName": "Get"
+              },
+              "displayName": "Loop on Items",
+              "firstLoopAction": {
+                "name": "step_3",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "url": "https://api.diffbot.com/v3/article?url={{step_2['item']}}&token=REPLACE_WITH_API_KEY",
+                    "body": {},
+                    "method": "GET",
+                    "headers": {},
+                    "failsafe": false,
+                    "body_type": "none",
+                    "use_proxy": false,
+                    "queryParams": {},
+                    "proxy_settings": {}
+                  },
+                  "pieceName": "@activepieces/piece-http",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "send_request",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.6.1",
+                  "propertySettings": {
+                    "url": {
+                      "type": "MANUAL"
+                    },
+                    "body": {
+                      "type": "MANUAL"
+                    },
+                    "method": {
+                      "type": "MANUAL"
+                    },
+                    "headers": {
+                      "type": "MANUAL"
+                    },
+                    "failsafe": {
+                      "type": "MANUAL"
+                    },
+                    "body_type": {
+                      "type": "MANUAL"
+                    },
+                    "use_proxy": {
+                      "type": "MANUAL"
+                    },
+                    "queryParams": {
+                      "type": "MANUAL"
+                    },
+                    "proxy_settings": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-01-24T13:10:31.949Z",
+                    "sampleDataFileId": "REV7eSjPRpmvcPxDDreLH"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_17",
+                  "skip": false,
+                  "type": "ROUTER",
+                  "valid": true,
+                  "children": [
+                    {
+                      "name": "step_18",
+                      "skip": false,
+                      "type": "ROUTER",
+                      "valid": true,
+                      "children": [
+                        {
+                          "name": "step_5",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "inputDate": "{{step_3['body']['objects'][0]['date']}}",
+                              "inputFormat": "DDD, DD MMM YYYY HH:mm:ss ",
+                              "unitExtract": [
+                                "year"
+                              ]
+                            },
+                            "pieceName": "@activepieces/piece-date-helper",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "extract_date_parts",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.1.6",
+                            "propertySettings": {
+                              "inputDate": {
+                                "type": "MANUAL"
+                              },
+                              "inputFormat": {
+                                "type": "DYNAMIC"
+                              },
+                              "unitExtract": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-01-23T21:57:53.928Z",
+                              "sampleDataFileId": "qHejGmUSc8v2Cc9b5ZTB0"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_19",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "key": "year",
+                                "value": "{{step_5['year']}}",
+                                "store_scope": "RUN"
+                              },
+                              "pieceName": "@activepieces/piece-store",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "put",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "~0.5.4",
+                              "propertySettings": {
+                                "key": {
+                                  "type": "MANUAL"
+                                },
+                                "value": {
+                                  "type": "MANUAL"
+                                },
+                                "store_scope": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-01-23T22:01:32.112Z",
+                                "sampleDataFileId": "s0gKMkwIEmxDfyODRikli"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "displayName": "Put"
+                          },
+                          "displayName": "Extract Date Units"
+                        },
+                        null
+                      ],
+                      "settings": {
+                        "branches": [
+                          {
+                            "branchName": "Branch 1",
+                            "branchType": "CONDITION",
+                            "conditions": [
+                              [
+                                {
+                                  "operator": "EXISTS",
+                                  "firstValue": "{{step_3['body']['objects'][0]['date']}}"
+                                }
+                              ]
+                            ]
+                          },
+                          {
+                            "branchName": "Otherwise",
+                            "branchType": "FALLBACK"
+                          }
+                        ],
+                        "executionType": "EXECUTE_FIRST_MATCH",
+                        "propertySettings": {},
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-01-23T21:55:46.397Z",
+                          "sampleDataFileId": "AjUyu9QmgJ3oU0xNWNdhp"
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_21",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "year",
+                            "store_scope": "RUN"
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "get",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.5.4",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-01-23T22:01:42.536Z",
+                            "sampleDataFileId": "qyD9fVUm2O1V8LTeYxGlm"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_4",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "texts": [
+                                "<td>",
+                                "{{step_3['body']['objects'][0]['author']}} et al, {{step_21}}",
+                                "</td>"
+                              ]
+                            },
+                            "pieceName": "@activepieces/piece-text-helper",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "concat",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.4.0",
+                            "propertySettings": {
+                              "texts": {
+                                "type": "MANUAL"
+                              },
+                              "separator": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-01-23T22:02:02.244Z",
+                              "sampleDataFileId": "bNV2tJHGrEJYc4WPSDGY1"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_8",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "url": "https://ollamapi.e4eweb.space/api/generate",
+                                "body": {
+                                  "data": {
+                                    "model": "llama3.2:3b",
+                                    "prompt": "Take the article content and construct a concise single-line focus of the entire writeup not more than 10 words. Article Content: {{step_3['body']['objects'][0]['text']}}. Please your response should start directly from the focus of the article, do not include filler language, introductory comments or remarks.",
+                                    "stream": false,
+                                    "options": {
+                                      "temperature": 0.6
+                                    }
+                                  }
+                                },
+                                "method": "POST",
+                                "headers": {
+                                  "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                },
+                                "failsafe": false,
+                                "body_type": "json",
+                                "use_proxy": false,
+                                "queryParams": {},
+                                "proxy_settings": {}
+                              },
+                              "pieceName": "@activepieces/piece-http",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "send_request",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "~0.6.1",
+                              "propertySettings": {
+                                "url": {
+                                  "type": "MANUAL"
+                                },
+                                "body": {
+                                  "type": "MANUAL"
+                                },
+                                "method": {
+                                  "type": "MANUAL"
+                                },
+                                "headers": {
+                                  "type": "MANUAL"
+                                },
+                                "failsafe": {
+                                  "type": "MANUAL"
+                                },
+                                "body_type": {
+                                  "type": "MANUAL"
+                                },
+                                "use_proxy": {
+                                  "type": "MANUAL"
+                                },
+                                "queryParams": {
+                                  "type": "MANUAL"
+                                },
+                                "proxy_settings": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-02-25T15:33:53.699Z",
+                                "sampleDataFileId": "DitFYw80YMquRsgpQJmPH"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_6",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "texts": [
+                                    "<td>",
+                                    "{{step_3['body']['objects'][0]['title']}}/{{step_8['body']['response']}}",
+                                    "</td>"
+                                  ]
+                                },
+                                "pieceName": "@activepieces/piece-text-helper",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "concat",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "~0.4.0",
+                                "propertySettings": {
+                                  "texts": {
+                                    "type": "MANUAL"
+                                  },
+                                  "separator": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2025-01-23T23:29:15.704Z",
+                                  "sampleDataFileId": "DkVfGMnpztrkWKyFk7C2l"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_7",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "url": "https://ollamapi.e4eweb.space/api/generate",
+                                    "body": {
+                                      "data": {
+                                        "model": "llama3.2:3b",
+                                        "prompt": "Take the article content and derive a concise aim and objective of the entire writeup not more than 30 words. Article Content: {{step_3['body']['objects'][0]['text']}}. Please your response should start directly from the aim/objective of the article begin with the word 'To', do not include filler language, introductory comments or remarks.",
+                                        "stream": false,
+                                        "options": {
+                                          "temperature": 0.6
+                                        }
+                                      }
+                                    },
+                                    "method": "POST",
+                                    "headers": {
+                                      "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                    },
+                                    "failsafe": false,
+                                    "body_type": "json",
+                                    "use_proxy": false,
+                                    "queryParams": {},
+                                    "proxy_settings": {}
+                                  },
+                                  "pieceName": "@activepieces/piece-http",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "send_request",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "~0.6.1",
+                                  "propertySettings": {
+                                    "url": {
+                                      "type": "MANUAL"
+                                    },
+                                    "body": {
+                                      "type": "MANUAL"
+                                    },
+                                    "method": {
+                                      "type": "MANUAL"
+                                    },
+                                    "headers": {
+                                      "type": "MANUAL"
+                                    },
+                                    "failsafe": {
+                                      "type": "MANUAL"
+                                    },
+                                    "body_type": {
+                                      "type": "MANUAL"
+                                    },
+                                    "use_proxy": {
+                                      "type": "MANUAL"
+                                    },
+                                    "queryParams": {
+                                      "type": "MANUAL"
+                                    },
+                                    "proxy_settings": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2025-02-25T15:34:34.905Z",
+                                    "sampleDataFileId": "GlKgg21PRDILhQQNy6vNf"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_20",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "texts": [
+                                        "<td>",
+                                        "{{step_7['body']['response']}}",
+                                        "</td>"
+                                      ]
+                                    },
+                                    "pieceName": "@activepieces/piece-text-helper",
+                                    "pieceType": "OFFICIAL",
+                                    "actionName": "concat",
+                                    "packageType": "REGISTRY",
+                                    "pieceVersion": "~0.4.0",
+                                    "propertySettings": {
+                                      "texts": {
+                                        "type": "MANUAL"
+                                      },
+                                      "separator": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-01-23T23:29:37.374Z",
+                                      "sampleDataFileId": "ix0nkk2dksmYtVGhEX2hA"
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_9",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "url": "https://ollamapi.e4eweb.space/api/generate",
+                                        "body": {
+                                          "data": {
+                                            "model": "llama3.2:3b",
+                                            "prompt": "Given the article content; {{step_3['body']['objects'][0]['text']}} select the article classification from the list: {{step_10}}. Please your response should not be in quotes, it should only contain the article classification you have selected from the list provided (DO NOT hallucinate the classification), avoid filler language, introductory comments or remarks.",
+                                            "stream": false,
+                                            "options": {
+                                              "temperature": 0.6
+                                            }
+                                          }
+                                        },
+                                        "method": "POST",
+                                        "headers": {
+                                          "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                        },
+                                        "failsafe": false,
+                                        "body_type": "json",
+                                        "use_proxy": false,
+                                        "queryParams": {},
+                                        "proxy_settings": {}
+                                      },
+                                      "pieceName": "@activepieces/piece-http",
+                                      "pieceType": "OFFICIAL",
+                                      "actionName": "send_request",
+                                      "packageType": "REGISTRY",
+                                      "pieceVersion": "~0.6.1",
+                                      "propertySettings": {
+                                        "url": {
+                                          "type": "MANUAL"
+                                        },
+                                        "body": {
+                                          "type": "MANUAL"
+                                        },
+                                        "method": {
+                                          "type": "MANUAL"
+                                        },
+                                        "headers": {
+                                          "type": "MANUAL"
+                                        },
+                                        "failsafe": {
+                                          "type": "MANUAL"
+                                        },
+                                        "body_type": {
+                                          "type": "MANUAL"
+                                        },
+                                        "use_proxy": {
+                                          "type": "MANUAL"
+                                        },
+                                        "queryParams": {
+                                          "type": "MANUAL"
+                                        },
+                                        "proxy_settings": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "sampleDataSettings": {
+                                        "lastTestDate": "2025-01-24T07:04:33.606Z",
+                                        "sampleDataFileId": "a0boGCL3ikCwarLZ6WzqU"
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_12",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "texts": [
+                                            "<td>",
+                                            "{{step_9['body']['response']}}",
+                                            "</td>"
+                                          ]
+                                        },
+                                        "pieceName": "@activepieces/piece-text-helper",
+                                        "pieceType": "OFFICIAL",
+                                        "actionName": "concat",
+                                        "packageType": "REGISTRY",
+                                        "pieceVersion": "~0.4.0",
+                                        "propertySettings": {
+                                          "texts": {
+                                            "type": "MANUAL"
+                                          },
+                                          "separator": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {
+                                          "lastTestDate": "2025-01-23T23:37:47.396Z",
+                                          "sampleDataFileId": "DtF5nKiyCKlBV6fNQOPxd"
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_11",
+                                        "skip": false,
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "texts": [
+                                              "<td>",
+                                              "{{step_3['body']['objects'][0]['publisherRegion']}}/{{step_3['body']['objects'][0]['publisherCountry']}}",
+                                              "</td>"
+                                            ]
+                                          },
+                                          "pieceName": "@activepieces/piece-text-helper",
+                                          "pieceType": "OFFICIAL",
+                                          "actionName": "concat",
+                                          "packageType": "REGISTRY",
+                                          "pieceVersion": "~0.4.0",
+                                          "propertySettings": {
+                                            "texts": {
+                                              "type": "MANUAL"
+                                            },
+                                            "separator": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "sampleDataSettings": {
+                                            "lastTestDate": "2025-01-23T23:37:54.483Z",
+                                            "sampleDataFileId": "pJRKQj7PwsYKnJRIqP7v9"
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_13",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "url": "https://ollamapi.e4eweb.space/api/generate",
+                                              "body": {
+                                                "data": {
+                                                  "model": "llama3.2:3b",
+                                                  "prompt": "Given the article content; {{step_3['body']['objects'][0]['text']}} derive the findings and key points highlighted. Please your response should be in the form of a concised paragraph, starting directly from the findings not more than 50 words, do not include filler language, introductory comments or remarks.",
+                                                  "stream": false,
+                                                  "options": {
+                                                    "temperature": 0.6
+                                                  }
+                                                }
+                                              },
+                                              "method": "POST",
+                                              "headers": {
+                                                "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                              },
+                                              "failsafe": false,
+                                              "body_type": "json",
+                                              "use_proxy": false,
+                                              "queryParams": {},
+                                              "proxy_settings": {}
+                                            },
+                                            "pieceName": "@activepieces/piece-http",
+                                            "pieceType": "OFFICIAL",
+                                            "actionName": "send_request",
+                                            "packageType": "REGISTRY",
+                                            "pieceVersion": "~0.6.1",
+                                            "propertySettings": {
+                                              "url": {
+                                                "type": "MANUAL"
+                                              },
+                                              "body": {
+                                                "type": "MANUAL"
+                                              },
+                                              "method": {
+                                                "type": "MANUAL"
+                                              },
+                                              "headers": {
+                                                "type": "MANUAL"
+                                              },
+                                              "failsafe": {
+                                                "type": "MANUAL"
+                                              },
+                                              "body_type": {
+                                                "type": "MANUAL"
+                                              },
+                                              "use_proxy": {
+                                                "type": "MANUAL"
+                                              },
+                                              "queryParams": {
+                                                "type": "MANUAL"
+                                              },
+                                              "proxy_settings": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "sampleDataSettings": {
+                                              "lastTestDate": "2025-02-25T15:35:24.306Z",
+                                              "sampleDataFileId": "t7PRz6j1PUwJgA15pqBcP"
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "nextAction": {
+                                            "name": "step_14",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "texts": [
+                                                  "<td>",
+                                                  "{{step_13['body']['response']}}",
+                                                  "</td>"
+                                                ]
+                                              },
+                                              "pieceName": "@activepieces/piece-text-helper",
+                                              "pieceType": "OFFICIAL",
+                                              "actionName": "concat",
+                                              "packageType": "REGISTRY",
+                                              "pieceVersion": "~0.4.0",
+                                              "propertySettings": {
+                                                "texts": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "separator": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "sampleDataSettings": {
+                                                "lastTestDate": "2025-01-23T23:38:55.548Z",
+                                                "sampleDataFileId": "pjnoUGhO4USkxUC4DNI3Z"
+                                              },
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "nextAction": {
+                                              "name": "step_15",
+                                              "skip": false,
+                                              "type": "PIECE",
+                                              "valid": true,
+                                              "settings": {
+                                                "input": {
+                                                  "key": "table_data5",
+                                                  "value": "<tr>\n{{step_4}}\n{{step_6}}\n{{step_20}}\n{{step_12}}\n{{step_11}}\n{{step_14}}\n</tr>",
+                                                  "store_scope": "RUN",
+                                                  "ignore_if_exists": false
+                                                },
+                                                "pieceName": "@activepieces/piece-store",
+                                                "pieceType": "OFFICIAL",
+                                                "actionName": "add_to_list",
+                                                "packageType": "REGISTRY",
+                                                "pieceVersion": "~0.5.4",
+                                                "propertySettings": {
+                                                  "key": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "value": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "store_scope": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "ignore_if_exists": {
+                                                    "type": "MANUAL"
+                                                  }
+                                                },
+                                                "sampleDataSettings": {},
+                                                "errorHandlingOptions": {
+                                                  "retryOnFailure": {
+                                                    "value": false
+                                                  },
+                                                  "continueOnFailure": {
+                                                    "value": false
+                                                  }
+                                                }
+                                              },
+                                              "displayName": "Add To List"
+                                            },
+                                            "displayName": "Findings"
+                                          },
+                                          "displayName": "Derive Findings"
+                                        },
+                                        "displayName": "Context/Setting/Sample"
+                                      },
+                                      "displayName": "Method"
+                                    },
+                                    "displayName": "Choose literature review method"
+                                  },
+                                  "displayName": "Aim/Objective(s)"
+                                },
+                                "displayName": "Derive Aim/Objective(s)"
+                              },
+                              "displayName": "Topic/Focus"
+                            },
+                            "displayName": "Extract article focus"
+                          },
+                          "displayName": "Author/Date"
+                        },
+                        "displayName": "Get"
+                      },
+                      "displayName": "If date exists"
+                    },
+                    null
+                  ],
+                  "settings": {
+                    "branches": [
+                      {
+                        "branchName": "Branch 1",
+                        "branchType": "CONDITION",
+                        "conditions": [
+                          [
+                            {
+                              "operator": "TEXT_DOES_NOT_CONTAIN",
+                              "firstValue": "{{step_3['body']}}",
+                              "secondValue": "error",
+                              "caseSensitive": false
+                            },
+                            {
+                              "operator": "TEXT_DOES_NOT_CONTAIN",
+                              "firstValue": "{{step_2['item']}}",
+                              "secondValue": "removed",
+                              "caseSensitive": false
+                            },
+                            {
+                              "operator": "EXISTS",
+                              "firstValue": "{{step_3['body']['objects'][0]['text']}}"
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "branchName": "Otherwise",
+                        "branchType": "FALLBACK"
+                      }
+                    ],
+                    "executionType": "EXECUTE_FIRST_MATCH",
+                    "propertySettings": {},
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-01-24T06:29:15.089Z",
+                      "sampleDataFileId": "PLJoMmDmWUr4HKTqa3xB8"
+                    }
+                  },
+                  "displayName": "Router"
+                },
+                "displayName": "Get article content"
+              }
+            },
+            "displayName": "Get article category"
+          },
+          "displayName": "Convert Text to Json"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

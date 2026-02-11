@@ -1,0 +1,941 @@
+﻿{
+  "name": "PDF Datasource Table Extractor",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "XTDLZyJ1fd6HD3ujmBQsT"
+  },
+  "flows": [
+    {
+      "displayName": "PDF Datasource Table Extractor",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.26",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "sampleData": {},
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_16",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "auth": "{{connections['slack']}}",
+              "text": "Hello! <!channel>\n\nThe PDF table extraction process for the file:\n<{{trigger['body']['data'][0]['value']['url']}}|{{trigger['body']['data'][0]['value']['name']}}> has started!\n\nKindly wait 2~3 minutes to receive the CSV output.",
+              "blocks": [],
+              "channel": "C0719G7FKCP",
+              "username": "HR bot"
+            },
+            "pieceName": "@activepieces/piece-slack",
+            "actionName": "send_channel_message",
+            "pieceVersion": "0.7.15",
+            "propertySettings": {
+              "auth": {
+                "type": "MANUAL"
+              },
+              "text": {
+                "type": "MANUAL"
+              },
+              "blocks": {
+                "type": "MANUAL"
+              },
+              "channel": {
+                "type": "MANUAL"
+              },
+              "username": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": true
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_5",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "timeZone": "Africa/Lagos",
+                "timeFormat": "MMMM DD YYYY HH:mm:ss"
+              },
+              "pieceName": "@activepieces/piece-date-helper",
+              "actionName": "get_current_date",
+              "sampleData": {},
+              "pieceVersion": "0.1.22",
+              "propertySettings": {
+                "timeZone": {
+                  "type": "MANUAL"
+                },
+                "timeFormat": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_6",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                  "values": {
+                    "A": "PDF Datasource Table Extractor",
+                    "B": "{{step_5['result']}}",
+                    "C": "On Paper form submission",
+                    "E": "ai@e4email.net"
+                  },
+                  "sheetId": 1211720957,
+                  "as_string": false,
+                  "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                  "first_row_headers": true,
+                  "includeTeamDrives": true
+                },
+                "pieceName": "@activepieces/piece-google-sheets",
+                "actionName": "insert_row",
+                "pieceVersion": "0.12.20",
+                "propertySettings": {
+                  "auth": {
+                    "type": "MANUAL"
+                  },
+                  "values": {
+                    "type": "MANUAL",
+                    "schema": {
+                      "A": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Automation",
+                        "displayName": "Automation",
+                        "defaultValue": ""
+                      },
+                      "B": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Date/Time Automation ran",
+                        "displayName": "Date/Time Automation ran",
+                        "defaultValue": ""
+                      },
+                      "C": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Automation Details (Triggers and Usage)",
+                        "displayName": "Automation Details (Triggers and Usage)",
+                        "defaultValue": ""
+                      },
+                      "D": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Time taken to run automation",
+                        "displayName": "Time taken to run automation",
+                        "defaultValue": ""
+                      },
+                      "E": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Email Connection Used",
+                        "displayName": "Email Connection Used",
+                        "defaultValue": ""
+                      },
+                      "F": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Slack Channel sent to",
+                        "displayName": "Slack Channel sent to",
+                        "defaultValue": ""
+                      },
+                      "G": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "General Meeting Notes",
+                        "displayName": "General Meeting Notes",
+                        "defaultValue": ""
+                      },
+                      "H": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "",
+                        "displayName": "",
+                        "defaultValue": ""
+                      },
+                      "I": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "",
+                        "displayName": "",
+                        "defaultValue": ""
+                      },
+                      "J": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Assignee",
+                        "displayName": "Assignee",
+                        "defaultValue": ""
+                      }
+                    }
+                  },
+                  "sheetId": {
+                    "type": "MANUAL"
+                  },
+                  "as_string": {
+                    "type": "MANUAL"
+                  },
+                  "spreadsheetId": {
+                    "type": "MANUAL"
+                  },
+                  "first_row_headers": {
+                    "type": "MANUAL"
+                  },
+                  "includeTeamDrives": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_8",
+                "skip": false,
+                "type": "ROUTER",
+                "valid": true,
+                "children": [
+                  {
+                    "name": "step_11",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                        "memKey": "{{step_5['result']}}",
+                        "sheetId": 215587646,
+                        "startRow": 1,
+                        "groupSize": "100000",
+                        "headerRow": 1,
+                        "spreadsheetId": "1No7oRZIomJJ2UcdVSUO7G48QgBgY1-GazW4-ZEj6rqc",
+                        "useHeaderNames": false,
+                        "includeTeamDrives": true
+                      },
+                      "pieceName": "@activepieces/piece-google-sheets",
+                      "actionName": "get_next_rows",
+                      "sampleData": {},
+                      "pieceVersion": "0.12.20",
+                      "propertySettings": {
+                        "auth": {
+                          "type": "MANUAL"
+                        },
+                        "memKey": {
+                          "type": "MANUAL"
+                        },
+                        "sheetId": {
+                          "type": "MANUAL"
+                        },
+                        "markdown": {
+                          "type": "MANUAL"
+                        },
+                        "startRow": {
+                          "type": "MANUAL"
+                        },
+                        "groupSize": {
+                          "type": "MANUAL"
+                        },
+                        "headerRow": {
+                          "type": "MANUAL"
+                        },
+                        "spreadsheetId": {
+                          "type": "MANUAL"
+                        },
+                        "useHeaderNames": {
+                          "type": "MANUAL"
+                        },
+                        "includeTeamDrives": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_21",
+                      "skip": false,
+                      "type": "CODE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "sheet": "{{step_11}}",
+                          "datasource": "{{trigger['body']['data'][3]['value']}}"
+                        },
+                        "sampleData": {},
+                        "sourceCode": {
+                          "code": "export const code = async (inputs) => {\n  const sheet = inputs.sheet; // Array of rows (including header row)\n  const datasource = inputs.datasource;\n\n  if (!Array.isArray(sheet) || sheet.length < 2) {\n    return []; // Not enough data\n  }\n\n  // Step 1: Extract header mapping from first row\n  const headerRow = sheet[0].values;\n  const columnMap = {};\n  for (const key in headerRow) {\n    const columnName = headerRow[key];\n    if (columnName) {\n      columnMap[columnName] = key;\n    }\n  }\n\n  // Step 2: Extract and filter data rows\n  const result = sheet.slice(1).reduce((acc, row) => {\n    const values = row.values;\n    if (values[columnMap[\"datasource_id\"]] === datasource) {\n      acc.push({\n        datasource_id: values[columnMap[\"datasource_id\"]],\n        indicator_id: values[columnMap[\"indicator_id\"]],\n        datasource_indicator: values[columnMap[\"datasource_indicator\"]],\n      });\n    }\n    return acc;\n  }, []);\n\n  return result;\n};",
+                          "packageJson": "{}"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_19",
+                        "skip": true,
+                        "type": "CODE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "pdfUrl": "https://paperform.co/file/s3.amazonaws.com/pf-user-files-01/u-2233/uploads/2025-10-24/px13zrf/2023-State-of-States_%201.pdf?expires=1761885761&signature=72b0788e8478d0053f713c18d486feba29dd8b72d06a5f2ea18b914763be89f6",
+                            "pageNumber": "19"
+                          },
+                          "sampleData": {},
+                          "sourceCode": {
+                            "code": "import fs from 'fs';\nimport axios from 'axios';\nimport { PDFDocument } from 'pdf-lib';\n\nexport const code = async (inputs) => {\n  try {\n    const { pdfUrl, pageNumber } = inputs;\n\n    if (!pdfUrl || !pageNumber) {\n      throw new Error(\"Missing required inputs: pdfUrl and pageNumber\");\n    }\n\n    // Parse page numbers from a comma-separated string\n    const pageNumbers = String(pageNumber)\n      .split(',')\n      .map(num => parseInt(num.trim(), 10))\n      .filter(num => !isNaN(num));\n\n    if (pageNumbers.length === 0) {\n      throw new Error(\"No valid page numbers provided.\");\n    }\n\n    // Download PDF from the provided URL\n    const response = await axios({\n      url: pdfUrl,\n      responseType: 'arraybuffer'\n    });\n\n    // Load the original PDF document\n    const pdfDoc = await PDFDocument.load(response.data);\n    const totalPages = pdfDoc.getPageCount();\n\n    // Validate all provided page numbers\n    for (let num of pageNumbers) {\n      if (num < 1 || num > totalPages) {\n        throw new Error(`Page number ${num} is out of range (1 - ${totalPages})`);\n      }\n    }\n\n    // Create a new PDF document to hold the extracted pages\n    const newPdfDoc = await PDFDocument.create();\n\n    // Convert to 0-based index and copy pages\n    const zeroBasedPageIndices = pageNumbers.map(num => num - 1);\n    const extractedPages = await newPdfDoc.copyPages(pdfDoc, zeroBasedPageIndices);\n\n    // Add each extracted page to the new document\n    extractedPages.forEach(page => newPdfDoc.addPage(page));\n\n    // Convert the new PDF to a base64-encoded string\n    const pdfBytes = await newPdfDoc.save();\n    const pdfBase64 = Buffer.from(pdfBytes).toString('base64');\n\n    console.log(\"Selected PDF pages converted to base64\");\n\n    return pdfBase64;\n\n  } catch (error) {\n    console.error(\"Error extracting pages from PDF:\", error);\n    throw error;\n  }\n};",
+                            "packageJson": "{\n  \"dependencies\": {\n    \"axios\": \"1.9.0\",\n    \"fs\": \"0.0.1-security\",\n    \"pdf-lib\": \"1.17.1\"\n  }\n}"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_4",
+                          "skip": true,
+                          "type": "CODE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "pdfUrl": "{{trigger['body']['data'][0]['value']}}"
+                            },
+                            "sourceCode": {
+                              "code": "import axios from 'axios';\nimport { Buffer } from 'buffer';\n\nexport const code = async (inputs) => {\n  const pdfUrl = inputs.pdfUrl;\n  if (!pdfUrl) {\n    throw new Error(\"Missing 'pdfUrl' input.\");\n  }\n\n  try {\n    // Download PDF using axios with response type set to arraybuffer\n    const response = await axios.get(pdfUrl, { responseType: 'arraybuffer' });\n\n    // Convert buffer to base64\n    const buffer = Buffer.from(response.data);\n    const base64 = buffer.toString('base64');\n\n    return {\n      base64: base64,\n      contentType: response.headers['content-type'] || 'application/pdf',\n      fileName: pdfUrl.split('/').pop() || 'file.pdf'\n    };\n  } catch (error) {\n    return { error: error.message };\n  }\n};\n",
+                              "packageJson": "{\n  \"dependencies\": {\n    \"axios\": \"1.9.0\",\n    \"buffer\": \"6.0.3\"\n  }\n}"
+                            },
+                            "propertySettings": {
+                              "pdfUrl": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-05-16T21:47:39.955Z",
+                              "sampleDataFileId": "8IzMSKQj7fhj9vGOMP8p3",
+                              "sampleDataInputFileId": "3bvsqpVOKZcoq7CYAajcU"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_14",
+                            "skip": false,
+                            "type": "CODE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "pdfUrl": "{{trigger['body']['data'][0]['value']['url']}}",
+                                "pageNumber": "{{trigger['body']['data'][1]['value']}}",
+                                "straicoApiKey": "REPLACE_WITH_API_KEY"
+                              },
+                              "sampleData": {},
+                              "sourceCode": {
+                                "code": "import axios from \"axios\";\nimport FormData from \"form-data\";\nimport { PDFDocument } from \"pdf-lib\";\n\nexport const code = async (inputs) => {\n  try {\n    const { pdfUrl, pageNumber, straicoApiKey } = inputs;\n    if (!pdfUrl || !pageNumber || !straicoApiKey) {\n      throw new Error(\"Missing required inputs: pdfUrl, pageNumber, straicoApiKey\");\n    }\n\n    // Parse page numbers\n    const pageNumbers = String(pageNumber)\n      .split(\",\")\n      .map(n => parseInt(n.trim(), 10))\n      .filter(n => !isNaN(n));\n\n    if (pageNumbers.length === 0) {\n      throw new Error(\"No valid page numbers provided.\");\n    }\n\n    // Download source PDF\n    const response = await axios({ url: pdfUrl, responseType: \"arraybuffer\" });\n    const sourcePdfBytes = response.data;\n\n    // Load PDF\n    const pdfDoc = await PDFDocument.load(sourcePdfBytes);\n    const totalPages = pdfDoc.getPageCount();\n\n    // Validate page numbers\n    for (let num of pageNumbers) {\n      if (num < 1 || num > totalPages) {\n        throw new Error(`Page number ${num} is out of range (1‐${totalPages})`);\n      }\n    }\n\n    // Create new PDF with selected pages\n    const newPdfDoc = await PDFDocument.create();\n    const zeroBased = pageNumbers.map(n => n - 1);\n    const copiedPages = await newPdfDoc.copyPages(pdfDoc, zeroBased);\n    copiedPages.forEach(page => newPdfDoc.addPage(page));\n\n    const newPdfBytes = await newPdfDoc.save();\n\n    // Build multipart/form-data\n    const form = new FormData();\n    const filename = `extracted_pages_${pageNumbers.join(\"_\")}.pdf`;\n    form.append(\"file\", Buffer.from(newPdfBytes), { filename, contentType: \"application/pdf\" });\n    // Add any other fields if required by Straico, e.g.:\n    // form.append(\"metadata\", JSON.stringify({ someField: \"value\" }));\n\n    const uploadUrl = \"https://api.straico.com/v0/file/upload\";\n    const headers = {\n      Authorization: `Bearer ${straicoApiKey}`,\n      ...form.getHeaders()\n    };\n\n    const uploadResponse = await axios.post(uploadUrl, form, {\n      headers,\n      maxContentLength: Infinity,\n      maxBodyLength: Infinity\n    });\n\n    console.log(\"Upload response:\", uploadResponse.data);\n    return uploadResponse.data;\n\n  } catch (err) {\n    console.error(\"Error in extract & upload:\", err);\n    throw err;\n  }\n};\n",
+                                "packageJson": "{\n  \"dependencies\": {\n    \"fs\": \"0.0.1-security\",\n    \"axios\": \"1.12.2\",\n    \"pdf-lib\": \"1.17.1\",\n    \"form-data\": \"4.0.4\"\n  }\n}"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_13",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['straico']}}",
+                                  "model": "google/gemini-2.5-pro-preview",
+                                  "prompt": "Task: Parse the table data as a CSV. Extract the table data exactly as it appears in the pdf (on all pages), parse it into CSV rows and columns. Output the CSV data as plain text without any code block formatting or markdown syntax, return only the table data without any filler words, or additional comments. If provided, below are the indicators/ headers to extract; {{trigger['body']['data'][2]['value']}} or {{step_21}}. Please note that some indicators may be specific to certain reports; extract only those that correspond to the report/table data. If the provided indicators don’t match the table data, simply extract the table as is. For each indicator/ header, extract and structure the information into the following CSV columns: | indicator | period | data_source | location | value | value_type | Details for each column: - indicator: Use the indicator names listed above exactly as provided (no variations). - period: Extract the corresponding year from the PDF for each indicator (e.g., 2019). - data_source: Set to {{trigger['body']['data'][3]['value']}} for all rows. - location: Extract each corresponding state/location where the report was carried out, if this header is not found in the pdf, Set to \\\"National\\\" for all rows - value: Extract the numeric value corresponding to the indicator from the PDF values should be written without any symbols such as commas or percentage signs (e.g., 2354). - value_type: Set to \\\"Survey\\\" for all rows. Important: - Carefully read and examine the PDF to ensure accuracy — values must match exactly as they appear. - If a value is missing for an indicator, leave the value field blank but still maintain the row structure. - The final output must be a valid, properly formatted CSV in plain text. - Ensure that every field in every row, including the header row, is wrapped in double quotes, regardless of whether the content contains commas, spaces, or special characters. - Treat the first row as the header, with columns labeled: indicator, period, data_source, location, value, and value_type. - Only return the CSV data, without filler language or comments",
+                                  "fileUrls": [
+                                    "{{step_14['data']['url']}}"
+                                  ],
+                                  "imageUrls": [],
+                                  "youtubeUrls": [],
+                                  "displayTranscripts": false
+                                },
+                                "pieceName": "@activepieces/piece-straico",
+                                "actionName": "prompt_completion",
+                                "sampleData": {},
+                                "pieceVersion": "0.1.10",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "model": {
+                                    "type": "MANUAL"
+                                  },
+                                  "prompt": {
+                                    "type": "MANUAL"
+                                  },
+                                  "fileUrls": {
+                                    "type": "MANUAL"
+                                  },
+                                  "imageUrls": {
+                                    "type": "MANUAL"
+                                  },
+                                  "maxTokens": {
+                                    "type": "MANUAL"
+                                  },
+                                  "temperature": {
+                                    "type": "MANUAL"
+                                  },
+                                  "youtubeUrls": {
+                                    "type": "MANUAL"
+                                  },
+                                  "displayTranscripts": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_3",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "content": "{{step_13['content']}}",
+                                    "encoding": "utf8",
+                                    "fileName": "{{trigger['body']['data'][3]['value']}} output.csv"
+                                  },
+                                  "pieceName": "@activepieces/piece-file-helper",
+                                  "actionName": "createFile",
+                                  "pieceVersion": "0.1.17",
+                                  "propertySettings": {
+                                    "content": {
+                                      "type": "MANUAL"
+                                    },
+                                    "encoding": {
+                                      "type": "MANUAL"
+                                    },
+                                    "fileName": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_1",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['AI_google-drive']}}",
+                                      "file": "{{step_3['url']}}",
+                                      "fileName": "{{step_3['fileName']}}",
+                                      "parentFolder": "1fnyJftlfS111cX1DqHurfCxAWFn8eXlX",
+                                      "include_team_drives": true
+                                    },
+                                    "pieceName": "@activepieces/piece-google-drive",
+                                    "pieceType": "OFFICIAL",
+                                    "actionName": "upload_gdrive_file",
+                                    "packageType": "REGISTRY",
+                                    "pieceVersion": "0.5.53",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "file": {
+                                        "type": "MANUAL"
+                                      },
+                                      "fileName": {
+                                        "type": "MANUAL"
+                                      },
+                                      "parentFolder": {
+                                        "type": "MANUAL"
+                                      },
+                                      "include_team_drives": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-05-30T08:00:23.930Z",
+                                      "sampleDataFileId": "bbsjfql44Io0fCdGzD7Z2",
+                                      "sampleDataInputFileId": "5aB3lcOcMGcrl9iv35XlR"
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_2",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "auth": "{{connections['slack']}}",
+                                        "text": "Hello! <!channel>\n\nThe {{trigger['body']['data'][3]['value']}} report table extraction process was successful.\nPlease find attached a link to the csv table.\n\nurl: https://drive.google.com/file/d/{{step_1['id']}}/view?usp=drive_link",
+                                        "blocks": [],
+                                        "channel": "C0719G7FKCP"
+                                      },
+                                      "pieceName": "@activepieces/piece-slack",
+                                      "actionName": "send_channel_message",
+                                      "pieceVersion": "0.8.6",
+                                      "propertySettings": {
+                                        "auth": {
+                                          "type": "MANUAL"
+                                        },
+                                        "text": {
+                                          "type": "MANUAL"
+                                        },
+                                        "blocks": {
+                                          "type": "MANUAL"
+                                        },
+                                        "channel": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_7",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['slack']}}",
+                                          "text": "Hello! <!channel>\n\nThe {{trigger['body']['data'][3]['value']}} report table extraction process was successful.\nPlease find attached a link to the csv table.\n\nurl: https://drive.google.com/file/d/{{step_1['id']}}/view?usp=drive_link",
+                                          "blocks": [],
+                                          "channel": "C07NNUA4VA5"
+                                        },
+                                        "pieceName": "@activepieces/piece-slack",
+                                        "actionName": "send_channel_message",
+                                        "pieceVersion": "0.8.6",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "text": {
+                                            "type": "MANUAL"
+                                          },
+                                          "blocks": {
+                                            "type": "MANUAL"
+                                          },
+                                          "channel": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "displayName": "Send Message To A Channel Copy"
+                                    },
+                                    "displayName": "Send Message To A Channel"
+                                  },
+                                  "displayName": "Upload file"
+                                },
+                                "displayName": "Create file"
+                              },
+                              "displayName": "Ask AI"
+                            },
+                            "displayName": "Upload to Straico"
+                          },
+                          "displayName": "PDF to Base64"
+                        },
+                        "displayName": "Extract table page"
+                      },
+                      "displayName": "Datasource Indicators"
+                    },
+                    "displayName": "Get next row(s)"
+                  },
+                  {
+                    "name": "step_17",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "auth": "{{connections['slack']}}",
+                        "text": "Hello! <!channel>\n\nThe PDF table extraction process failed because a pdf file was not provided.\n",
+                        "blocks": [],
+                        "channel": "C0719G7FKCP"
+                      },
+                      "pieceName": "@activepieces/piece-slack",
+                      "actionName": "send_channel_message",
+                      "pieceVersion": "0.8.6",
+                      "propertySettings": {
+                        "auth": {
+                          "type": "MANUAL"
+                        },
+                        "text": {
+                          "type": "MANUAL"
+                        },
+                        "blocks": {
+                          "type": "MANUAL"
+                        },
+                        "channel": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_20",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['slack']}}",
+                          "text": "Hello! <!channel>\n\nThe PDF table extraction process failed because a pdf file was not provided.\n",
+                          "blocks": [],
+                          "channel": "C07NNUA4VA5"
+                        },
+                        "pieceName": "@activepieces/piece-slack",
+                        "actionName": "send_channel_message",
+                        "pieceVersion": "0.8.6",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "text": {
+                            "type": "MANUAL"
+                          },
+                          "blocks": {
+                            "type": "MANUAL"
+                          },
+                          "channel": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Send Message To Automation logs"
+                    },
+                    "displayName": "Send Message To A Channel"
+                  }
+                ],
+                "settings": {
+                  "branches": [
+                    {
+                      "branchName": "Branch 1",
+                      "branchType": "CONDITION",
+                      "conditions": [
+                        [
+                          {
+                            "operator": "EXISTS",
+                            "firstValue": "{{trigger['body']['data'][0]['value']}}"
+                          },
+                          {
+                            "operator": "TEXT_DOES_NOT_CONTAIN",
+                            "firstValue": "{{trigger['body']['data'][0]['value']}}",
+                            "secondValue": "google",
+                            "caseSensitive": false
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "branchName": "Otherwise",
+                      "branchType": "FALLBACK"
+                    }
+                  ],
+                  "executionType": "EXECUTE_FIRST_MATCH",
+                  "propertySettings": {},
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-04-30T10:30:55.351Z",
+                    "sampleDataFileId": "nWTpWxpcOOGBgfCINJXpr",
+                    "sampleDataInputFileId": "LV3sFCNq7m67KXAIUFOL3"
+                  }
+                },
+                "nextAction": {
+                  "name": "step_9",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "timeZone": "Africa/Lagos",
+                      "timeFormat": "MMMM DD YYYY HH:mm:ss"
+                    },
+                    "pieceName": "@activepieces/piece-date-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "get_current_date",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.1.22",
+                    "propertySettings": {
+                      "timeZone": {
+                        "type": "MANUAL"
+                      },
+                      "timeFormat": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-04-04T14:45:17.668Z",
+                      "sampleDataFileId": "DztXcpFBJbbtgisdSDLat",
+                      "sampleDataInputFileId": "m7y64Nv5yERWKztNtNgq3"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_10",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "endDate": "{{step_9['result']}}",
+                        "startDate": "{{step_5['result']}}",
+                        "endDateFormat": "MMMM DD YYYY HH:mm:ss",
+                        "unitDifference": [
+                          "hour",
+                          "minute",
+                          "second"
+                        ],
+                        "startDateFormat": "MMMM DD YYYY HH:mm:ss"
+                      },
+                      "pieceName": "@activepieces/piece-date-helper",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "date_difference",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "0.1.22",
+                      "propertySettings": {
+                        "endDate": {
+                          "type": "MANUAL"
+                        },
+                        "startDate": {
+                          "type": "MANUAL"
+                        },
+                        "endDateFormat": {
+                          "type": "MANUAL"
+                        },
+                        "unitDifference": {
+                          "type": "MANUAL"
+                        },
+                        "startDateFormat": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-04-04T14:45:25.219Z",
+                        "sampleDataFileId": "cWa6TSI5KrRNBcWXETqkI",
+                        "sampleDataInputFileId": "JTwpE1cxLQXFABYXJTl2F"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_15",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                          "row_id": "{{step_6['row']}}",
+                          "values": {
+                            "D": "{{step_10['hour']}}hr {{step_10['minute']}}min {{step_10['second']}}sec",
+                            "F": "ai-data-team-automation"
+                          },
+                          "sheetId": 1211720957,
+                          "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                          "first_row_headers": true,
+                          "includeTeamDrives": true
+                        },
+                        "pieceName": "@activepieces/piece-google-sheets",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "update_row",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "0.12.20",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "row_id": {
+                            "type": "MANUAL"
+                          },
+                          "values": {
+                            "type": "MANUAL"
+                          },
+                          "sheetId": {
+                            "type": "MANUAL"
+                          },
+                          "spreadsheetId": {
+                            "type": "MANUAL"
+                          },
+                          "first_row_headers": {
+                            "type": "MANUAL"
+                          },
+                          "includeTeamDrives": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Update Log tracking sheet"
+                    },
+                    "displayName": "Date Difference"
+                  },
+                  "displayName": "Get Current Date"
+                },
+                "displayName": "Router"
+              },
+              "displayName": "Insert Log tracking sheet"
+            },
+            "displayName": "Get Current Date"
+          },
+          "displayName": "Send Message To A Channel"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

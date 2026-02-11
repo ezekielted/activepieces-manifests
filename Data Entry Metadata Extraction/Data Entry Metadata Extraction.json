@@ -1,0 +1,577 @@
+﻿{
+  "name": "Data Entry Metadata Extraction",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-math-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-csv",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "29Pd1wakzYYIwveftK5St"
+  },
+  "flows": [
+    {
+      "displayName": "Data Entry Metadata Extraction",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.15",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_2",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "first_number": "0",
+              "second_number": "10000000000"
+            },
+            "pieceName": "@activepieces/piece-math-helper",
+            "pieceType": "OFFICIAL",
+            "actionName": "generateRandom_math",
+            "packageType": "REGISTRY",
+            "pieceVersion": "0.0.11",
+            "propertySettings": {
+              "first_number": {
+                "type": "MANUAL"
+              },
+              "second_number": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-06-13T07:35:21.007Z",
+              "sampleDataFileId": "fNpgYoCiv0bWdOH5MLaTD",
+              "sampleDataInputFileId": "bpiGzG0rMAKvFT11ZM6Ge"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_1",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                "memKey": "{{step_2}}",
+                "sheetId": 215587646,
+                "startRow": 1,
+                "groupSize": "10000",
+                "spreadsheetId": "1No7oRZIomJJ2UcdVSUO7G48QgBgY1-GazW4-ZEj6rqc",
+                "includeTeamDrives": true
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "pieceType": "OFFICIAL",
+              "actionName": "get_next_rows",
+              "packageType": "REGISTRY",
+              "pieceVersion": "0.12.4",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "memKey": {
+                  "type": "MANUAL"
+                },
+                "sheetId": {
+                  "type": "MANUAL"
+                },
+                "startRow": {
+                  "type": "MANUAL"
+                },
+                "groupSize": {
+                  "type": "MANUAL"
+                },
+                "spreadsheetId": {
+                  "type": "MANUAL"
+                },
+                "includeTeamDrives": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-06-13T07:36:06.417Z",
+                "sampleDataFileId": "7kSxo3hSnqdk3aQbSST03",
+                "sampleDataInputFileId": "Z6yrokIvp2DBYcyHilswu"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_3",
+              "skip": false,
+              "type": "CODE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "sheet": "{{step_1}}",
+                  "datasource": "{{trigger['body']['data'][1]['value']}}"
+                },
+                "sourceCode": {
+                  "code": "export const code = async (inputs) => {\n  const sheet = inputs.sheet; // Array of rows (including header row)\n  const datasource = inputs.datasource;\n\n  if (!Array.isArray(sheet) || sheet.length < 2) {\n    return []; // Not enough data\n  }\n\n  // Step 1: Extract header mapping from first row\n  const headerRow = sheet[0].values;\n  const columnMap = {};\n  for (const key in headerRow) {\n    const columnName = headerRow[key];\n    if (columnName) {\n      columnMap[columnName] = key;\n    }\n  }\n\n  // Step 2: Extract and filter data rows\n  const result = sheet.slice(1).reduce((acc, row) => {\n    const values = row.values;\n    if (values[columnMap[\"datasource_id\"]] === datasource) {\n      acc.push({\n        datasource_id: values[columnMap[\"datasource_id\"]],\n        indicator_id: values[columnMap[\"indicator_id\"]],\n        datasource_indicator: values[columnMap[\"datasource_indicator\"]],\n      });\n    }\n    return acc;\n  }, []);\n\n  return result;\n};",
+                  "packageJson": "{}"
+                },
+                "propertySettings": {
+                  "sheet": {
+                    "type": "MANUAL"
+                  },
+                  "datasource": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-06-13T07:36:39.186Z",
+                  "sampleDataFileId": "gNret1zhQmV9eRFVqfapj",
+                  "sampleDataInputFileId": "T2SDYcF45WFIijRu6cpAe"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_5",
+                "skip": false,
+                "type": "CODE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "pdfUrl": "{{trigger['body']['data'][0]['value']['url']}}"
+                  },
+                  "sourceCode": {
+                    "code": "import axios from 'axios';\nimport { Buffer } from 'buffer';\n\nexport const code = async (inputs) => {\n  const pdfUrl = inputs.pdfUrl;\n  if (!pdfUrl) {\n    throw new Error(\"Missing 'pdfUrl' input.\");\n  }\n\n  try {\n    // Download PDF using axios with response type set to arraybuffer\n    const response = await axios.get(pdfUrl, { responseType: 'arraybuffer' });\n\n    // Convert buffer to base64\n    const buffer = Buffer.from(response.data);\n    const base64 = buffer.toString('base64');\n\n    return {\n      base64: base64,\n      contentType: response.headers['content-type'] || 'application/pdf',\n      fileName: pdfUrl.split('/').pop() || 'file.pdf'\n    };\n  } catch (error) {\n    return { error: error.message };\n  }\n};",
+                    "packageJson": "{\n  \"dependencies\": {\n    \"axios\": \"1.9.0\",\n    \"buffer\": \"6.0.3\"\n  }\n}"
+                  },
+                  "propertySettings": {
+                    "pdfUrl": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-06-13T07:36:59.597Z",
+                    "sampleDataFileId": "xwCQy6t5xmbe3EuxUkOko",
+                    "sampleDataInputFileId": "RivjhveCmNYMSAm48KnnE"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_4",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "auth": "{{connections['straico']}}",
+                      "file": "data:application/pdf;base64,{{step_5['base64']}}"
+                    },
+                    "pieceName": "@activepieces/piece-straico",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "file_upload",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.1.2",
+                    "propertySettings": {
+                      "auth": {
+                        "type": "MANUAL"
+                      },
+                      "file": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-06-13T07:37:26.423Z",
+                      "sampleDataFileId": "KcN2mJU8ZEdI3HFFcqqHa",
+                      "sampleDataInputFileId": "EN5MliiwuOoQLJbSoutre"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_6",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "auth": "{{connections['straico']}}",
+                        "model": "google/gemini-2.5-pro-preview",
+                        "prompt": "You are tasked with extracting metadata of health indicators from the provided PDF report containing statistical tables. These indicators are typically found as headers in the tables. Each PDF includes the year of the report, page numbers where indicators are located and table or figure numbers associated with those indicators. kindly note that some tables only provide a summarized overview of the report, refer to the more detailed tables that include data for each state/location where applicable.\n\nThis prompt takes the following inputs:\n1. [indicators_to_find= {{step_3}}] — A JSON array of indicators, where each object has the following fields:\n   -datasource_id\n   -indicator_id\n   -datasource_indicator (used as the search keyword)\n2. datasource — The name or ID of the data source\n3. program_area — A general program area category (if not derivable from context)\n\nYour task: Using the indicators_to_find list and the PDF content, construct a CSV-formatted Data Entry Metadata Table with the following column headers:\nIndicator Name,Program Area,Data Source,Year,Page,Table No,Comment,Status,Done by\nInstructions for Populating Each Column:\n\n1. Indicator Name\n-Use the indicator_id from the {{indicators_to_find}} input.\n-Search the PDF for each datasource_indicator field. \nIf the exact text is not found, locate the closest  matching term. If you don't find a close match exclude the field in the final CSV.\n-Normalize the found term to the correct indicator_id.\nExample: If the PDF contains “Mpox” but datasource_indicator is “Monkeypox,” this should be a match, then normalize it to it's corresponding indicator_id field. \n\n2. Program Area\nAssign based on the nature of the indicator:\n-RMNCH: Related to childbirth, pregnancy, or contraception\n-Nutrition: Related to nutrition, vitamins, undernourishment\n-Immunization: Related to vaccines (e.g., OPV, BCG, PCV, Polio)\n-HIV: Related to HIV/AIDS or STDs (e.g., Syphilis, Gonorrhea)\n-Malaria: Related to mosquitoes, insecticides, ITNs\n-Mortality: Related to death (e.g., post-neonatal mortality rate)\nUse the best match based on the indicator context in the PDF.\n\n3. Data Source\nPopulate with the corresponding datasource_id from the JSON input.\n\n4. Year\nExtract the year or period mentioned in the PDF for when the indicator data was reported.\n\n5. Page\nExtract the page number where the indicator/header appears.\n\n6. Table No\nExtract the table number, figure number, or chapter reference associated with the table where the indicator is found. e.g., CH.3, Figure 7\n\n7. Comment\n-Use the exact phrase as written in the PDF to describe how the indicator is mentioned.\n-Format: Written as \"\"exact phrase in PDF\"\". (i.e., escape inner double quotes with double-double quotes) \n-Example: \"Written as \"\"CONFIRMED CASES\"\"\", \"Written as \"\"Insecticide treated mosquito net (ITN)\"\"\"\n\n8. Status and Done by\nLeave these columns empty.\n\nOutput Format:\nRespond only with the extracted data in CSV plain text format using the specified column headers.\nDo not include any explanations, markdown formatting, or extra comments—only the CSV content.\n\nClean and correct the CSV data. Ensure that:\n-The first row is treated as the header and has exactly 9 columns. (include the headers in the final CSV).\n-All subsequent rows also have exactly 9 columns.\n-If any value is missing (e.g., Table No, Status, Done by), leave the field empty: ,,\n-Ensure that every field in every row, including the header row, is wrapped in double quotes, regardless of whether the content contains commas, spaces, or special characters, and escape inner quotes using two double-quotes (\"\").\n-Fix any malformed rows due to misplaced commas or quotes.\n\nExample CSV output;\n\"Indicator Name\",\"Program Area\",\"Data Source\",\"Year\",\"Page\",\"Table No\",\"Comment\",\"Status\",\"Done by\"\n\"COVID-19 confirmed cases (cumulative)\",\"COVID-19\",\"NCDC\",\"2020\",\"2\",\"Table 1\",\"Written as \"\"CONFIRMED CASES\"\"\",\"\",\"\"\n\"COVID-19 recovered cases (cumulative)\",\"COVID-19\",\"NCDC\",\"2020\",\"2\",\"Table 1\",\"Written as \"\"DISCHARGED CASES\"\"\",\"\",\"\"\n\"COVID-19 deaths (cumulative)\",\"COVID-19\",\"NCDC\",\"2020\",\"2\",\"Table 1\",\"Written as \"\"DEATHS\"\"\",\"\",\"\"\n\"COVID-19 testing cases (cumulative)\",\"COVID-19\",\"NCDC\",\"2020\",\"1\",\"\",\"Written as \"\"SAMPLES TESTED\"\"\",\"\",\"\"\n\"COVID-19 active cases (cumulative)\",\"COVID-19\",\"NCDC\",\"2020\",\"2\",\"Table 1\",\"Written as \"\"TOTAL ACTIVE CASES\"\"\",\"\",\"\"",
+                        "fileUrls": [
+                          "{{step_4}}"
+                        ],
+                        "imageUrls": [],
+                        "youtubeUrls": [],
+                        "displayTranscripts": false
+                      },
+                      "pieceName": "@activepieces/piece-straico",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "prompt_completion",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "0.1.2",
+                      "propertySettings": {
+                        "auth": {
+                          "type": "MANUAL"
+                        },
+                        "model": {
+                          "type": "MANUAL"
+                        },
+                        "prompt": {
+                          "type": "MANUAL"
+                        },
+                        "fileUrls": {
+                          "type": "MANUAL"
+                        },
+                        "imageUrls": {
+                          "type": "MANUAL"
+                        },
+                        "youtubeUrls": {
+                          "type": "MANUAL"
+                        },
+                        "displayTranscripts": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-06-13T08:11:00.595Z",
+                        "sampleDataFileId": "2UT8xSGlkkx5xEGWRLhs3",
+                        "sampleDataInputFileId": "f13Q0FvplmHhWz1bxDsyV"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_7",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "csv_text": "{{step_6['content']}}",
+                          "has_headers": true,
+                          "delimiter_type": ","
+                        },
+                        "pieceName": "@activepieces/piece-csv",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "convert_csv_to_json",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "0.4.2",
+                        "propertySettings": {
+                          "csv_text": {
+                            "type": "MANUAL"
+                          },
+                          "has_headers": {
+                            "type": "MANUAL"
+                          },
+                          "delimiter_type": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-06-13T09:26:07.490Z",
+                          "sampleDataFileId": "GSxc4guvUO9f39X3FEaq9",
+                          "sampleDataInputFileId": "2qEaTnCFqNAodUyxGcMKt"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_8",
+                        "skip": false,
+                        "type": "LOOP_ON_ITEMS",
+                        "valid": true,
+                        "settings": {
+                          "items": "{{step_7}}",
+                          "propertySettings": {},
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-06-13T08:17:10.467Z",
+                            "sampleDataFileId": "LdztQ5nT0KLf9awU2Js4c",
+                            "sampleDataInputFileId": "9kPemteVkVOkclWGDaTTC"
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_11",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "markdown": "Hello! @channel\n\nThe **Data Entry Metadata Sheet** has been updated with new entries from **{{trigger['body']['data'][1]['value']}}**.\n\nPlease find the updated spreadsheet [here](https://docs.google.com/spreadsheets/d/1_whfP7IbvbAfEaujmjWjqJTUueXQWnOZnwZQXJvDMmE/edit?usp=sharing).\n"
+                            },
+                            "pieceName": "@activepieces/piece-slack",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "markdownToSlackFormat",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.9.3",
+                            "propertySettings": {
+                              "markdown": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-06-13T08:55:15.374Z",
+                              "sampleDataFileId": "3Pa5ecVbGsJ6FOj7Ojt8y",
+                              "sampleDataInputFileId": "55vWnYd17V82rbXctV71Q"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_10",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['slack']}}",
+                                "text": "{{step_11}}",
+                                "channel": "C071ZTPGJHE"
+                              },
+                              "pieceName": "@activepieces/piece-slack",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "send_channel_message",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "0.9.3",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "text": {
+                                  "type": "MANUAL"
+                                },
+                                "channel": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {},
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_12",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['slack']}}",
+                                  "text": "{{step_11}}",
+                                  "channel": "C07NNUA4VA5"
+                                },
+                                "pieceName": "@activepieces/piece-slack",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "send_channel_message",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "0.9.3",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "text": {
+                                    "type": "MANUAL"
+                                  },
+                                  "channel": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "displayName": "Send Message To A Channel"
+                            },
+                            "displayName": "Send Message To A Channel"
+                          },
+                          "displayName": "Markdown to Slack format"
+                        },
+                        "displayName": "Loop on Items",
+                        "firstLoopAction": {
+                          "name": "step_9",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                              "values": {
+                                "values": [
+                                  {
+                                    "A": "{{step_8['item']['Indicator Name']}}",
+                                    "B": "{{step_8['item']['Program Area']}}",
+                                    "C": "{{step_8['item']['Data Source']}}",
+                                    "D": "{{step_8['item']['Year']}}",
+                                    "E": "{{step_8['item']['Page']}}",
+                                    "F": "{{step_8['item']['Table No']}}",
+                                    "G": "{{step_8['item']['Comment']}}",
+                                    "H": "",
+                                    "I": "{{step_8['item']['Status']}}",
+                                    "J": "{{step_8['item']['Done by']}}"
+                                  }
+                                ]
+                              },
+                              "sheetId": 221322593,
+                              "as_string": false,
+                              "overwrite": false,
+                              "input_type": "column_names",
+                              "spreadsheetId": "1_whfP7IbvbAfEaujmjWjqJTUueXQWnOZnwZQXJvDMmE",
+                              "includeTeamDrives": true,
+                              "check_for_duplicate": false,
+                              "check_for_duplicate_column": {}
+                            },
+                            "pieceName": "@activepieces/piece-google-sheets",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "google-sheets-insert-multiple-rows",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.12.4",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "values": {
+                                "type": "MANUAL"
+                              },
+                              "sheetId": {
+                                "type": "MANUAL"
+                              },
+                              "as_string": {
+                                "type": "MANUAL"
+                              },
+                              "overwrite": {
+                                "type": "MANUAL"
+                              },
+                              "input_type": {
+                                "type": "MANUAL"
+                              },
+                              "spreadsheetId": {
+                                "type": "MANUAL"
+                              },
+                              "includeTeamDrives": {
+                                "type": "MANUAL"
+                              },
+                              "check_for_duplicate": {
+                                "type": "MANUAL"
+                              },
+                              "check_for_duplicate_column": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Insert Multiple Rows"
+                        }
+                      },
+                      "displayName": "Convert CSV to JSON"
+                    },
+                    "displayName": "Ask AI"
+                  },
+                  "displayName": "Upload File"
+                },
+                "displayName": "PDF to Base64"
+              },
+              "displayName": "Datasource Indicators"
+            },
+            "displayName": "Normalized Sheet"
+          },
+          "displayName": "Generate Random Number"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

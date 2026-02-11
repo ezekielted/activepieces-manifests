@@ -1,0 +1,804 @@
+﻿{
+  "name": "Internal Newsletter",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-http",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-store",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-delay"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "JtCasu75WPAdMqGu7lugC"
+  },
+  "flows": [
+    {
+      "displayName": "Internal Newsletter",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            },
+            "liveMarkdown": {
+              "type": "MANUAL"
+            },
+            "syncMarkdown": {
+              "type": "MANUAL"
+            },
+            "testMarkdown": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.25",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_16",
+          "type": "CODE",
+          "valid": true,
+          "settings": {
+            "input": {},
+            "sampleData": {},
+            "sourceCode": {
+              "code": "export const code = async (inputs: any): Promise<{ currentMonth: string; previousMonth: string; year: number }> => {\n  const date = new Date();\n\n  // Options for retrieving the month name in full (e.g., \"October\")\n  const options: Intl.DateTimeFormatOptions = { month: 'long' };\n\n  // Retrieve the current month name\n  const currentMonth: string = date.toLocaleString('default', options);\n\n  // Calculate the previous month correctly by adjusting to the 1st of the month first\n  const previousMonthDate = new Date(date);\n  previousMonthDate.setDate(1); // Set to the 1st of the current month to avoid issues with the day\n  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1); // Move to the previous month\n  const previousMonth: string = previousMonthDate.toLocaleString('default', options);\n\n  // Retrieve the full year (e.g., 2024)\n  const year: number = date.getFullYear();\n\n  return { currentMonth, previousMonth, year };\n};\n",
+              "packageJson": "{}"
+            },
+            "propertySettings": {},
+            "sampleDataSettings": {
+              "lastTestDate": "2024-11-13T17:02:48.120Z",
+              "sampleDataFileId": "p8gc9l8Urqo19ihO4JcMw"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_2",
+            "type": "LOOP_ON_ITEMS",
+            "valid": true,
+            "settings": {
+              "items": "{{trigger['body']['data']}}",
+              "propertySettings": {},
+              "sampleDataSettings": {
+                "lastTestDate": "2024-11-25T09:00:37.559Z",
+                "sampleDataFileId": "0DD30F2Z8SLgMD6pY1kK6"
+              }
+            },
+            "nextAction": {
+              "name": "step_5",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "key": "html_markdown",
+                  "store_scope": "RUN",
+                  "defaultValue": "[]"
+                },
+                "pieceName": "@activepieces/piece-store",
+                "pieceType": "OFFICIAL",
+                "actionName": "get",
+                "packageType": "REGISTRY",
+                "pieceVersion": "0.5.4",
+                "propertySettings": {
+                  "key": {
+                    "type": "MANUAL"
+                  },
+                  "store_scope": {
+                    "type": "MANUAL"
+                  },
+                  "defaultValue": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2024-11-26T11:07:46.937Z",
+                  "sampleDataFileId": "pGq3p4r7aDFjIxPiRtr1r"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_1",
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "cc": [
+                      "karl.ezeh@e4email.net",
+                      "awele.ojei@e4email.net"
+                    ],
+                    "to": [
+                      "ezekiel.tedunjaiye@e4email.net"
+                    ],
+                    "bcc": [],
+                    "auth": "{{connections['smtp.office365.com']}}",
+                    "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #ffffff;\n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .section {\n            width: 100%;\n            padding: 10px 0;\n            margin: 10px 0;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 10px;\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 25px;\n            height: 25px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        .quote {\n            text-align: center;\n            margin: 20px 0;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/5b446ef6-1292-a4a4-7451-81dab2e22e07.png\" alt=\"Newsletter Header Image\">\n        \n        <div class=\"section\">\n            <div class=\"quote\">\n                <small><i>\"There is nothing impossible to they who will try\"</i><br>Alexander the Great</small>\n            </div>\n  \n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/515486e9-51ee-8d02-0653-0ad7883a990a.png\" alt=\"Misc Image\"><br>\n            {{step_5[0]}}\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/f489b594-804a-83f4-04af-eed41b0650a0.png\" alt=\"Misc Image\">\n            <h3>Events for the month:</h3>\n            {{step_5[1]}}<br>\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/d912cd96-c391-a907-3912-5bcc23e47b27.png\" alt=\"Misc Image\">\n            <p>We love opportunities to celebrate, and in the month of {{step_16['currentMonth']}}, we had celebrations for;</p>\n            {{step_5[2]}}\n            <p>These team members all celebrated something special in the month of {{step_16['currentMonth']}}. We love and appreciate you all! eHealthers, pls let’s all appreciate them in whatever way we can.</p>\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/fd28853b-cacb-6c42-37ab-b2fb3a075142.png\" alt=\"Misc Image\">\n            {{step_5[3]}}\n            <div class=\"connect-section\">\n                <h2>Announcements</h2>\n                {{step_5[4]}}<br>\n                <div class=\"sub-heading\">Did you know that….</div>\n                    <ul>\n                        <li>You are required to submit your office laptop before going on leave and all handover notes and discussion should be done 2 days before the intended leave day.</li>\n                        <li>There are mediums available to collect your feedback about work experience. Identifiable mediums are via mails (<a href=\"mailto:complaints@e4email.net\" target=\"_blank\">complaints@e4email.net</a>, <a href=\"mailto:hr@e4email.net\" target=\"_blank\">hr@e4email.net</a>), the office improvement channel, and physical discussions. Anonymous mediums are via the suggestion box in the kitchen (extreme left of the microwave), anonymous feedback link etc. You can make use of any of these as you deem fit.</li><br>\n                    </ul>\n            </div>\n        </div>\n  \n        <footer class=\"footer\">\n            \n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n                <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n                </a>\n                <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n                </a>\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) {{step_16['year']}} eHealth4everyone. All rights reserved.</i>\n            \n            <div class=\"preferences\">\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=c25e50b70a&e=[UNIQID]&c=e797a0de77\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=c25e50b70a&t=b&e=[UNIQID]&c=e797a0de77\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                    "from": "automationagent@e4email.net",
+                    "subject": "This is a test! for {{step_16['currentMonth']}} {{step_16['year']}} Internal Newsletter",
+                    "body_type": "html",
+                    "senderName": "ehealth4everyone",
+                    "customHeaders": {}
+                  },
+                  "pieceName": "@activepieces/piece-smtp",
+                  "actionName": "send-email",
+                  "pieceVersion": "0.2.4",
+                  "propertySettings": {
+                    "cc": {
+                      "type": "MANUAL"
+                    },
+                    "to": {
+                      "type": "MANUAL"
+                    },
+                    "bcc": {
+                      "type": "MANUAL"
+                    },
+                    "auth": {
+                      "type": "MANUAL"
+                    },
+                    "body": {
+                      "type": "MANUAL"
+                    },
+                    "from": {
+                      "type": "MANUAL"
+                    },
+                    "subject": {
+                      "type": "MANUAL"
+                    },
+                    "body_type": {
+                      "type": "MANUAL"
+                    },
+                    "senderName": {
+                      "type": "MANUAL"
+                    },
+                    "customHeaders": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_7",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "auth": "{{connections['slack']}}",
+                      "text": "Hello there,\n\nI trust you have received the sample for the {{step_16['currentMonth']}} newsletter. May I proceed with sending it out to the targeted audience?",
+                      "channel": "C02EDG7UMT3"
+                    },
+                    "pieceName": "@activepieces/piece-slack",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "request_approval_message",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.7.15",
+                    "propertySettings": {
+                      "auth": {
+                        "type": "MANUAL"
+                      },
+                      "text": {
+                        "type": "MANUAL"
+                      },
+                      "channel": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2024-11-27T11:05:03.342Z",
+                      "sampleDataFileId": "e7Ar7BRwjByFVrj9arADV"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_9",
+                    "type": "ROUTER",
+                    "valid": true,
+                    "children": [
+                      {
+                        "name": "step_28",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "url": "https://us11.api.mailchimp.com/3.0/lists/c25e50b70a/members?status=subscribed&count=1000",
+                            "body": {},
+                            "method": "GET",
+                            "headers": {
+                              "Authorization": "Basic REPLACE_WITH_API_KEY"
+                            },
+                            "failsafe": false,
+                            "body_type": "none",
+                            "use_proxy": false,
+                            "queryParams": {},
+                            "proxy_settings": {}
+                          },
+                          "pieceName": "@activepieces/piece-http",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "send_request",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "0.6.2",
+                          "propertySettings": {
+                            "url": {
+                              "type": "MANUAL"
+                            },
+                            "body": {
+                              "type": "MANUAL"
+                            },
+                            "method": {
+                              "type": "MANUAL"
+                            },
+                            "headers": {
+                              "type": "MANUAL"
+                            },
+                            "failsafe": {
+                              "type": "MANUAL"
+                            },
+                            "body_type": {
+                              "type": "MANUAL"
+                            },
+                            "use_proxy": {
+                              "type": "MANUAL"
+                            },
+                            "queryParams": {
+                              "type": "MANUAL"
+                            },
+                            "proxy_settings": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2024-11-29T12:59:35.595Z",
+                            "sampleDataFileId": "t1hvxH1lonh0uN2eYQOru"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_29",
+                          "type": "LOOP_ON_ITEMS",
+                          "valid": true,
+                          "settings": {
+                            "items": "{{step_28['body']['members']}}",
+                            "propertySettings": {},
+                            "sampleDataSettings": {
+                              "lastTestDate": "2024-11-29T12:59:50.956Z",
+                              "sampleDataFileId": "RQhfazlQDEkA1O6gBZnI9"
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_18",
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['slack']}}",
+                                "text": "Hey! @channel\n\nThe Internal newsletter for {{step_16['currentMonth']}} {{step_16['year']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                                "channel": "C02EDG7UMT3"
+                              },
+                              "pieceName": "@activepieces/piece-slack",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "send_channel_message",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "0.7.15",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "text": {
+                                  "type": "MANUAL"
+                                },
+                                "channel": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {},
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_17",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['slack']}}",
+                                  "text": "Hey! @channel\n\nThe Internal newsletter for {{step_16['currentMonth']}} {{step_16['year']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                                  "channel": "C07NNUA4VA5"
+                                },
+                                "pieceName": "@activepieces/piece-slack",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "send_channel_message",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "0.7.15",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "text": {
+                                    "type": "MANUAL"
+                                  },
+                                  "channel": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2024-11-13T18:19:14.052Z",
+                                  "sampleDataFileId": "XNpaxGjasms0gYbS7gZvu"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "displayName": "Send Message To Automation logs"
+                            },
+                            "displayName": "Send Message To Newsletter channel"
+                          },
+                          "displayName": "Send out Newsletter",
+                          "firstLoopAction": {
+                            "name": "step_6",
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "cc": [],
+                                "to": [
+                                  "{{step_29['item']['email_address']}}"
+                                ],
+                                "bcc": [],
+                                "auth": "{{connections['smtp.office365.com']}}",
+                                "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #ffffff;\n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .section {\n            width: 100%;\n            padding: 10px 0;\n            margin: 10px 0;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 10px;\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 25px;\n            height: 25px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        .quote {\n            text-align: center;\n            margin: 20px 0;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/5b446ef6-1292-a4a4-7451-81dab2e22e07.png\" alt=\"Newsletter Header Image\">\n        \n        <div class=\"section\">\n            <div class=\"quote\">\n                <small><i>\"There is nothing impossible to they who will try\"</i><br>Alexander the Great</small>\n            </div>\n  \n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/515486e9-51ee-8d02-0653-0ad7883a990a.png\" alt=\"Misc Image\"><br>\n            {{step_5[0]}}\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/f489b594-804a-83f4-04af-eed41b0650a0.png\" alt=\"Misc Image\">\n            <h3>Events for the month:</h3>\n            {{step_5[1]}}<br>\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/d912cd96-c391-a907-3912-5bcc23e47b27.png\" alt=\"Misc Image\">\n            <p>We love opportunities to celebrate, and in the month of {{step_16['currentMonth']}}, we had celebrations for;</p>\n            {{step_5[2]}}\n            <p>These team members all celebrated something special in the month of {{step_16['currentMonth']}}. We love and appreciate you all! eHealthers, pls let’s all appreciate them in whatever way we can.</p>\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/fd28853b-cacb-6c42-37ab-b2fb3a075142.png\" alt=\"Misc Image\">\n            {{step_5[3]}}\n            <div class=\"connect-section\">\n                <h2>Announcements</h2>\n                {{step_5[4]}}<br>\n                <div class=\"sub-heading\">Did you know that….</div>\n                    <ul>\n                        <li>You are required to submit your office laptop before going on leave and all handover notes and discussion should be done 2 days before the intended leave day.</li>\n                        <li>There are mediums available to collect your feedback about work experience. Identifiable mediums are via mails (<a href=\"mailto:complaints@e4email.net\" target=\"_blank\">complaints@e4email.net</a>, <a href=\"mailto:hr@e4email.net\" target=\"_blank\">hr@e4email.net</a>), the office improvement channel, and physical discussions. Anonymous mediums are via the suggestion box in the kitchen (extreme left of the microwave), anonymous feedback link etc. You can make use of any of these as you deem fit.</li><br>\n                    </ul>\n            </div>\n        </div>\n  \n        <footer class=\"footer\">\n            \n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n                <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n                </a>\n                <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n                </a>\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) {{step_16['year']}} eHealth4everyone. All rights reserved.</i>\n            \n            <div class=\"preferences\">\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=c25e50b70a&e=[UNIQID]&c=e797a0de77\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=c25e50b70a&t=b&e=[UNIQID]&c=e797a0de77\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                                "from": "automationagent@e4email.net",
+                                "subject": "{{step_16['currentMonth']}} {{step_16['year']}} Internal Newsletter",
+                                "body_type": "html",
+                                "senderName": "ehealth4everyone",
+                                "customHeaders": {}
+                              },
+                              "pieceName": "@activepieces/piece-smtp",
+                              "actionName": "send-email",
+                              "pieceVersion": "0.2.4",
+                              "propertySettings": {
+                                "cc": {
+                                  "type": "MANUAL"
+                                },
+                                "to": {
+                                  "type": "MANUAL"
+                                },
+                                "bcc": {
+                                  "type": "MANUAL"
+                                },
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "body": {
+                                  "type": "MANUAL"
+                                },
+                                "from": {
+                                  "type": "MANUAL"
+                                },
+                                "subject": {
+                                  "type": "MANUAL"
+                                },
+                                "body_type": {
+                                  "type": "MANUAL"
+                                },
+                                "senderName": {
+                                  "type": "MANUAL"
+                                },
+                                "customHeaders": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_22",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "unit": "seconds",
+                                  "delayFor": "2"
+                                },
+                                "pieceName": "@activepieces/piece-delay",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "delayFor",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "0.3.21",
+                                "propertySettings": {
+                                  "unit": {
+                                    "type": "MANUAL"
+                                  },
+                                  "delayFor": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2024-11-14T06:56:23.861Z",
+                                  "sampleDataFileId": "XjmOuxjrzJ6NDvmHgLpyF"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "displayName": "Delay For"
+                            },
+                            "displayName": "Send Email to Audience"
+                          }
+                        },
+                        "displayName": "Retrieve Mailchimp Audience List"
+                      },
+                      {
+                        "name": "step_10",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['slack']}}",
+                            "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                            "channel": "C02EDG7UMT3"
+                          },
+                          "pieceName": "@activepieces/piece-slack",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "send_channel_message",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "0.7.15",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "text": {
+                              "type": "MANUAL"
+                            },
+                            "channel": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {},
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_11",
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['slack']}}",
+                              "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                              "channel": "C07NNUA4VA5"
+                            },
+                            "pieceName": "@activepieces/piece-slack",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "send_channel_message",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.7.15",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "text": {
+                                "type": "MANUAL"
+                              },
+                              "channel": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Send Message To Automation logs"
+                        },
+                        "displayName": "Send Message To Newsletter channel"
+                      }
+                    ],
+                    "settings": {
+                      "branches": [
+                        {
+                          "branchName": "Branch 1",
+                          "branchType": "CONDITION",
+                          "conditions": [
+                            [
+                              {
+                                "operator": "BOOLEAN_IS_TRUE",
+                                "firstValue": "{{step_7['approved']}}"
+                              }
+                            ]
+                          ]
+                        },
+                        {
+                          "branchName": "Otherwise",
+                          "branchType": "FALLBACK"
+                        }
+                      ],
+                      "executionType": "EXECUTE_FIRST_MATCH",
+                      "propertySettings": {},
+                      "sampleDataSettings": {
+                        "lastTestDate": "2024-11-27T11:05:21.970Z",
+                        "sampleDataFileId": "a1E55nUgxD4WWCpqnwcFQ"
+                      }
+                    },
+                    "displayName": "Router"
+                  },
+                  "displayName": "Request Approval in a Channel"
+                },
+                "displayName": "Send Email to cc"
+              },
+              "displayName": "Get"
+            },
+            "displayName": "Convert response to markdown",
+            "firstLoopAction": {
+              "name": "step_8",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "url": "https://ollamapi.e4eweb.space/api/generate",
+                  "body": {
+                    "data": {
+                      "model": "llama3.2:3b",
+                      "prompt": "Take the following unstructured text as input and convert it into markdown format. Do not add, remove, or hallucinate any content. For text that consists of simple sentences, format each sentence as a bullet point. Use '####' for the largest header and only if necessary for section titles. Do not introduce additional section headers unless explicitly provided in the input. Your response should only consist of the markdown formatted text without unnecessary modifications. Input: {{step_2['item']['value']}}",
+                      "stream": false,
+                      "options": {
+                        "temperature": 0.6
+                      }
+                    }
+                  },
+                  "method": "POST",
+                  "headers": {
+                    "Authorization": "Basic REPLACE_WITH_API_KEY"
+                  },
+                  "failsafe": false,
+                  "body_type": "json",
+                  "use_proxy": false,
+                  "queryParams": {},
+                  "proxy_settings": {}
+                },
+                "pieceName": "@activepieces/piece-http",
+                "actionName": "send_request",
+                "pieceVersion": "0.6.2",
+                "propertySettings": {
+                  "url": {
+                    "type": "MANUAL"
+                  },
+                  "body": {
+                    "type": "MANUAL",
+                    "schema": {
+                      "data": {
+                        "type": "JSON",
+                        "required": true,
+                        "displayName": "JSON Body"
+                      }
+                    }
+                  },
+                  "method": {
+                    "type": "MANUAL"
+                  },
+                  "headers": {
+                    "type": "MANUAL"
+                  },
+                  "failsafe": {
+                    "type": "MANUAL"
+                  },
+                  "body_type": {
+                    "type": "MANUAL"
+                  },
+                  "use_proxy": {
+                    "type": "MANUAL"
+                  },
+                  "queryParams": {
+                    "type": "MANUAL"
+                  },
+                  "proxy_settings": {
+                    "type": "MANUAL",
+                    "schema": {}
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_3",
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "flavor": "github",
+                    "tables": true,
+                    "markdown": "{{step_8['body']['response']}}",
+                    "noHeaderId": false,
+                    "headerLevelStart": 1,
+                    "simpleLineBreaks": false,
+                    "openLinksInNewWindow": false
+                  },
+                  "pieceName": "@activepieces/piece-text-helper",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "markdown_to_html",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "0.2.7",
+                  "propertySettings": {
+                    "flavor": {
+                      "type": "MANUAL"
+                    },
+                    "tables": {
+                      "type": "MANUAL"
+                    },
+                    "markdown": {
+                      "type": "MANUAL"
+                    },
+                    "noHeaderId": {
+                      "type": "MANUAL"
+                    },
+                    "headerLevelStart": {
+                      "type": "MANUAL"
+                    },
+                    "simpleLineBreaks": {
+                      "type": "MANUAL"
+                    },
+                    "openLinksInNewWindow": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2024-11-25T09:37:16.827Z",
+                    "sampleDataFileId": "Y9CWG5ouTwxUMWSyRR8nM"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_4",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "html_markdown",
+                      "value": "{{step_3}}",
+                      "store_scope": "RUN",
+                      "ignore_if_exists": false
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "add_to_list",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.5.4",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "value": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "ignore_if_exists": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "displayName": "Add To List"
+                },
+                "displayName": "Markdown to HTML"
+              },
+              "displayName": "convert text to markdown"
+            }
+          },
+          "displayName": "Get date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

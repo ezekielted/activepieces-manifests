@@ -1,0 +1,204 @@
+﻿{
+  "name": "Convert html to pdf and save to drive",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-http",
+    "@activepieces/piece-google-drive"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "tCNKJCP25iYggqK87as3A"
+  },
+  "flows": [
+    {
+      "displayName": "Convert html to pdf and save to drive",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Month",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "day_of_the_month": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "~0.1.5",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 4,
+            "day_of_the_month": 3
+          },
+          "triggerName": "every_month"
+        },
+        "nextAction": {
+          "name": "step_27",
+          "type": "CODE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "reportHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>\n<style>\n    body {\n        font-family: 'Lexend';\n        font-size: 16px;\n    }\n    pre {\n        font-family: 'Lexend'; \n        font-size: 16px; \n        white-space: pre-wrap;\n        word-wrap: break-word; \n    }\n    .page-break {\n        page-break-after: always;\n    }\n    .container {\n        display: flex;\n        flex-direction: column;\n        padding: 10px;\n        justify-content: space-evenly;\n    }\n    .table-wrapper {\n        width: 100%;\n        margin-bottom: 20px;\n    }\n    table {\n        width: 100%;\n        border-collapse: collapse;\n    }\n    th, td {\n        border: 1px solid #000;\n        padding: 8px;\n        text-align: left;\n    }\n    #col-header {\n        background-color: #d0e4f5;\n    }\n    caption {\n        margin-bottom: 10px;\n        font-weight: bold;\n        font-size: 16px;\n    }\n</style>\n\n\n    <title>Dhistance Google Analytics {{step_32['currentMonth']}} Report {{step_32['year']}}</title>\n</head>\n<body>\n    <h2>Dhistance Google Analytics Report For {{step_32['currentMonth']}}</h2><br>\n     <div class=\"container\">\n<div class=\"table-wrapper\"><table><thead><tr><th>Month</th><th>{{step_32['currentMonth']}} {{step_32['year']}}</th></tr></thead><tbody><tr><td>Platform</td><td><a href=\"https://dhistance.com/\" target=\"_blank\">https://dhistance.com/</a></td></tr></tbody></table></div><br><br>\n<div class=\"table-wrapper\">\n<table><caption>Monthly Overview</caption><thead id=\"col-header\"><tr><th>Month</th><th>New Users</th><th>Total Users</th><th>Bounce Rate</th><th>Event Count</th></tr></thead><tbody><tr><td>{{step_32['previousMonth']}}</td><td>{{step_20[1]['values']['A']}}</td><td>{{step_20[1]['values']['B']}}</td><td>{{step_23['previousBounceRate']}}</td><td>{{step_20[1]['values']['C']}}</td></tr><tr><td>{{step_32['currentMonth']}}</td><td>{{step_4[1]['values']['A']}}</td><td>{{step_4[1]['values']['B']}}</td><td>{{step_23['currentBounceRate']}}</td><td>{{step_4[1]['values']['C']}}</td></tr></tbody></table></div>\n</div>\n    \n    <p>It is GA4 (Google Analytics 4) this time around.</p>\n    <p>Event count in Google Analytics 4 according to Google: “It is a report that shows you each triggered event and the number of times each event was triggered in the last 30 minutes by the users on your website or app. An event allows you to measure a specific interaction or occurrence on your website or app. For example, you can use an event to measure when someone loads a page, clicks a link, or to measure system behavior, such as when an app crashes or an impression is served.”</p>\n    <div class=\"page-break\"></div>\n    <h4>A. Analysis of New Users, Users, and Average Engagement Time in the Month of {{step_32['currentMonth']}}</h4>\n    <img src=\"{{step_21[0]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_22['body']['choices'][0]['message']['content']}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>B. Analysis of Event Counts in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[1]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_9['body']['choices'][0]['message']['content']}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>C. Analysis of Audience and User Acquisition in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[2]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_12['body']['choices'][0]['message']['content']}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>D. Analysis of Users by Country</h4>\n    <img src=\"{{step_21[3]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_14['body']['choices'][0]['message']['content']}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>E. Analysis of Pages and Screens</h4> \n    <img src=\"{{step_21[4]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_15['body']['choices'][0]['message']['content']}}</pre>\n\n  <div class=\"page-break\"></div>\n    <h4>F. Analysis of Landing Pages</h4>  \n   <img src=\"{{step_21[5]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_16['body']['choices'][0]['message']['content']}}</pre>\n    <div class=\"page-break\"></div>\n    <h4>UX Recommendations Based on the Report for the Month of {{step_32['currentMonth']}}</h4>\n    <pre>{{step_17['body']['choices'][0]['message']['content']}} </pre>\n\n\n</body>\n</html>"
+            },
+            "sourceCode": {
+              "code": "export const code = async (inputs) => {\n  // Example input: HTML content\n  const htmlContent = inputs.reportHtml;\n\n  // Create a JSON object with a key-value pair\n  const jsonBody = {\n    reportHtml: htmlContent\n  };\n\n  // Return the JSON object (you can use this for further processing or API requests)\n  return jsonBody;\n};\n",
+              "packageJson": "{}"
+            },
+            "propertySettings": {
+              "reportHtml": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-02-06T09:21:14.947Z",
+              "sampleDataFileId": "yOBM0wvAoUZlrKm5tdLZ2"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_26",
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "url": "https://api.pdfshift.io/v3/convert/pdf",
+                "body": {
+                  "data": {
+                    "encode": true,
+                    "margin": "50px",
+                    "source": "{{step_27['reportHtml']}}",
+                    "landscape": false,
+                    "use_print": false
+                  }
+                },
+                "method": "POST",
+                "headers": {
+                  "Authorization": "Basic REPLACE_WITH_API_KEY"
+                },
+                "failsafe": false,
+                "body_type": "json",
+                "use_proxy": false,
+                "queryParams": {},
+                "proxy_settings": {}
+              },
+              "pieceName": "@activepieces/piece-http",
+              "pieceType": "OFFICIAL",
+              "actionName": "send_request",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.5.1",
+              "propertySettings": {
+                "url": {
+                  "type": "MANUAL"
+                },
+                "body": {
+                  "type": "MANUAL"
+                },
+                "method": {
+                  "type": "MANUAL"
+                },
+                "headers": {
+                  "type": "MANUAL"
+                },
+                "failsafe": {
+                  "type": "MANUAL"
+                },
+                "body_type": {
+                  "type": "MANUAL"
+                },
+                "use_proxy": {
+                  "type": "MANUAL"
+                },
+                "queryParams": {
+                  "type": "MANUAL"
+                },
+                "proxy_settings": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-02-06T09:21:32.486Z",
+                "sampleDataFileId": "5GFnm4XTPFbabcEpXznFq"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_1",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['AI_google-drive']}}",
+                  "file": "{{step_26['body']}}",
+                  "fileName": "my_file.pdf",
+                  "include_team_drives": false
+                },
+                "pieceName": "@activepieces/piece-google-drive",
+                "pieceType": "OFFICIAL",
+                "actionName": "upload_gdrive_file",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.5.36",
+                "propertySettings": {
+                  "auth": {
+                    "type": "MANUAL"
+                  },
+                  "file": {
+                    "type": "MANUAL"
+                  },
+                  "fileName": {
+                    "type": "MANUAL"
+                  },
+                  "include_team_drives": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {},
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "displayName": "Upload file"
+            },
+            "displayName": "Print html to pdf"
+          },
+          "displayName": "Convert html to json object"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

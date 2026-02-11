@@ -1,0 +1,115 @@
+﻿{
+  "name": "Webscraper",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-http"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "ugAOXFg1CihZiWaquop41"
+  },
+  "flows": [
+    {
+      "displayName": "Webscraper",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "~0.1.25",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_18",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "url": "https://scrapers-proxy2.p.rapidapi.com/parser?url=&auto_detect=true",
+              "body": {},
+              "method": "GET",
+              "headers": {
+                "x-rapidapi-key": "REPLACE_WITH_API_KEY",
+                "x-rapidapi-host": "scrapers-proxy2.p.rapidapi.com"
+              },
+              "failsafe": false,
+              "body_type": "none",
+              "use_proxy": false,
+              "queryParams": {},
+              "proxy_settings": {}
+            },
+            "pieceName": "@activepieces/piece-http",
+            "actionName": "send_request",
+            "pieceVersion": "~0.6.2",
+            "propertySettings": {
+              "url": {
+                "type": "MANUAL"
+              },
+              "body": {
+                "type": "MANUAL",
+                "schema": {}
+              },
+              "method": {
+                "type": "MANUAL"
+              },
+              "headers": {
+                "type": "MANUAL"
+              },
+              "failsafe": {
+                "type": "MANUAL"
+              },
+              "body_type": {
+                "type": "MANUAL"
+              },
+              "use_proxy": {
+                "type": "MANUAL"
+              },
+              "queryParams": {
+                "type": "MANUAL"
+              },
+              "proxy_settings": {
+                "type": "MANUAL",
+                "schema": {}
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "displayName": "Scraper proxy API"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+﻿{
+  "name": "PostgreSQL Assistant",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-slack",
+    "@activepieces/piece-store",
+    "@activepieces/piece-ai"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "9dWNJOnpR7X3LB6i9Eb8x"
+  },
+  "flows": [
+    {
+      "displayName": "PostgreSQL Assistant",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New Mention in Channel",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "info": {
+              "type": "MANUAL"
+            },
+            "user": {
+              "type": "MANUAL"
+            },
+            "channels": {
+              "type": "MANUAL"
+            },
+            "ignoreBots": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-slack",
+          "pieceVersion": "0.11.7",
+          "input": {
+            "auth": "{{connections['artS25ankOXWQeGClYF24']}}",
+            "user": "U0A99HZM75H",
+            "channels": [
+              "C09K4HB7F4M"
+            ],
+            "ignoreBots": false
+          },
+          "sampleData": {},
+          "triggerName": "new_mention"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "key": "system_prompt",
+              "store_scope": "COLLECTION"
+            },
+            "pieceName": "@activepieces/piece-store",
+            "actionName": "get",
+            "sampleData": {},
+            "pieceVersion": "0.6.13",
+            "propertySettings": {
+              "key": {
+                "type": "MANUAL"
+              },
+              "store_scope": {
+                "type": "MANUAL"
+              },
+              "defaultValue": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_3",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "prompt": "You are a data retrieval agent responsible for querying a Postgres database.\n\nVariables;\nDATA_RETRIEVAL_INSTRUCTIONS = {{step_1}}\nUSER_QUERY =  {{trigger['blocks'][0]['elements'][0]['elements'][1]['text']}}\n\nUse DATA_RETRIEVAL_INSTRUCTIONS and USER_QUERY to retrieve the requested information. Follow all rules and constraints defined in the DATA_RETRIEVAL_INSTRUCTIONS .\n\nUse the Markdown to Slack tool to format the result, then use the Send Message to a Channel tool to post it. Do not include reasoning, explanations, filler text, or system artifacts.",
+                "maxSteps": 20,
+                "agentTools": [
+                  {
+                    "type": "PIECE",
+                    "toolName": "_activepieces_piece-postgres-run-query",
+                    "pieceMetadata": {
+                      "pieceName": "@activepieces/piece-postgres",
+                      "actionName": "run-query",
+                      "pieceVersion": "0.2.2",
+                      "predefinedInput": {
+                        "auth": "{{connections['1NTQ6J0lfVq3T0zL0hO8A']}}",
+                        "fields": {}
+                      }
+                    }
+                  },
+                  {
+                    "type": "PIECE",
+                    "toolName": "_activepieces_piece-slack-markdownToSlackFormat",
+                    "pieceMetadata": {
+                      "pieceName": "@activepieces/piece-slack",
+                      "actionName": "markdownToSlackFormat",
+                      "pieceVersion": "0.11.7"
+                    }
+                  },
+                  {
+                    "type": "PIECE",
+                    "toolName": "_activepieces_piece-slack-send_channel_message",
+                    "pieceMetadata": {
+                      "pieceName": "@activepieces/piece-slack",
+                      "actionName": "send_channel_message",
+                      "pieceVersion": "0.11.7",
+                      "predefinedInput": {
+                        "auth": "{{connections['artS25ankOXWQeGClYF24']}}",
+                        "fields": {
+                          "channel": {
+                            "mode": "choose-yourself",
+                            "value": "C09K4HB7F4M"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "aiProviderModel": {
+                  "model": "google/gemini-3-flash-preview",
+                  "provider": "activepieces"
+                },
+                "structuredOutput": []
+              },
+              "pieceName": "@activepieces/piece-ai",
+              "actionName": "run_agent",
+              "sampleData": {},
+              "pieceVersion": "0.1.5",
+              "propertySettings": {
+                "prompt": {
+                  "type": "MANUAL"
+                },
+                "maxSteps": {
+                  "type": "MANUAL"
+                },
+                "agentTools": {
+                  "type": "MANUAL"
+                },
+                "aiProviderModel": {
+                  "type": "MANUAL"
+                },
+                "structuredOutput": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "displayName": "Run Agent"
+          },
+          "displayName": "Get System Prompt"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

@@ -1,0 +1,1333 @@
+﻿{
+  "name": "NHMIS Daily Update",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-http",
+    "@activepieces/piece-math-helper",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-openai"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "jmrgMDpZw2eTfy8KIcHD4"
+  },
+  "flows": [
+    {
+      "displayName": "NHMIS Daily Update",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Day",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "run_on_weekends": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.14",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 14,
+            "run_on_weekends": true
+          },
+          "sampleData": {},
+          "triggerName": "every_day"
+        },
+        "nextAction": {
+          "name": "step_16",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "sampleData": {},
+            "pieceVersion": "0.1.22",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_28",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "inputDate": "{{step_16['result']}}",
+                "inputFormat": "MMMM DD YYYY HH:mm:ss",
+                "unitExtract": [
+                  "day"
+                ]
+              },
+              "pieceName": "@activepieces/piece-date-helper",
+              "actionName": "extract_date_parts",
+              "sampleData": {},
+              "pieceVersion": "0.1.22",
+              "propertySettings": {
+                "inputDate": {
+                  "type": "MANUAL"
+                },
+                "inputFormat": {
+                  "type": "MANUAL"
+                },
+                "unitExtract": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_20",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                  "values": {
+                    "A": "NHMIS Daily Update",
+                    "B": "{{step_16['result']}}",
+                    "C": "Schedule (Every day) by 2pm",
+                    "E": "ai@e4mail.net"
+                  },
+                  "sheetId": 1211720957,
+                  "as_string": false,
+                  "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                  "first_row_headers": true,
+                  "includeTeamDrives": true
+                },
+                "pieceName": "@activepieces/piece-google-sheets",
+                "actionName": "insert_row",
+                "pieceVersion": "0.12.20",
+                "propertySettings": {
+                  "auth": {
+                    "type": "MANUAL"
+                  },
+                  "values": {
+                    "type": "MANUAL",
+                    "schema": {
+                      "A": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Automation",
+                        "displayName": "Automation",
+                        "defaultValue": ""
+                      },
+                      "B": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Date/Time Automation ran",
+                        "displayName": "Date/Time Automation ran",
+                        "defaultValue": ""
+                      },
+                      "C": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Automation Details (Triggers and Usage)",
+                        "displayName": "Automation Details (Triggers and Usage)",
+                        "defaultValue": ""
+                      },
+                      "D": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Time taken to run automation",
+                        "displayName": "Time taken to run automation",
+                        "defaultValue": ""
+                      },
+                      "E": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Email Connection Used",
+                        "displayName": "Email Connection Used",
+                        "defaultValue": ""
+                      },
+                      "F": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Slack Channel sent to",
+                        "displayName": "Slack Channel sent to",
+                        "defaultValue": ""
+                      },
+                      "G": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "General Meeting Notes",
+                        "displayName": "General Meeting Notes",
+                        "defaultValue": ""
+                      },
+                      "H": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "",
+                        "displayName": "",
+                        "defaultValue": ""
+                      },
+                      "I": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "",
+                        "displayName": "",
+                        "defaultValue": ""
+                      },
+                      "J": {
+                        "type": "SHORT_TEXT",
+                        "required": false,
+                        "description": "Assignee",
+                        "displayName": "Assignee",
+                        "defaultValue": ""
+                      }
+                    }
+                  },
+                  "sheetId": {
+                    "type": "MANUAL"
+                  },
+                  "as_string": {
+                    "type": "MANUAL"
+                  },
+                  "spreadsheetId": {
+                    "type": "MANUAL"
+                  },
+                  "first_row_headers": {
+                    "type": "MANUAL"
+                  },
+                  "includeTeamDrives": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": true
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_27",
+                "skip": false,
+                "type": "ROUTER",
+                "valid": true,
+                "children": [
+                  {
+                    "name": "step_7",
+                    "type": "CODE",
+                    "valid": true,
+                    "settings": {
+                      "input": {},
+                      "sampleData": {},
+                      "sourceCode": {
+                        "code": "export const code = async (inputs) => {\n  // Define the time zone\n  const timeZone = 'Africa/Lagos';\n\n  // Get the current date in the specified time zone\n  const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone }));\n\n  // Adjust the month to the previous month\n  currentDate.setMonth(currentDate.getMonth() - 1);\n\n  // Format the adjusted date to return the previous month and year\n  const previousMonthYear = currentDate.toLocaleString('en-US', {\n    timeZone,\n    month: 'long',\n    year: 'numeric'\n  });\n\n  return previousMonthYear;\n};\n\n",
+                        "packageJson": "\n      {\n        \"dependencies\": {\n        }\n      }"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_1",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "url": "https://dhis2nigeria.org.ng/dhis/api/40/analytics?dimension=pe:LAST_MONTH,dx:beZ1WYNONnH;NO1ASEzyurW;ETqcBdGA1uj;wz7WxHNIC6U;yHw3A23QqP8;VOS2f9jGj4o;kC9iLgI1Wlq;SDmCprzAStG;HH0iQLlqddM;hvYqrmR6MPq;B7O7qe8H4Wk;slvffucfWn0;fMdVmjC9otz;zGZUbJrjUkD;mwbMslFo5HZ;AfCAxEIzERD;Ly3HmUoHQEP;obcu03IYMEz;GWxFtWFcEW1;iIbhvOXScP5;iXWVkRayCy9;jQP614yuBc8;ZqWkiIAplRx;Na1cdV06Iar;TU18WjmidNA,ou:s5DPBsdoE8b;LEVEL-sJ6qnMn6IZ8;LEVEL-DPo33reFh7g&displayProperty=NAME&includeNumDen=false&skipMeta=false&skipData=false&includeMetadataDetails=false",
+                          "body": {},
+                          "method": "GET",
+                          "headers": {
+                            "Authorization": "Basic REPLACE_WITH_API_KEY"
+                          },
+                          "timeout": "30",
+                          "failsafe": false,
+                          "body_type": "none",
+                          "use_proxy": false,
+                          "queryParams": {},
+                          "proxy_settings": {}
+                        },
+                        "pieceName": "@activepieces/piece-http",
+                        "actionName": "send_request",
+                        "sampleData": {},
+                        "pieceVersion": "0.5.1",
+                        "propertySettings": {
+                          "url": {
+                            "type": "MANUAL"
+                          },
+                          "body": {
+                            "type": "MANUAL",
+                            "schema": {}
+                          },
+                          "method": {
+                            "type": "MANUAL"
+                          },
+                          "headers": {
+                            "type": "MANUAL"
+                          },
+                          "timeout": {
+                            "type": "MANUAL"
+                          },
+                          "failsafe": {
+                            "type": "MANUAL"
+                          },
+                          "body_type": {
+                            "type": "MANUAL"
+                          },
+                          "use_proxy": {
+                            "type": "MANUAL"
+                          },
+                          "queryParams": {
+                            "type": "MANUAL"
+                          },
+                          "proxy_settings": {
+                            "type": "MANUAL",
+                            "schema": {}
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": true
+                          },
+                          "continueOnFailure": {
+                            "value": true
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_8",
+                        "type": "ROUTER",
+                        "valid": true,
+                        "children": [
+                          {
+                            "name": "step_6",
+                            "type": "CODE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "rows": "{{step_1['body']['rows']}}",
+                                "headers": "{{step_1['body']['headers']}}",
+                                "metaData": "{{step_1['body']['metaData']}}",
+                                "rowContext": "{{step_1['body']['rowContext']}}"
+                              },
+                              "sampleData": {},
+                              "sourceCode": {
+                                "code": "type Header = {\n    name: string;\n    column: string;\n    valueType: string;\n    type: string;\n    hidden: boolean;\n    meta: boolean;\n};\n\ntype Item = {\n    uid: string;\n    name: string;\n    code?: string;\n    description?: string;\n    dimensionItemType: string;\n    valueType: string;\n    totalAggregationType: string;\n    indicatorType?: {\n        name: string;\n        displayName: string;\n        factor: number;\n        number: boolean;\n    };\n};\n\ntype Dimension = {\n    dx: string[];\n    pe: string[];\n    ou: string[];\n    co: string[];\n};\n\ntype Row = (string | number)[];\n\ntype Metadata = {\n    items: { [key: string]: Item };\n    dimensions: Dimension;\n};\n\ntype Data = {\n    headers: Header[];\n    metaData: Metadata;\n    rowContext: object;\n    rows: Row[];\n};\n\nexport const code = async (inputs: Data) => {\n    const structuredData: any[] = [];\n\n    const headers = inputs.headers.map(header => header.column);\n    const items = inputs.metaData.items;\n\n    inputs.rows.forEach(row => {\n        const rowObject: any = {};\n        rowObject['periodid'] = row[1];\n        rowObject['periodname'] = items[row[1] as string].name;\n        rowObject['periodcode'] = items[row[1] as string].code || '';\n        rowObject['perioddescription'] = items[row[1] as string].description || '';\n        \n        rowObject['dataid'] = row[0];\n        rowObject['dataname'] = items[row[0] as string].name;\n        rowObject['datacode'] = items[row[0] as string].code || '';\n        rowObject['datadescription'] = items[row[0] as string].description || '';\n\n        rowObject['organisationunitid'] = row[2];\n        rowObject['organisationunitname'] = items[row[2] as string].name;\n        rowObject['organisationunitcode'] = items[row[2] as string].code || '';\n        rowObject['organisationunitdescription'] = items[row[2] as string].description || '';\n\n        rowObject['Total'] = row[3];\n\n        structuredData.push(rowObject);\n    });\n\n    return structuredData;\n};\n\n",
+                                "packageJson": "\n      {\n        \"dependencies\": {\n        }\n      }"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_2",
+                              "type": "CODE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "jsonArray": "{{step_6}}",
+                                  "maxRowsPerSheet": "100000000"
+                                },
+                                "sampleData": {},
+                                "sourceCode": {
+                                  "code": "function flattenObject(obj) {\n  const flattened = {};\n  Object.keys(obj).forEach(key => {\n    if (typeof obj[key] === 'object' && obj[key] !== null) {\n      const flatObject = flattenObject(obj[key]);\n      Object.keys(flatObject).forEach(flatKey => {\n        flattened[`${key}_${flatKey}`] = flatObject[flatKey];\n      });\n    } else {\n      flattened[key] = obj[key];\n    }\n  });\n  return flattened;\n}\n\nexport const code = async (inputs) => {\n  const flattenedJsonArray = inputs.jsonArray.map(obj => flattenObject(obj));\n  const keys = Object.keys(flattenedJsonArray[0]);\n  const header = keys.join(',');\n  let csvContent = header + '\\n';\n  let rowCount = 0;\n\n  for (const obj of flattenedJsonArray) {\n    if (rowCount >= inputs.maxRowsPerSheet) {\n      break;\n    }\n    const row = keys.map(key => {\n      const value = obj[key];\n      return value === null || value === undefined \n        ? ''\n        : typeof value === 'string' && value.includes(',') \n          ? `\"${value.replace(/\"/g, '\"\"')}\"` \n          : String(value);\n    }).join(',');\n    csvContent += row + '\\n';\n    rowCount++;\n  }\n\n  return csvContent.trim(); // Remove trailing newline\n};\n\n",
+                                  "packageJson": "\n      {\n        \"dependencies\": {\n        }\n      }"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": true
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_3",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "first_number": "1",
+                                    "second_number": "100000000"
+                                  },
+                                  "pieceName": "@activepieces/piece-math-helper",
+                                  "actionName": "generateRandom_math",
+                                  "sampleData": {},
+                                  "pieceVersion": "0.0.18",
+                                  "propertySettings": {
+                                    "first_number": {
+                                      "type": "MANUAL"
+                                    },
+                                    "second_number": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_10",
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                                      "memKey": "{{step_3}}",
+                                      "sheet_id": 13371671,
+                                      "startRow": 1,
+                                      "groupSize": "100",
+                                      "spreadsheet_id": "1T8YfA2Ktpb_tqf1jkc3wlx6HIRTBUnkp3sdWlmkPBCk",
+                                      "include_team_drives": true
+                                    },
+                                    "pieceName": "@activepieces/piece-google-sheets",
+                                    "actionName": "get_next_rows",
+                                    "sampleData": {},
+                                    "pieceVersion": "0.11.14",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "memKey": {
+                                        "type": "MANUAL"
+                                      },
+                                      "markdown": {
+                                        "type": "MANUAL"
+                                      },
+                                      "sheet_id": {
+                                        "type": "MANUAL"
+                                      },
+                                      "startRow": {
+                                        "type": "MANUAL"
+                                      },
+                                      "groupSize": {
+                                        "type": "MANUAL"
+                                      },
+                                      "spreadsheet_id": {
+                                        "type": "MANUAL"
+                                      },
+                                      "include_team_drives": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": true
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_14",
+                                    "type": "CODE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "jsonArray": "{{step_10}}",
+                                        "maxRowsPerSheet": "1000"
+                                      },
+                                      "sampleData": {},
+                                      "sourceCode": {
+                                        "code": "function flattenObject(obj) {\n  const flattened = {};\n  Object.keys(obj).forEach(key => {\n    if (typeof obj[key] === 'object' && obj[key] !== null) {\n      const flatObject = flattenObject(obj[key]);\n      Object.keys(flatObject).forEach(flatKey => {\n        flattened[`${key}_${flatKey}`] = flatObject[flatKey];\n      });\n    } else {\n      flattened[key] = obj[key];\n    }\n  });\n  return flattened;\n}\n\nexport const code = async (inputs) => {\n  const flattenedJsonArray = inputs.jsonArray.map(obj => flattenObject(obj));\n  const keys = Object.keys(flattenedJsonArray[0]);\n  const header = keys.join(',');\n  let csvContent = header + '\\n';\n  let rowCount = 0;\n\n  for (const obj of flattenedJsonArray) {\n    if (rowCount >= inputs.maxRowsPerSheet) {\n      break;\n    }\n    const row = keys.map(key => {\n      const value = obj[key];\n      return value === null || value === undefined \n        ? ''\n        : typeof value === 'string' && value.includes(',') \n          ? `\"${value.replace(/\"/g, '\"\"')}\"` \n          : String(value);\n    }).join(',');\n    csvContent += row + '\\n';\n    rowCount++;\n  }\n\n  // Remove first row (headers) and first column values\n  const rows = csvContent.trim().split('\\n');\n  \n  // Remove the first row (header)\n  rows.shift();\n  \n  // Process the rows to remove the first column value from each row\n  const processedRows = rows.map(row => {\n    const columns = row.split(',');\n    // Remove the first column value\n    columns.shift();\n    // Return the remaining columns joined back into a CSV row\n    return columns.join(',');\n  });\n\n  // Join the processed rows back into a CSV string\n  const finalCsvContent = processedRows.join('\\n');\n\n  return finalCsvContent.trim(); // Remove trailing newline if any\n};",
+                                        "packageJson": "{}"
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_4",
+                                      "type": "CODE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "rawData": "{{step_2}}",
+                                          "vlookup": "{{step_14}}"
+                                        },
+                                        "sampleData": {},
+                                        "sourceCode": {
+                                          "code": "export const code = async (inputs: { rawData: string, vlookup: string }) => {\n  const { rawData, vlookup } = inputs;\n\n  // Parse the rawData CSV string into rows\n  const rawRows = rawData.split('\\n');\n  let headers = rawRows[0].split(',');\n\n  // Parse the vlookup CSV string into rows\n  const vlookupRows = vlookup.split('\\n');\n  const vlookupHeaders = vlookupRows[0].split(',');\n\n  // Clean up column names by trimming extra spaces\n  const cleanHeader = (header: string) => header.trim().toLowerCase();\n\n  // Ensure the vlookup contains the required columns\n  const nhmisIndicatorIndex = vlookupHeaders.findIndex(header => cleanHeader(header) === 'indicators (nhmis)');\n  const msdatIndicatorIndex = vlookupHeaders.findIndex(header => cleanHeader(header) === 'indicators (msdat)');\n  const nhmisLocationIndex = vlookupHeaders.findIndex(header => cleanHeader(header) === 'location(nhmis)');\n  const msdatLocationIndex = vlookupHeaders.findIndex(header => cleanHeader(header) === 'location(msdat)');\n\n  if (\n    nhmisIndicatorIndex === -1 ||\n    msdatIndicatorIndex === -1 ||\n    nhmisLocationIndex === -1 ||\n    msdatLocationIndex === -1\n  ) {\n    throw new Error(\"The provided vlookup CSV is missing required columns.\");\n  }\n\n  // Create a mapping from the vlookup CSV\n  const nhmisToMsdatMapping = {\n    indicators: {},\n    locations: {}\n  };\n\n  vlookupRows.slice(1).forEach((row) => {\n    const columns = row.split(',');\n    const nhmisIndicator = columns[nhmisIndicatorIndex]?.trim();\n    const msdatIndicator = columns[msdatIndicatorIndex]?.trim();\n    const nhmisLocation = columns[nhmisLocationIndex]?.trim();\n    const msdatLocation = columns[msdatLocationIndex]?.trim();\n\n    if (nhmisIndicator && msdatIndicator) {\n      nhmisToMsdatMapping.indicators[nhmisIndicator.toLowerCase()] = msdatIndicator;\n    }\n\n    if (nhmisLocation && msdatLocation) {\n      nhmisToMsdatMapping.locations[nhmisLocation.toLowerCase()] = msdatLocation;\n    }\n  });\n\n  // Restructure to remove columns with no values or columns with 'id' in their headers\n  const columnsWithValues = headers.map((header, index) => {\n    const columnHasValue = rawRows.slice(1).some(row => row.split(',')[index].trim() !== '');\n    return columnHasValue && !header.toLowerCase().includes('id') ? header : null;\n  });\n\n  // Filter out headers that have no corresponding values or contain 'id'\n  headers = headers.filter((header, index) => columnsWithValues[index] !== null);\n  let filteredRows = rawRows.map(row => {\n    const columns = row.split(',');\n    return columns.filter((_, index) => columnsWithValues[index] !== null).join(',');\n  });\n\n  // Renaming column headers based on specific matches (case-insensitive)\n  headers = headers.map(header => {\n    const trimmedHeader = header.trim().toLowerCase(); // Convert to lowercase for case-insensitive matching\n\n    if (trimmedHeader === 'dataname') {\n      return 'indicator';\n    }\n    if (trimmedHeader === 'periodname') {\n      return 'period';\n    }\n    if (trimmedHeader === 'total') {\n      return 'value';\n    }\n    if (trimmedHeader === 'organisationunitname') {\n      return 'location';\n    }\n    return header.trim(); // Return the original header if no match\n  });\n\n  // Check if 'datasource' and 'value_type' exist, if not, add them\n  const hasDataSource = headers.includes('datasource');\n  const hasValueType = headers.includes('value_type');\n\n  if (!hasDataSource) {\n    headers.push('datasource');\n  }\n  if (!hasValueType) {\n    headers.push('value_type');\n  }\n\n  // Replace the header row with the renamed headers\n  filteredRows[0] = headers.join(',');\n\n  // Process each row\n  const processedRows = filteredRows.map((row, rowIndex) => {\n    if (rowIndex === 0) return row; // Skip header row as it is already processed\n\n    const columns = row.split(',');\n\n    // Process each column\n    const processedColumns = columns.map((value, colIndex) => {\n      let trimmedValue = value.trim().toLowerCase(); // Make comparison case-insensitive\n\n      // Restructure the 'indicator' column using the vlookup for NHMIS to MSDAT mapping\n      if (headers[colIndex] === 'indicator' && nhmisToMsdatMapping.indicators[trimmedValue]) {\n        return nhmisToMsdatMapping.indicators[trimmedValue];\n      }\n\n      // Restructure the 'location' column using the vlookup for NHMIS to MSDAT mapping\n      if (headers[colIndex] === 'location' && nhmisToMsdatMapping.locations[trimmedValue]) {\n        return nhmisToMsdatMapping.locations[trimmedValue];\n      }\n\n      // Process floating point numbers\n      if (/^\\d+\\.\\d+$/.test(trimmedValue)) {\n        return Number(trimmedValue).toFixed(1);\n      }\n\n      // Process dates\n      const monthRegex = /\\b(January|February|March|April|May|June|July|August|September|October|November|December)\\s\\d{4}\\b/i;\n      const dashDateRegex = /\\b([a-z]{3})-(\\d{4})\\b/i;\n\n      let match = trimmedValue.match(monthRegex);\n      if (match) {\n        const date = new Date(match[0]);\n        const month = date.getMonth(); // Returns 0-11 where 0 is January and 11 is December\n        const monthAbbr = month === 8 ? 'Sept' : date.toLocaleString('default', { month: 'short' }); // Custom check for September\n        return `${monthAbbr} ${date.getFullYear()}`;\n      }\n\n      match = trimmedValue.match(dashDateRegex);\n      if (match) {\n        return `${match[1]} ${match[2]}`;\n      }\n\n      return value;\n    });\n\n    // Add 'NHMIS-DHIS2' and 'Routine' values to new columns if they were added\n    if (!hasDataSource) {\n      processedColumns.push('NHMIS monthly (Facility-based)');\n    }\n    if (!hasValueType) {\n      processedColumns.push('Routine');\n    }\n\n    // Delete rows where the 'value' column is empty or NULL\n    const valueColumnIndex = headers.indexOf('value');\n    if (valueColumnIndex !== -1 && !processedColumns[valueColumnIndex].trim()) {\n      return null; // Mark this row for deletion\n    }\n\n    return processedColumns.join(',');\n  }).filter(row => row !== null); // Filter out rows marked for deletion\n\n  // Reorder the columns\n  const desiredOrder = ['indicator', 'period', 'location', 'datasource', 'value', 'value_type'];\n  const reorderedRows = processedRows.map((row, rowIndex) => {\n    const columns = row.split(',');\n\n    // Reorder columns based on desiredOrder\n    const reorderedColumns = desiredOrder.map((header) => {\n      const index = headers.indexOf(header);\n      return columns[index];\n    });\n\n    return reorderedColumns.join(',');\n  });\n\n  // Join the processed and reordered rows back into a CSV string\n  const processedCsvString = reorderedRows.join('\\n');\n\n  return processedCsvString;\n};",
+                                          "packageJson": "{}"
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_23",
+                                        "skip": false,
+                                        "type": "CODE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "csv": "{{step_4}}",
+                                            "filename": "NHMIS-DHIS2 Monthly {{step_7}}"
+                                          },
+                                          "sampleData": {},
+                                          "sourceCode": {
+                                            "code": "import * as XLSX from \"xlsx\";\n\nexport const code = async (inputs: any) => {\n  const csvText = inputs.csv;\n  const rawFilename = inputs.filename || \"converted\";\n\n  if (!csvText || typeof csvText !== \"string\") {\n    throw new Error(\"Missing or invalid 'csv' input\");\n  }\n\n  if (typeof rawFilename !== \"string\") {\n    throw new Error(\"Invalid 'filename' input\");\n  }\n\n  // Convert CSV to worksheet\n  const worksheet = XLSX.utils.aoa_to_sheet(\n    csvText\n      .trim()\n      .split(\"\\n\")\n      .map((row) => row.split(\",\"))\n  );\n\n  // Create workbook\n  const workbook = XLSX.utils.book_new();\n  XLSX.utils.book_append_sheet(workbook, worksheet, \"Sheet1\");\n\n  // Convert workbook to buffer\n  const xlsxBuffer = XLSX.write(workbook, { type: \"buffer\", bookType: \"xlsx\" });\n\n  // Return plain base64 (NO data URI prefix)\n  const base64 = xlsxBuffer.toString(\"base64\");\n\n  return {\n    filename: `${rawFilename}.xlsx`,\n    mimeType: \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n    base64,\n  };\n};",
+                                            "packageJson": "{\n  \"dependencies\": {\n    \"xlsx\": \"0.18.5\"\n  }\n}"
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_22",
+                                          "skip": false,
+                                          "type": "CODE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "name": "NHMIS-DHIS2 Monthly {{step_7}}",
+                                              "ordinary_data": "{{step_23['base64']}}"
+                                            },
+                                            "sourceCode": {
+                                              "code": "export const code = async (inputs: any) => {\n  const name = inputs.name;\n  const base64 = inputs.ordinary_data;\n\n  if (!name || typeof name !== \"string\") {\n    throw new Error(\"Missing or invalid 'name' parameter.\");\n  }\n\n  if (!base64 || typeof base64 !== \"string\") {\n    throw new Error(\"Missing or invalid 'ordinary_data' base64 string.\");\n  }\n\n  const safeFileName =\n    name.slice(0, 95).replace(/\\W+/g, \"_\") + \".xlsx\";\n\n  // Base64 decode (no prefix expected!)\n  const binary = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));\n  const fileBlob = new Blob([binary], {\n    type: \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n  });\n\n  const formData = new FormData();\n  formData.append(\"name\", name);\n  formData.append(\"application\", \"DMI\");\n  formData.append(\"file_type\", \"Data\");\n  formData.append(\"type\", \"Unnormalized\");\n  formData.append(\"status\", \"Uploaded\");\n  formData.append(\"approved\", \"false\");\n  formData.append(\"ordinary_data\", fileBlob, safeFileName);\n\n  try {\n    const response = await fetch(\n      \"https://msdat-api.fmohconnect.gov.ng/api/dmi/fileuploads/\",\n      { method: \"POST\", body: formData }\n    );\n\n    const contentType = response.headers.get(\"content-type\") || \"\";\n\n    if (contentType.includes(\"text/html\")) {\n      const html = await response.text();\n      const match = html.match(/<pre class=\"exception_value\">([\\s\\S]*?)<\\/pre>/);\n      const exceptionText = match\n        ? match[1]\n            .replace(/&#x27;/g, \"'\")\n            .replace(/&quot;/g, '\"')\n            .replace(/&lt;/g, '<')\n            .replace(/&gt;/g, '>')\n        : html;\n      throw new Error(`Server exception: ${exceptionText.trim()}`);\n    }\n\n    if (!response.ok) {\n      const errText = await response.text();\n      throw new Error(\n        `Upload failed with status ${response.status}: ${errText}`\n      );\n    }\n\n    const result = await response.json();\n    console.log(\"Upload successful:\", result);\n    return result;\n  } catch (err) {\n    console.error(\"Upload error:\", err);\n    throw err;\n  }\n};",
+                                              "packageJson": "{}"
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "nextAction": {
+                                            "name": "step_19",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "url": "https://msdat-api.fmohconnect.gov.ng/api/dmi/fileuploads/",
+                                                "body": {},
+                                                "method": "GET",
+                                                "headers": {},
+                                                "authType": "NONE",
+                                                "body_type": "none",
+                                                "use_proxy": false,
+                                                "authFields": {},
+                                                "queryParams": {},
+                                                "proxy_settings": {},
+                                                "response_is_binary": false
+                                              },
+                                              "pieceName": "@activepieces/piece-http",
+                                              "actionName": "send_request",
+                                              "pieceVersion": "0.8.7",
+                                              "propertySettings": {
+                                                "url": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "body": {
+                                                  "type": "MANUAL",
+                                                  "schema": {}
+                                                },
+                                                "method": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "headers": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "authType": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "body_type": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "use_proxy": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "authFields": {
+                                                  "type": "MANUAL",
+                                                  "schema": {}
+                                                },
+                                                "queryParams": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "proxy_settings": {
+                                                  "type": "MANUAL",
+                                                  "schema": {}
+                                                },
+                                                "response_is_binary": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": true
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "nextAction": {
+                                              "name": "step_11",
+                                              "skip": false,
+                                              "type": "PIECE",
+                                              "valid": true,
+                                              "settings": {
+                                                "input": {
+                                                  "url": "https://msdat-api.fmohconnect.gov.ng/api/dmi/fileuploads/{{step_19['body']['results'][0]['id']}}/push/",
+                                                  "body": {},
+                                                  "method": "GET",
+                                                  "headers": {},
+                                                  "authType": "NONE",
+                                                  "body_type": "none",
+                                                  "use_proxy": false,
+                                                  "authFields": {},
+                                                  "queryParams": {},
+                                                  "proxy_settings": {},
+                                                  "response_is_binary": false
+                                                },
+                                                "pieceName": "@activepieces/piece-http",
+                                                "actionName": "send_request",
+                                                "pieceVersion": "0.8.7",
+                                                "propertySettings": {
+                                                  "url": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "body": {
+                                                    "type": "MANUAL",
+                                                    "schema": {}
+                                                  },
+                                                  "method": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "headers": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "timeout": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "authType": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "body_type": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "use_proxy": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "authFields": {
+                                                    "type": "MANUAL",
+                                                    "schema": {}
+                                                  },
+                                                  "failureMode": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "queryParams": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "proxy_settings": {
+                                                    "type": "MANUAL",
+                                                    "schema": {}
+                                                  },
+                                                  "response_is_binary": {
+                                                    "type": "MANUAL"
+                                                  }
+                                                },
+                                                "errorHandlingOptions": {
+                                                  "retryOnFailure": {
+                                                    "value": true
+                                                  },
+                                                  "continueOnFailure": {
+                                                    "value": false
+                                                  }
+                                                }
+                                              },
+                                              "nextAction": {
+                                                "name": "step_24",
+                                                "skip": false,
+                                                "type": "ROUTER",
+                                                "valid": true,
+                                                "children": [
+                                                  {
+                                                    "name": "step_5",
+                                                    "skip": false,
+                                                    "type": "PIECE",
+                                                    "valid": true,
+                                                    "settings": {
+                                                      "input": {
+                                                        "auth": "{{connections['slack']}}",
+                                                        "text": "Hello! @channel\n\nThe NHMIS-DHIS2 daily update for the period of {{step_7}} was successful with id; {{step_19['body']['results'][0]['id']}}\n\nPush Message: {{step_11['body']['message']}}",
+                                                        "channel": "C07GF4PNMMM",
+                                                        "username": "NHMIS-DHIS2 bot"
+                                                      },
+                                                      "pieceName": "@activepieces/piece-slack",
+                                                      "actionName": "send_channel_message",
+                                                      "pieceVersion": "0.7.15",
+                                                      "propertySettings": {
+                                                        "auth": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "text": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "channel": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "username": {
+                                                          "type": "MANUAL"
+                                                        }
+                                                      },
+                                                      "errorHandlingOptions": {
+                                                        "retryOnFailure": {
+                                                          "value": true
+                                                        },
+                                                        "continueOnFailure": {
+                                                          "value": false
+                                                        }
+                                                      }
+                                                    },
+                                                    "nextAction": {
+                                                      "name": "step_25",
+                                                      "skip": false,
+                                                      "type": "PIECE",
+                                                      "valid": true,
+                                                      "settings": {
+                                                        "input": {
+                                                          "auth": "{{connections['slack']}}",
+                                                          "text": "Hello! @channel\n\nThe NHMIS-DHIS2 daily update for the period of {{step_7}} was successful with id; {{step_19['body']['results'][0]['id']}}\n\nPush Message: {{step_11['body']['message']}}",
+                                                          "channel": "C081PDGJMQE",
+                                                          "username": "NHMIS-DHIS2 bot"
+                                                        },
+                                                        "pieceName": "@activepieces/piece-slack",
+                                                        "actionName": "send_channel_message",
+                                                        "pieceVersion": "0.7.15",
+                                                        "propertySettings": {
+                                                          "auth": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "text": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "channel": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "username": {
+                                                            "type": "MANUAL"
+                                                          }
+                                                        },
+                                                        "sampleDataSettings": {},
+                                                        "errorHandlingOptions": {
+                                                          "retryOnFailure": {
+                                                            "value": true
+                                                          },
+                                                          "continueOnFailure": {
+                                                            "value": false
+                                                          }
+                                                        }
+                                                      },
+                                                      "displayName": "Send notification to automation-logs"
+                                                    },
+                                                    "displayName": "Send notification to nhmis-monthly-automation channel"
+                                                  },
+                                                  {
+                                                    "name": "step_13",
+                                                    "skip": false,
+                                                    "type": "PIECE",
+                                                    "valid": true,
+                                                    "settings": {
+                                                      "input": {
+                                                        "auth": "{{connections['slack']}}",
+                                                        "text": "Hello! @channel\n\nThe NHMIS-DHIS2 daily update has failed :( \n\nFilename: {{step_22['name']}}\nid: {{step_19['body']['results'][0]['id']}}\n\nPlease investigate and resolve the issue to ensure timely data availability.",
+                                                        "channel": "C07GF4PNMMM",
+                                                        "username": "NHMIS-DHIS2 bot"
+                                                      },
+                                                      "pieceName": "@activepieces/piece-slack",
+                                                      "actionName": "send_channel_message",
+                                                      "pieceVersion": "0.7.15",
+                                                      "propertySettings": {
+                                                        "auth": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "text": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "channel": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "username": {
+                                                          "type": "MANUAL"
+                                                        }
+                                                      },
+                                                      "errorHandlingOptions": {
+                                                        "retryOnFailure": {
+                                                          "value": false
+                                                        },
+                                                        "continueOnFailure": {
+                                                          "value": false
+                                                        }
+                                                      }
+                                                    },
+                                                    "nextAction": {
+                                                      "name": "step_26",
+                                                      "skip": false,
+                                                      "type": "PIECE",
+                                                      "valid": true,
+                                                      "settings": {
+                                                        "input": {
+                                                          "auth": "{{connections['slack']}}",
+                                                          "text": "Hello! @channel\n\nThe NHMIS-DHIS2 daily update has failed :( \n\nFilename: {{step_22['name']}}\nid: {{step_19['body']['results'][0]['id']}}\n\nPlease investigate and resolve the issue to ensure timely data availability.",
+                                                          "channel": "C081PDGJMQE",
+                                                          "username": "NHMIS-DHIS2 bot"
+                                                        },
+                                                        "pieceName": "@activepieces/piece-slack",
+                                                        "actionName": "send_channel_message",
+                                                        "pieceVersion": "0.7.15",
+                                                        "propertySettings": {
+                                                          "auth": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "text": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "channel": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "username": {
+                                                            "type": "MANUAL"
+                                                          }
+                                                        },
+                                                        "sampleDataSettings": {},
+                                                        "errorHandlingOptions": {
+                                                          "retryOnFailure": {
+                                                            "value": false
+                                                          },
+                                                          "continueOnFailure": {
+                                                            "value": false
+                                                          }
+                                                        }
+                                                      },
+                                                      "displayName": "Send notification to automation-logs"
+                                                    },
+                                                    "displayName": "Send notification to nhmis-monthly-automation channel"
+                                                  }
+                                                ],
+                                                "settings": {
+                                                  "branches": [
+                                                    {
+                                                      "branchName": "Branch 1",
+                                                      "branchType": "CONDITION",
+                                                      "conditions": [
+                                                        [
+                                                          {
+                                                            "operator": "EXISTS",
+                                                            "firstValue": "{{step_11['status']}}"
+                                                          }
+                                                        ]
+                                                      ]
+                                                    },
+                                                    {
+                                                      "branchName": "Otherwise",
+                                                      "branchType": "FALLBACK"
+                                                    }
+                                                  ],
+                                                  "executionType": "EXECUTE_FIRST_MATCH",
+                                                  "propertySettings": {},
+                                                  "sampleDataSettings": {
+                                                    "lastTestDate": "2025-08-03T22:42:39.781Z",
+                                                    "sampleDataFileId": "DAOCC9xhBbbLVX2gznXcU"
+                                                  }
+                                                },
+                                                "displayName": "Router"
+                                              },
+                                              "displayName": "Push id"
+                                            },
+                                            "displayName": "Get Push id"
+                                          },
+                                          "displayName": "POST to DMI"
+                                        },
+                                        "displayName": "Convert csv to xlsx"
+                                      },
+                                      "displayName": "Data Restructuring"
+                                    },
+                                    "displayName": "Convert vlookup to csv"
+                                  },
+                                  "displayName": "Get vlookup file"
+                                },
+                                "displayName": "Generate Random Number"
+                              },
+                              "displayName": "Convert json to csv"
+                            },
+                            "displayName": "Clean json data"
+                          },
+                          {
+                            "name": "step_9",
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "timeZone": "UTC",
+                                "timeFormat": "DDD MMM DD HH:mm:ss YYYY"
+                              },
+                              "pieceName": "@activepieces/piece-date-helper",
+                              "actionName": "get_current_date",
+                              "pieceVersion": "0.1.22",
+                              "propertySettings": {
+                                "timeZone": {
+                                  "type": "MANUAL"
+                                },
+                                "timeFormat": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-08-03T22:29:56.911Z",
+                                "sampleDataFileId": "j4iGEu3oaUTkzJUy6nfDs"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_29",
+                              "skip": true,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['71ZvIFeiguoqPrJ9sDVyI']}}",
+                                  "topP": 1,
+                                  "model": "gpt-4.1-mini",
+                                  "roles": [
+                                    {
+                                      "role": "system",
+                                      "content": "You are a helpful assistant."
+                                    }
+                                  ],
+                                  "prompt": "From the response below;\n\nDraft a concise two-line summary of the request status, clearly stating the status code. Include only the two lines with no filler words, explanations, or additional commentary",
+                                  "maxTokens": 2048,
+                                  "temperature": 1,
+                                  "frequencyPenalty": 0
+                                },
+                                "pieceName": "@activepieces/piece-openai",
+                                "actionName": "ask_chatgpt",
+                                "sampleData": {},
+                                "pieceVersion": "0.7.2",
+                                "propertySettings": {
+                                  "topP": {
+                                    "type": "MANUAL"
+                                  },
+                                  "model": {
+                                    "type": "MANUAL"
+                                  },
+                                  "roles": {
+                                    "type": "MANUAL"
+                                  },
+                                  "prompt": {
+                                    "type": "MANUAL"
+                                  },
+                                  "maxTokens": {
+                                    "type": "MANUAL"
+                                  },
+                                  "memoryKey": {
+                                    "type": "MANUAL"
+                                  },
+                                  "temperature": {
+                                    "type": "MANUAL"
+                                  },
+                                  "presencePenalty": {
+                                    "type": "MANUAL"
+                                  },
+                                  "frequencyPenalty": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_12",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['slack']}}",
+                                    "text": "Hello @channel\n\nThe NHMIS-DHIS2 daily update for the period of {{step_7}} has failed :(\nThe error occurred on {{step_9['result']}}\nError Details:\n-Data Period: {{step_7}}\n-Message: Status code: 500 (Internal Server Error)\n\nPlease investigate and resolve the issue to ensure timely data availability.\nAction Required:\n1. Check the NHMIS-DHIS2 dashboard for any errors or downtime.\n2. Verify API request URL and credentials. \n3. Reschedule the data fetch manually if necessary.\nFor further assistance, please contact the AI & Automation Team at ai@e4email.net\n\nHave a great day!",
+                                    "channel": "C07GF4PNMMM",
+                                    "username": "NHMIS-DHIS2 Bot"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "actionName": "send_channel_message",
+                                  "pieceVersion": "0.7.15",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "channel": {
+                                      "type": "MANUAL"
+                                    },
+                                    "username": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": true
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_15",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['slack']}}",
+                                      "text": "Hello @channel\n\nThe NHMIS-DHIS2 daily update for the period of {{step_7}} has failed :(\nThe error occurred on {{step_9['result']}}\nError Details:\n-Data Period: {{step_7}}\n-Message: Status code: 500 (Internal Server Error)\n\nPlease investigate and resolve the issue to ensure timely data availability.\nAction Required:\n1. Check the NHMIS-DHIS2 dashboard for any errors or downtime.\n2. Verify API request URL and credentials. \n3. Reschedule the data fetch manually if necessary.\nFor further assistance, please contact the AI & Automation Team at ai@e4email.net\n\nHave a great day!",
+                                      "channel": "C081PDGJMQE",
+                                      "username": "NHMIS-DHIS2 Bot"
+                                    },
+                                    "pieceName": "@activepieces/piece-slack",
+                                    "actionName": "send_channel_message",
+                                    "pieceVersion": "0.7.15",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "text": {
+                                        "type": "MANUAL"
+                                      },
+                                      "channel": {
+                                        "type": "MANUAL"
+                                      },
+                                      "username": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "displayName": "Send error message to automation-logs channel"
+                                },
+                                "displayName": "Send error message to nhmis-monthly channel"
+                              },
+                              "displayName": "Ask ChatGPT"
+                            },
+                            "displayName": "Get Current Date"
+                          }
+                        ],
+                        "settings": {
+                          "branches": [
+                            {
+                              "branchName": "On Success",
+                              "branchType": "CONDITION",
+                              "conditions": [
+                                [
+                                  {
+                                    "operator": "EXISTS",
+                                    "firstValue": "{{step_1['status']}}"
+                                  }
+                                ]
+                              ]
+                            },
+                            {
+                              "branchName": "Otherwise",
+                              "branchType": "FALLBACK"
+                            }
+                          ],
+                          "executionType": "EXECUTE_FIRST_MATCH",
+                          "propertySettings": {},
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-08-03T20:47:11.695Z",
+                            "sampleDataFileId": "CeUkAlqzrGq7u2b3458Zb"
+                          }
+                        },
+                        "displayName": "If HTTP request Status = 200"
+                      },
+                      "displayName": "Send HTTP request"
+                    },
+                    "displayName": "Get data period"
+                  },
+                  null
+                ],
+                "settings": {
+                  "branches": [
+                    {
+                      "branchName": "Branch 1",
+                      "branchType": "CONDITION",
+                      "conditions": [
+                        [
+                          {
+                            "operator": "NUMBER_IS_EQUAL_TO",
+                            "firstValue": "{{step_28['day']}}",
+                            "secondValue": "15"
+                          }
+                        ],
+                        [
+                          {
+                            "operator": "NUMBER_IS_GREATER_THAN",
+                            "firstValue": "{{step_28['day']}}",
+                            "secondValue": "15"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "branchName": "Otherwise",
+                      "branchType": "FALLBACK"
+                    }
+                  ],
+                  "sampleData": {},
+                  "executionType": "EXECUTE_FIRST_MATCH"
+                },
+                "nextAction": {
+                  "name": "step_17",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "timeZone": "Africa/Lagos",
+                      "timeFormat": "MMMM DD YYYY HH:mm:ss"
+                    },
+                    "pieceName": "@activepieces/piece-date-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "get_current_date",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.1.22",
+                    "propertySettings": {
+                      "timeZone": {
+                        "type": "MANUAL"
+                      },
+                      "timeFormat": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_18",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "endDate": "{{step_17['result']}}",
+                        "startDate": "{{step_16['result']}}",
+                        "endDateFormat": "MMMM DD YYYY HH:mm:ss",
+                        "unitDifference": [
+                          "hour",
+                          "minute",
+                          "second"
+                        ],
+                        "startDateFormat": "MMMM DD YYYY HH:mm:ss"
+                      },
+                      "pieceName": "@activepieces/piece-date-helper",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "date_difference",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "0.1.22",
+                      "propertySettings": {
+                        "endDate": {
+                          "type": "MANUAL"
+                        },
+                        "startDate": {
+                          "type": "MANUAL"
+                        },
+                        "endDateFormat": {
+                          "type": "MANUAL"
+                        },
+                        "unitDifference": {
+                          "type": "MANUAL"
+                        },
+                        "startDateFormat": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_21",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                          "row_id": "{{step_20['row']}}",
+                          "values": {
+                            "D": "{{step_18['hour']}}hr {{step_18['minute']}}min {{step_18['second']}}sec",
+                            "F": "nhmis-monthly-automation"
+                          },
+                          "sheetId": 1211720957,
+                          "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                          "first_row_headers": true,
+                          "includeTeamDrives": true
+                        },
+                        "pieceName": "@activepieces/piece-google-sheets",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "update_row",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "0.12.20",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "row_id": {
+                            "type": "MANUAL"
+                          },
+                          "values": {
+                            "type": "MANUAL"
+                          },
+                          "sheetId": {
+                            "type": "MANUAL"
+                          },
+                          "spreadsheetId": {
+                            "type": "MANUAL"
+                          },
+                          "first_row_headers": {
+                            "type": "MANUAL"
+                          },
+                          "includeTeamDrives": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Update Row"
+                    },
+                    "displayName": "Date Difference"
+                  },
+                  "displayName": "Get Current Date"
+                },
+                "displayName": "Router"
+              },
+              "displayName": "Insert Row"
+            },
+            "displayName": "Extract Date Units"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

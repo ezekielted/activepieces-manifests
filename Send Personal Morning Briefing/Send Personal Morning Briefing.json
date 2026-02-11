@@ -1,0 +1,1468 @@
+﻿{
+  "name": "Send Personal Morning Briefing",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-google-calendar",
+    "@activepieces/piece-gmail",
+    "@activepieces/piece-store",
+    "@activepieces/piece-firecrawl",
+    "@activepieces/piece-todoist",
+    "@activepieces/piece-http",
+    "@activepieces/piece-ai",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-telegram-bot"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "X7Eu4V8YDEiTejtJlwxlz"
+  },
+  "flows": [
+    {
+      "displayName": "Send Personal Morning Briefing",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Day",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "run_on_weekends": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "~0.1.14",
+          "input": {
+            "timezone": "UTC",
+            "hour_of_the_day": 7,
+            "run_on_weekends": false
+          },
+          "sampleData": {},
+          "triggerName": "every_day"
+        },
+        "nextAction": {
+          "name": "step_2",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "UTC",
+              "timeFormat": "YYYY-MM-DDTHH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "sampleData": {},
+            "pieceVersion": "~0.1.23",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_10",
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "timeZone": "UTC",
+                "inputDate": "{{step_2['result']}}",
+                "expression": "- 1 day",
+                "outputFormat": "YYYY-MM-DD",
+                "useCurrentTime": false,
+                "inputDateFormat": "YYYY-MM-DDTHH:mm:ss"
+              },
+              "pieceName": "@activepieces/piece-date-helper",
+              "actionName": "add_subtract_date",
+              "sampleData": {},
+              "pieceVersion": "~0.1.23",
+              "propertySettings": {
+                "setTime": {
+                  "type": "MANUAL"
+                },
+                "timeZone": {
+                  "type": "MANUAL"
+                },
+                "inputDate": {
+                  "type": "MANUAL"
+                },
+                "expression": {
+                  "type": "MANUAL"
+                },
+                "outputFormat": {
+                  "type": "MANUAL"
+                },
+                "useCurrentTime": {
+                  "type": "MANUAL"
+                },
+                "inputDateFormat": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_3",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "timeZone": null,
+                  "inputDate": "{{step_2['result']}}",
+                  "expression": "+ 1 day",
+                  "outputFormat": "YYYY-MM-DDTHH:mm:ss",
+                  "useCurrentTime": false,
+                  "inputDateFormat": "YYYY-MM-DD HH:mm:ss"
+                },
+                "pieceName": "@activepieces/piece-date-helper",
+                "actionName": "add_subtract_date",
+                "sampleData": {},
+                "pieceVersion": "~0.1.23",
+                "propertySettings": {
+                  "setTime": {
+                    "type": "MANUAL"
+                  },
+                  "timeZone": {
+                    "type": "MANUAL"
+                  },
+                  "inputDate": {
+                    "type": "MANUAL"
+                  },
+                  "expression": {
+                    "type": "MANUAL"
+                  },
+                  "outputFormat": {
+                    "type": "MANUAL"
+                  },
+                  "useCurrentTime": {
+                    "type": "MANUAL"
+                  },
+                  "inputDateFormat": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_4",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "text": "{{step_3['result']}}",
+                    "searchValue": "T.*$",
+                    "replaceValue": "T00:00:00",
+                    "replaceOnlyFirst": false
+                  },
+                  "pieceName": "@activepieces/piece-text-helper",
+                  "actionName": "replace",
+                  "sampleData": {},
+                  "pieceVersion": "~0.4.10",
+                  "propertySettings": {
+                    "text": {
+                      "type": "MANUAL"
+                    },
+                    "searchValue": {
+                      "type": "MANUAL"
+                    },
+                    "replaceValue": {
+                      "type": "MANUAL"
+                    },
+                    "replaceOnlyFirst": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_1",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "auth": "{{connections['y87mCMl4zyODRx8Zdkdaq']}}",
+                      "end_date": "{{step_4}}",
+                      "start_date": "{{step_2['result']}}",
+                      "calendar_id": "{CALENDAR_ID}",
+                      "event_types": [
+                        "default",
+                        "focusTime",
+                        "outOfOffice"
+                      ],
+                      "singleEvents": false
+                    },
+                    "pieceName": "@activepieces/piece-google-calendar",
+                    "actionName": "google_calendar_get_events",
+                    "sampleData": {},
+                    "pieceVersion": "~0.8.1",
+                    "propertySettings": {
+                      "search": {
+                        "type": "MANUAL"
+                      },
+                      "end_date": {
+                        "type": "MANUAL"
+                      },
+                      "start_date": {
+                        "type": "MANUAL"
+                      },
+                      "calendar_id": {
+                        "type": "DYNAMIC"
+                      },
+                      "event_types": {
+                        "type": "MANUAL"
+                      },
+                      "singleEvents": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_6",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "auth": "{{connections['5pPYWWooMhj0S22kpPacT']}}",
+                        "label": {
+                          "id": "INBOX",
+                          "name": "INBOX",
+                          "type": "system"
+                        },
+                        "category": "primary",
+                        "after_date": "{{step_10['result']}}",
+                        "max_results": 10,
+                        "has_attachment": false,
+                        "include_spam_trash": false
+                      },
+                      "pieceName": "@activepieces/piece-gmail",
+                      "actionName": "gmail_search_mail",
+                      "sampleData": {},
+                      "pieceVersion": "~0.11.0",
+                      "propertySettings": {
+                        "to": {
+                          "type": "MANUAL"
+                        },
+                        "from": {
+                          "type": "MANUAL"
+                        },
+                        "label": {
+                          "type": "MANUAL"
+                        },
+                        "content": {
+                          "type": "MANUAL"
+                        },
+                        "subject": {
+                          "type": "MANUAL"
+                        },
+                        "category": {
+                          "type": "MANUAL"
+                        },
+                        "after_date": {
+                          "type": "MANUAL"
+                        },
+                        "before_date": {
+                          "type": "MANUAL"
+                        },
+                        "max_results": {
+                          "type": "MANUAL"
+                        },
+                        "has_attachment": {
+                          "type": "MANUAL"
+                        },
+                        "attachment_name": {
+                          "type": "MANUAL"
+                        },
+                        "include_spam_trash": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_14",
+                      "skip": false,
+                      "type": "LOOP_ON_ITEMS",
+                      "valid": true,
+                      "settings": {
+                        "items": "{{step_6['results']['messages']}}",
+                        "sampleData": {}
+                      },
+                      "nextAction": {
+                        "name": "step_16",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "emails_list",
+                            "store_scope": "COLLECTION",
+                            "defaultValue": "[]"
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "get",
+                          "sampleData": {},
+                          "pieceVersion": "~0.6.11",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "defaultValue": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_8",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "url": "{NEWS_RSS_URL}",
+                              "auth": "{{connections['nghhqoZt1IhTVLtg4RC0Q']}}",
+                              "formats": "json",
+                              "timeout": 60000,
+                              "useActions": false,
+                              "extractMode": {
+                                "mode": "advanced"
+                              },
+                              "extractPrompt": {
+                                "prompt": "Extract a summary of the article, including the title first."
+                              },
+                              "extractSchema": {
+                                "fields": {
+                                  "type": "object",
+                                  "required": [
+                                    "articles"
+                                  ],
+                                  "properties": {
+                                    "articles": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "required": [
+                                          "url",
+                                          "published_at"
+                                        ],
+                                        "properties": {
+                                          "url": {
+                                            "type": "string",
+                                            "format": "uri",
+                                            "description": "Article URL"
+                                          },
+                                          "title": {
+                                            "type": "string",
+                                            "description": "Article headline"
+                                          },
+                                          "summary": {
+                                            "type": "string",
+                                            "description": "Short article excerpt"
+                                          },
+                                          "published_at": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "description": "Publication date"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "actionProperties": {}
+                            },
+                            "pieceName": "@activepieces/piece-firecrawl",
+                            "actionName": "scrape",
+                            "sampleData": {},
+                            "pieceVersion": "~0.3.2",
+                            "propertySettings": {
+                              "url": {
+                                "type": "MANUAL"
+                              },
+                              "formats": {
+                                "type": "MANUAL"
+                              },
+                              "timeout": {
+                                "type": "MANUAL"
+                              },
+                              "useActions": {
+                                "type": "MANUAL"
+                              },
+                              "extractMode": {
+                                "type": "MANUAL",
+                                "schema": {
+                                  "mode": {
+                                    "type": "STATIC_DROPDOWN",
+                                    "options": {
+                                      "options": [],
+                                      "disabled": false
+                                    },
+                                    "required": true,
+                                    "description": "For complex schema, you can use advanced mode.",
+                                    "displayName": "Data Schema Type",
+                                    "defaultValue": "simple"
+                                  }
+                                }
+                              },
+                              "extractPrompt": {
+                                "type": "MANUAL",
+                                "schema": {
+                                  "prompt": {
+                                    "type": "LONG_TEXT",
+                                    "required": false,
+                                    "description": "Describe what information you want to extract.",
+                                    "displayName": "Extraction Prompt",
+                                    "defaultValue": "Extract the following data from the provided text."
+                                  }
+                                }
+                              },
+                              "extractSchema": {
+                                "type": "MANUAL",
+                                "schema": {
+                                  "fields": {
+                                    "type": "JSON",
+                                    "required": true,
+                                    "description": "Learn more about JSON Schema here: https://json-schema.org/learn/getting-started-step-by-step",
+                                    "displayName": "JSON Schema",
+                                    "defaultValue": {
+                                      "type": "object",
+                                      "required": [
+                                        "name"
+                                      ],
+                                      "properties": {
+                                        "age": {
+                                          "type": "number"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "actionProperties": {
+                                "type": "MANUAL",
+                                "schema": {}
+                              }
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_7",
+                            "skip": false,
+                            "type": "LOOP_ON_ITEMS",
+                            "valid": true,
+                            "settings": {
+                              "items": "{{step_8['data']['json']['articles']}}",
+                              "sampleData": {}
+                            },
+                            "nextAction": {
+                              "name": "step_13",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "key": "articles_list",
+                                  "store_scope": "COLLECTION",
+                                  "defaultValue": "[]"
+                                },
+                                "pieceName": "@activepieces/piece-store",
+                                "actionName": "get",
+                                "sampleData": {},
+                                "pieceVersion": "~0.6.11",
+                                "propertySettings": {
+                                  "key": {
+                                    "type": "MANUAL"
+                                  },
+                                  "store_scope": {
+                                    "type": "MANUAL"
+                                  },
+                                  "defaultValue": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_9",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "url": {
+                                      "url": "https://api.todoist.com/rest/v2/tasks?filter=today"
+                                    },
+                                    "auth": "{{connections['DHKp3MPJZ9c0Tu9gJDadg']}}",
+                                    "body": {},
+                                    "method": "GET",
+                                    "headers": {},
+                                    "failsafe": false,
+                                    "body_type": "none",
+                                    "queryParams": {},
+                                    "followRedirects": true,
+                                    "response_is_binary": false
+                                  },
+                                  "pieceName": "@activepieces/piece-todoist",
+                                  "actionName": "custom_api_call",
+                                  "sampleData": {},
+                                  "pieceVersion": "~0.4.1",
+                                  "propertySettings": {
+                                    "url": {
+                                      "type": "MANUAL",
+                                      "schema": {
+                                        "url": {
+                                          "type": "SHORT_TEXT",
+                                          "required": true,
+                                          "description": "You can either use the full URL or the relative path to the base URL\ni.e https://api.todoist.com/rest/v2/resource or /resource",
+                                          "displayName": "URL",
+                                          "defaultValue": "https://api.todoist.com/rest/v2"
+                                        }
+                                      }
+                                    },
+                                    "body": {
+                                      "type": "MANUAL",
+                                      "schema": {}
+                                    },
+                                    "method": {
+                                      "type": "MANUAL"
+                                    },
+                                    "headers": {
+                                      "type": "MANUAL"
+                                    },
+                                    "timeout": {
+                                      "type": "MANUAL"
+                                    },
+                                    "failsafe": {
+                                      "type": "MANUAL"
+                                    },
+                                    "body_type": {
+                                      "type": "MANUAL"
+                                    },
+                                    "queryParams": {
+                                      "type": "MANUAL"
+                                    },
+                                    "followRedirects": {
+                                      "type": "MANUAL"
+                                    },
+                                    "response_is_binary": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_19",
+                                  "skip": false,
+                                  "type": "LOOP_ON_ITEMS",
+                                  "valid": true,
+                                  "settings": {
+                                    "items": "{{step_9['body']}}",
+                                    "sampleData": {}
+                                  },
+                                  "nextAction": {
+                                    "name": "step_21",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "key": "tasks_list",
+                                        "store_scope": "COLLECTION",
+                                        "defaultValue": "[]"
+                                      },
+                                      "pieceName": "@activepieces/piece-store",
+                                      "actionName": "get",
+                                      "sampleData": {},
+                                      "pieceVersion": "~0.6.11",
+                                      "propertySettings": {
+                                        "key": {
+                                          "type": "MANUAL"
+                                        },
+                                        "store_scope": {
+                                          "type": "MANUAL"
+                                        },
+                                        "defaultValue": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_12",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "url": "https://weatherbit-v1-mashape.p.rapidapi.com/current?units=imperial&lang=en",
+                                          "body": {},
+                                          "method": "GET",
+                                          "headers": {
+                                            "x-rapidapi-key": "REPLACE_WITH_API_KEY",
+                                            "x-rapidapi-host": "weatherbit-v1-mashape.p.rapidapi.com"
+                                          },
+                                          "authType": "NONE",
+                                          "body_type": "none",
+                                          "use_proxy": false,
+                                          "authFields": {},
+                                          "failureMode": "continue_none",
+                                          "queryParams": {
+                                            "lat": "{CITY_LAT}",
+                                            "lon": "{CITY_LON}"
+                                          },
+                                          "proxy_settings": {},
+                                          "followRedirects": false,
+                                          "response_is_binary": false
+                                        },
+                                        "pieceName": "@activepieces/piece-http",
+                                        "actionName": "send_request",
+                                        "sampleData": {},
+                                        "pieceVersion": "~0.11.4",
+                                        "propertySettings": {
+                                          "url": {
+                                            "type": "MANUAL"
+                                          },
+                                          "body": {
+                                            "type": "MANUAL",
+                                            "schema": {}
+                                          },
+                                          "method": {
+                                            "type": "MANUAL"
+                                          },
+                                          "headers": {
+                                            "type": "MANUAL"
+                                          },
+                                          "timeout": {
+                                            "type": "MANUAL"
+                                          },
+                                          "authType": {
+                                            "type": "MANUAL"
+                                          },
+                                          "body_type": {
+                                            "type": "MANUAL"
+                                          },
+                                          "use_proxy": {
+                                            "type": "MANUAL"
+                                          },
+                                          "authFields": {
+                                            "type": "MANUAL",
+                                            "schema": {}
+                                          },
+                                          "failureMode": {
+                                            "type": "MANUAL"
+                                          },
+                                          "queryParams": {
+                                            "type": "MANUAL"
+                                          },
+                                          "proxy_settings": {
+                                            "type": "MANUAL",
+                                            "schema": {}
+                                          },
+                                          "followRedirects": {
+                                            "type": "MANUAL"
+                                          },
+                                          "response_is_binary": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_24",
+                                        "skip": false,
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "model": "openai/gpt-5.2",
+                                            "prompt": "You are a friendly and professional personal assistant. Create a morning briefing that is clear, motivating, and concise.\n\nUse the following information:\nVariables:\n\nBriefing Time: {{step_2['result']}}\nToday’s Calendar Events: {{step_1['body']['items']}}\nTop Tasks / To-dos: {{step_21}}\nEmail Highlights / Inbox Summary: {{step_16}}\nWeather: {{step_12['body']['data']}}\nQuick News Headlines: {{step_13}}\n\nInstructions:\n1. Start with a friendly greeting.\n2. Summarize calendar events for today in chronological order.\n3. List top tasks for the day with a short motivational note.\n4. Include email highlights as a quick digest.\n5. Provide the weather summary (temperature, conditions, any alerts).\n6. Include 3–5 concise news headlines.\n7. Keep the briefing under 250 words, formatted in clear sections with headings.\n8. End with a positive note or reminder for the day.\n9. Do not include any sections if the corresponding variable is empty. \n10. Format your response in Markdown, ensuring that the syntax is compatible with Telegram bots and that all reserved characters are properly escaped.",
+                                            "provider": "activepieces",
+                                            "webSearch": false,
+                                            "creativity": 100,
+                                            "maxOutputTokens": 2000,
+                                            "webSearchOptions": {}
+                                          },
+                                          "pieceName": "@activepieces/piece-ai",
+                                          "actionName": "askAi",
+                                          "sampleData": {},
+                                          "pieceVersion": "~0.1.2",
+                                          "propertySettings": {
+                                            "model": {
+                                              "type": "MANUAL"
+                                            },
+                                            "prompt": {
+                                              "type": "MANUAL"
+                                            },
+                                            "provider": {
+                                              "type": "MANUAL"
+                                            },
+                                            "webSearch": {
+                                              "type": "MANUAL"
+                                            },
+                                            "creativity": {
+                                              "type": "MANUAL"
+                                            },
+                                            "conversationKey": {
+                                              "type": "MANUAL"
+                                            },
+                                            "maxOutputTokens": {
+                                              "type": "MANUAL"
+                                            },
+                                            "webSearchOptions": {
+                                              "type": "MANUAL",
+                                              "schema": {}
+                                            }
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_29",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "markdown": "{{step_24}}"
+                                            },
+                                            "pieceName": "@activepieces/piece-slack",
+                                            "actionName": "markdownToSlackFormat",
+                                            "sampleData": {},
+                                            "pieceVersion": "~0.11.4",
+                                            "propertySettings": {
+                                              "markdown": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "nextAction": {
+                                            "name": "step_25",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "auth": "{{connections['artS25ankOXWQeGClYF24']}}",
+                                                "text": "{{step_29}}",
+                                                "blocks": [],
+                                                "userId": "{SLACK_USER_ID}",
+                                                "unfurlLinks": true,
+                                                "mentionOriginFlow": false
+                                              },
+                                              "pieceName": "@activepieces/piece-slack",
+                                              "actionName": "send_direct_message",
+                                              "sampleData": {},
+                                              "pieceVersion": "~0.11.4",
+                                              "propertySettings": {
+                                                "text": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "blocks": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "userId": {
+                                                  "type": "DYNAMIC"
+                                                },
+                                                "username": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "iconEmoji": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "unfurlLinks": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "profilePicture": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "mentionOriginFlow": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "nextAction": {
+                                              "name": "step_28",
+                                              "skip": false,
+                                              "type": "PIECE",
+                                              "valid": true,
+                                              "settings": {
+                                                "input": {
+                                                  "flavor": "github",
+                                                  "tables": true,
+                                                  "markdown": "{{step_24}}",
+                                                  "noHeaderId": false,
+                                                  "headerLevelStart": 1,
+                                                  "simpleLineBreaks": false,
+                                                  "openLinksInNewWindow": false
+                                                },
+                                                "pieceName": "@activepieces/piece-text-helper",
+                                                "actionName": "markdown_to_html",
+                                                "sampleData": {},
+                                                "pieceVersion": "~0.4.10",
+                                                "propertySettings": {
+                                                  "flavor": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "tables": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "markdown": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "noHeaderId": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "headerLevelStart": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "simpleLineBreaks": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "openLinksInNewWindow": {
+                                                    "type": "MANUAL"
+                                                  }
+                                                },
+                                                "errorHandlingOptions": {
+                                                  "retryOnFailure": {
+                                                    "value": false
+                                                  },
+                                                  "continueOnFailure": {
+                                                    "value": false
+                                                  }
+                                                }
+                                              },
+                                              "nextAction": {
+                                                "name": "step_26",
+                                                "skip": false,
+                                                "type": "PIECE",
+                                                "valid": true,
+                                                "settings": {
+                                                  "input": {
+                                                    "cc": [],
+                                                    "bcc": [],
+                                                    "auth": "{{connections['5pPYWWooMhj0S22kpPacT']}}",
+                                                    "body": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Daily Morning Briefing</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <style>\n      body {\n        margin: 0;\n        padding: 0;\n        background-color: #f1f5f9;\n        font-family: Arial, Helvetica, sans-serif;\n        font-size: 14px;\n        line-height: 1.5;\n        color: #0f172a; \n      }\n      .container {\n        max-width: 640px;\n        margin: 0 auto;\n        background-color: #ffffff; \n      }\n      .header {\n        background-color: #0b1c2d; \n        color: #ffffff;\n        padding: 20px 24px;\n      }\n      .header h1 {\n        margin: 0;\n        font-size: 18px;\n        font-weight: 600;\n      }\n      .content {\n        padding: 24px;\n      }\n      h2 {\n        margin: 20px 0 8px;\n        font-size: 16px;\n        color: #0b1c2d;\n      }\n      h2:first-child {\n        margin-top: 0;\n      }\n      p {\n        margin: 0 0 12px;\n      }\n      ul {\n        margin: 0 0 12px;\n        padding-left: 18px;\n      }\n      li {\n        margin-bottom: 6px;\n      }\n      .footer {\n        background-color: #e6f0f8;\n        border-top: 1px solid #cbd5e1;\n        padding: 16px 24px;\n        font-size: 12px;\n        color: #334155;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"header\">\n        <h1>☀️ Daily Morning Briefing</h1>\n      </div>\n      <div class=\"content\">\n        {{step_28}}\n      </div>\n      <div class=\"footer\">\n        Automated daily briefing · Calm starts, clear focus.\n      </div>\n    </div>\n  </body>\n</html>",
+                                                    "draft": false,
+                                                    "subject": "Daily Morning Briefing",
+                                                    "receiver": [
+                                                      "youremail@example.com"
+                                                    ],
+                                                    "reply_to": [],
+                                                    "body_type": "html",
+                                                    "attachments": []
+                                                  },
+                                                  "pieceName": "@activepieces/piece-gmail",
+                                                  "actionName": "send_email",
+                                                  "sampleData": {},
+                                                  "pieceVersion": "~0.11.0",
+                                                  "propertySettings": {
+                                                    "cc": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "bcc": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "body": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "from": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "draft": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "subject": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "receiver": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "reply_to": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "body_type": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "attachments": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "in_reply_to": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "sender_name": {
+                                                      "type": "MANUAL"
+                                                    }
+                                                  },
+                                                  "errorHandlingOptions": {
+                                                    "retryOnFailure": {
+                                                      "value": false
+                                                    },
+                                                    "continueOnFailure": {
+                                                      "value": false
+                                                    }
+                                                  }
+                                                },
+                                                "nextAction": {
+                                                  "name": "step_27",
+                                                  "skip": false,
+                                                  "type": "PIECE",
+                                                  "valid": true,
+                                                  "settings": {
+                                                    "input": {
+                                                      "auth": "{{connections['UprsbPzNe92gLvGotfZM4']}}",
+                                                      "format": "MarkdownV2",
+                                                      "chat_id": "{TELEGRAM_CHAT_ID}",
+                                                      "message": "{{step_24}}",
+                                                      "reply_markup": {},
+                                                      "web_page_preview": false
+                                                    },
+                                                    "pieceName": "@activepieces/piece-telegram-bot",
+                                                    "actionName": "send_text_message",
+                                                    "sampleData": {},
+                                                    "pieceVersion": "~0.4.2",
+                                                    "propertySettings": {
+                                                      "format": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "chat_id": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "message": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "instructions": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "reply_markup": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "web_page_preview": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "message_thread_id": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "instructions_format": {
+                                                        "type": "MANUAL"
+                                                      }
+                                                    },
+                                                    "errorHandlingOptions": {
+                                                      "retryOnFailure": {
+                                                        "value": false
+                                                      },
+                                                      "continueOnFailure": {
+                                                        "value": true
+                                                      }
+                                                    }
+                                                  },
+                                                  "nextAction": {
+                                                    "name": "step_18",
+                                                    "skip": false,
+                                                    "type": "PIECE",
+                                                    "valid": true,
+                                                    "settings": {
+                                                      "input": {
+                                                        "key": "emails_list",
+                                                        "store_scope": "COLLECTION"
+                                                      },
+                                                      "pieceName": "@activepieces/piece-store",
+                                                      "actionName": "remove_value",
+                                                      "sampleData": {},
+                                                      "pieceVersion": "~0.6.11",
+                                                      "propertySettings": {
+                                                        "key": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "store_scope": {
+                                                          "type": "MANUAL"
+                                                        }
+                                                      },
+                                                      "errorHandlingOptions": {
+                                                        "retryOnFailure": {
+                                                          "value": false
+                                                        },
+                                                        "continueOnFailure": {
+                                                          "value": false
+                                                        }
+                                                      }
+                                                    },
+                                                    "nextAction": {
+                                                      "name": "step_17",
+                                                      "skip": false,
+                                                      "type": "PIECE",
+                                                      "valid": true,
+                                                      "settings": {
+                                                        "input": {
+                                                          "key": "articles_list",
+                                                          "store_scope": "COLLECTION"
+                                                        },
+                                                        "pieceName": "@activepieces/piece-store",
+                                                        "actionName": "remove_value",
+                                                        "sampleData": {},
+                                                        "pieceVersion": "~0.6.11",
+                                                        "propertySettings": {
+                                                          "key": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "store_scope": {
+                                                            "type": "MANUAL"
+                                                          }
+                                                        },
+                                                        "errorHandlingOptions": {
+                                                          "retryOnFailure": {
+                                                            "value": false
+                                                          },
+                                                          "continueOnFailure": {
+                                                            "value": false
+                                                          }
+                                                        }
+                                                      },
+                                                      "nextAction": {
+                                                        "name": "step_23",
+                                                        "skip": false,
+                                                        "type": "PIECE",
+                                                        "valid": true,
+                                                        "settings": {
+                                                          "input": {
+                                                            "key": "tasks_list",
+                                                            "store_scope": "COLLECTION"
+                                                          },
+                                                          "pieceName": "@activepieces/piece-store",
+                                                          "actionName": "remove_value",
+                                                          "sampleData": {},
+                                                          "pieceVersion": "~0.6.11",
+                                                          "propertySettings": {
+                                                            "key": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "store_scope": {
+                                                              "type": "MANUAL"
+                                                            }
+                                                          },
+                                                          "errorHandlingOptions": {
+                                                            "retryOnFailure": {
+                                                              "value": false
+                                                            },
+                                                            "continueOnFailure": {
+                                                              "value": false
+                                                            }
+                                                          }
+                                                        },
+                                                        "displayName": "Remove"
+                                                      },
+                                                      "displayName": "Remove"
+                                                    },
+                                                    "displayName": "Remove"
+                                                  },
+                                                  "displayName": "Send Text Message"
+                                                },
+                                                "displayName": "Send Email"
+                                              },
+                                              "displayName": "Markdown to HTML"
+                                            },
+                                            "displayName": "Send Message To A User"
+                                          },
+                                          "displayName": "Markdown to Slack format"
+                                        },
+                                        "displayName": "Ask AI"
+                                      },
+                                      "displayName": "Get Today's Weather"
+                                    },
+                                    "displayName": "Get"
+                                  },
+                                  "displayName": "Loop on Items",
+                                  "firstLoopAction": {
+                                    "name": "step_20",
+                                    "skip": false,
+                                    "type": "ROUTER",
+                                    "valid": true,
+                                    "children": [
+                                      {
+                                        "name": "step_22",
+                                        "skip": false,
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "key": "tasks_list",
+                                            "value": [
+                                              "content: {{step_19['item']['content']}},\ncreated_at: {{step_19['item']['created_at']}}"
+                                            ],
+                                            "store_scope": "COLLECTION",
+                                            "ignore_if_exists": false
+                                          },
+                                          "pieceName": "@activepieces/piece-store",
+                                          "actionName": "add_to_list",
+                                          "sampleData": {},
+                                          "pieceVersion": "~0.6.11",
+                                          "propertySettings": {
+                                            "key": {
+                                              "type": "MANUAL"
+                                            },
+                                            "value": {
+                                              "type": "MANUAL"
+                                            },
+                                            "store_scope": {
+                                              "type": "MANUAL"
+                                            },
+                                            "ignore_if_exists": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "displayName": "Add To List"
+                                      },
+                                      null
+                                    ],
+                                    "settings": {
+                                      "branches": [
+                                        {
+                                          "branchName": "Branch 1",
+                                          "branchType": "CONDITION",
+                                          "conditions": [
+                                            [
+                                              {
+                                                "operator": "LIST_IS_NOT_EMPTY",
+                                                "firstValue": "{{step_9['body']}}"
+                                              }
+                                            ]
+                                          ]
+                                        },
+                                        {
+                                          "branchName": "Otherwise",
+                                          "branchType": "FALLBACK"
+                                        }
+                                      ],
+                                      "sampleData": {},
+                                      "executionType": "EXECUTE_FIRST_MATCH"
+                                    },
+                                    "displayName": "Router"
+                                  }
+                                },
+                                "displayName": "Get Today's Task"
+                              },
+                              "displayName": "Get"
+                            },
+                            "displayName": "Loop on Items",
+                            "firstLoopAction": {
+                              "name": "step_5",
+                              "skip": false,
+                              "type": "ROUTER",
+                              "valid": true,
+                              "children": [
+                                {
+                                  "name": "step_11",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "key": "articles_list",
+                                      "value": [
+                                        "url: {{step_7['item']['url']}},\ntitle: {{step_7['item']['title']}},\nsummary: {{step_7['item']['summary']}}\npublished_at: {{step_7['item']['published_at']}}"
+                                      ],
+                                      "store_scope": "COLLECTION",
+                                      "ignore_if_exists": false
+                                    },
+                                    "pieceName": "@activepieces/piece-store",
+                                    "actionName": "add_to_list",
+                                    "sampleData": {},
+                                    "pieceVersion": "~0.6.11",
+                                    "propertySettings": {
+                                      "key": {
+                                        "type": "MANUAL"
+                                      },
+                                      "value": {
+                                        "type": "MANUAL"
+                                      },
+                                      "store_scope": {
+                                        "type": "MANUAL"
+                                      },
+                                      "ignore_if_exists": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "displayName": "Add To List"
+                                },
+                                null
+                              ],
+                              "settings": {
+                                "branches": [
+                                  {
+                                    "branchName": "Branch 1",
+                                    "branchType": "CONDITION",
+                                    "conditions": [
+                                      [
+                                        {
+                                          "operator": "DATE_IS_EQUAL",
+                                          "firstValue": "{{step_7['item']['published_at']}}",
+                                          "secondValue": "{{step_10['result']}}"
+                                        }
+                                      ]
+                                    ]
+                                  },
+                                  {
+                                    "branchName": "Otherwise",
+                                    "branchType": "FALLBACK"
+                                  }
+                                ],
+                                "sampleData": {},
+                                "executionType": "EXECUTE_ALL_MATCH"
+                              },
+                              "displayName": "Router"
+                            }
+                          },
+                          "displayName": "Scrape Website"
+                        },
+                        "displayName": "Get"
+                      },
+                      "displayName": "Loop on Items",
+                      "firstLoopAction": {
+                        "name": "step_15",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "emails_list",
+                            "value": [
+                              "subject: {{step_14['item']['subject']}},\ndate: {{step_14['item']['date']}},\nfrom:{{step_14['item']['from']['text']}}"
+                            ],
+                            "store_scope": "COLLECTION",
+                            "ignore_if_exists": false
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "add_to_list",
+                          "sampleData": {},
+                          "pieceVersion": "~0.6.11",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "value": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "ignore_if_exists": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Add To List"
+                      }
+                    },
+                    "displayName": "Find Email"
+                  },
+                  "displayName": "Get all Events"
+                },
+                "displayName": "Replace"
+              },
+              "displayName": "Get Tomorrow's Date"
+            },
+            "displayName": "Get Yesterday's Date"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": [
+        {
+          "id": "1F1SWDsRWlHgPFrVOORNG",
+          "content": "#Tip:\n\nStoring relevant response fields allows for simpler processing and reduces AI credit usage",
+          "color": "blue",
+          "position": {
+            "x": 435,
+            "y": 975
+          },
+          "size": {
+            "width": 153,
+            "height": 150
+          },
+          "createdAt": "2026-02-01T14:45:14.031Z",
+          "updatedAt": "2026-02-01T14:45:14.031Z",
+          "ownerId": "bxhdJvbB2XbdMtYtQtxQV"
+        },
+        {
+          "id": "00msy05rFlBxUB8Ju5QHb",
+          "content": "#Tip\n\nClear the storage after each run to remove stale data.",
+          "color": "blue",
+          "position": {
+            "x": 360,
+            "y": 4020
+          },
+          "size": {
+            "width": 174,
+            "height": 150
+          },
+          "createdAt": "2026-02-01T14:45:14.032Z",
+          "updatedAt": "2026-02-01T14:45:14.032Z",
+          "ownerId": "bxhdJvbB2XbdMtYtQtxQV"
+        }
+      ]
+    }
+  ]
+}

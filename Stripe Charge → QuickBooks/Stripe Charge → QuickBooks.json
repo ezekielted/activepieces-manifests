@@ -1,0 +1,424 @@
+﻿{
+  "name": "Stripe Charge → QuickBooks",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-stripe",
+    "@activepieces/piece-quickbooks",
+    "@activepieces/piece-date-helper"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": null,
+  "flows": [
+    {
+      "displayName": "Stripe Charge → QuickBooks",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New Charge",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {},
+          "pieceName": "@activepieces/piece-stripe",
+          "pieceVersion": "0.6.1",
+          "input": {
+            "auth": "{{connections['Wxg0kbikV3ppk2FpYChuR']}}"
+          },
+          "sampleData": {},
+          "triggerName": "new_charge"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "id": "{{trigger['customer']}}",
+              "auth": "{{connections['Wxg0kbikV3ppk2FpYChuR']}}"
+            },
+            "pieceName": "@activepieces/piece-stripe",
+            "actionName": "retrieve_customer",
+            "sampleData": {},
+            "pieceVersion": "0.6.1",
+            "propertySettings": {
+              "id": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_2",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['fLsAE8a8piWNYmHAs09Yg']}}",
+                "search_term": "{{step_1['name']}}"
+              },
+              "pieceName": "@activepieces/piece-quickbooks",
+              "actionName": "find_customer",
+              "sampleData": {},
+              "pieceVersion": "0.1.0",
+              "propertySettings": {
+                "search_term": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_5",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "inputDate": "{{trigger['created']}}",
+                  "inputFormat": "X",
+                  "outputFormat": "YYYY-MM-DD",
+                  "inputTimeZone": "UTC",
+                  "outputTimeZone": "UTC"
+                },
+                "pieceName": "@activepieces/piece-date-helper",
+                "actionName": "format_date",
+                "sampleData": {},
+                "pieceVersion": "0.1.19",
+                "propertySettings": {
+                  "inputDate": {
+                    "type": "MANUAL"
+                  },
+                  "inputFormat": {
+                    "type": "MANUAL"
+                  },
+                  "outputFormat": {
+                    "type": "MANUAL"
+                  },
+                  "inputTimeZone": {
+                    "type": "MANUAL"
+                  },
+                  "outputTimeZone": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_3",
+                "skip": false,
+                "type": "ROUTER",
+                "valid": true,
+                "children": [
+                  {
+                    "name": "step_4",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": {
+                          "url": "https://quickbooks.api.intuit.com/v3/company/9341456090533240/salesreceipt"
+                        },
+                        "auth": "{{connections['fLsAE8a8piWNYmHAs09Yg']}}",
+                        "body": {
+                          "data": "{\n  \"CustomerRef\": {\n    \"value\": \"{{step_2['result']['Id']}}\"\n  },\n  \"Line\": [\n    {\n      \"Amount\": {{trigger['amount']}},\n      \"DetailType\": \"SalesItemLineDetail\",\n      \"SalesItemLineDetail\": {\n        \"ItemRef\": {\n          \"value\": \"1\"\n        },\n        \"Qty\": 1\n      }\n    }\n  ],\n  \"TxnDate\": \"{{step_5['result']}}\"\n}"
+                        },
+                        "method": "POST",
+                        "headers": {},
+                        "failsafe": false,
+                        "body_type": "json",
+                        "queryParams": {},
+                        "response_is_binary": false
+                      },
+                      "pieceName": "@activepieces/piece-quickbooks",
+                      "actionName": "custom_api_call",
+                      "sampleData": {},
+                      "pieceVersion": "0.1.0",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "url": {
+                              "type": "SHORT_TEXT",
+                              "required": true,
+                              "description": "You can either use the full URL or the relative path to the base URL\ni.e https://quickbooks.api.intuit.com/v3/company/9341456090533240/resource or /resource",
+                              "displayName": "URL",
+                              "defaultValue": "https://quickbooks.api.intuit.com/v3/company/9341456090533240"
+                            }
+                          }
+                        },
+                        "body": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "data": {
+                              "type": "JSON",
+                              "required": true,
+                              "displayName": "JSON Body"
+                            }
+                          }
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "timeout": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "response_is_binary": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "displayName": "Create a Sales Receipt"
+                  },
+                  {
+                    "name": "step_6",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": {
+                          "url": "https://quickbooks.api.intuit.com/v3/company/9341456090533240/customer"
+                        },
+                        "auth": "{{connections['fLsAE8a8piWNYmHAs09Yg']}}",
+                        "body": {
+                          "data": {
+                            "Notes": "Stripe customer ID: {{step_1['id']}}",
+                            "DisplayName": "{{step_1['name']}}",
+                            "PrimaryEmailAddr": {
+                              "Address": "{{step_1['email']}}"
+                            }
+                          }
+                        },
+                        "method": "POST",
+                        "headers": {},
+                        "failsafe": false,
+                        "body_type": "json",
+                        "queryParams": {},
+                        "response_is_binary": false
+                      },
+                      "pieceName": "@activepieces/piece-quickbooks",
+                      "actionName": "custom_api_call",
+                      "sampleData": {},
+                      "pieceVersion": "0.1.0",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "url": {
+                              "type": "SHORT_TEXT",
+                              "required": true,
+                              "description": "You can either use the full URL or the relative path to the base URL\ni.e https://quickbooks.api.intuit.com/v3/company/9341456090533240/resource or /resource",
+                              "displayName": "URL",
+                              "defaultValue": "https://quickbooks.api.intuit.com/v3/company/9341456090533240"
+                            }
+                          }
+                        },
+                        "body": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "data": {
+                              "type": "JSON",
+                              "required": true,
+                              "displayName": "JSON Body"
+                            }
+                          }
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "timeout": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "response_is_binary": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_7",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "url": {
+                            "url": "https://quickbooks.api.intuit.com/v3/company/9341456090533240/salesreceipt"
+                          },
+                          "auth": "{{connections['fLsAE8a8piWNYmHAs09Yg']}}",
+                          "body": {
+                            "data": "{\n  \"CustomerRef\": {\n    \"value\": \"{{step_6['body']['Customer']['Id']}}\"\n  },\n  \"Line\": [\n    {\n      \"Amount\": {{trigger['amount']}},\n      \"DetailType\": \"SalesItemLineDetail\",\n      \"SalesItemLineDetail\": {\n        \"ItemRef\": {\n          \"value\": \"1\"\n        },\n        \"Qty\": 1\n      }\n    }\n  ],\n  \"TxnDate\": \"{{step_5['result']}}\"\n}"
+                          },
+                          "method": "POST",
+                          "headers": {},
+                          "failsafe": false,
+                          "body_type": "json",
+                          "queryParams": {},
+                          "response_is_binary": false
+                        },
+                        "pieceName": "@activepieces/piece-quickbooks",
+                        "actionName": "custom_api_call",
+                        "sampleData": {},
+                        "pieceVersion": "0.1.0",
+                        "propertySettings": {
+                          "url": {
+                            "type": "MANUAL",
+                            "schema": {
+                              "url": {
+                                "type": "SHORT_TEXT",
+                                "required": true,
+                                "description": "You can either use the full URL or the relative path to the base URL\ni.e https://quickbooks.api.intuit.com/v3/company/9341456090533240/resource or /resource",
+                                "displayName": "URL",
+                                "defaultValue": "https://quickbooks.api.intuit.com/v3/company/9341456090533240"
+                              }
+                            }
+                          },
+                          "body": {
+                            "type": "MANUAL",
+                            "schema": {
+                              "data": {
+                                "type": "JSON",
+                                "required": true,
+                                "displayName": "JSON Body"
+                              }
+                            }
+                          },
+                          "method": {
+                            "type": "MANUAL"
+                          },
+                          "headers": {
+                            "type": "MANUAL"
+                          },
+                          "timeout": {
+                            "type": "MANUAL"
+                          },
+                          "failsafe": {
+                            "type": "MANUAL"
+                          },
+                          "body_type": {
+                            "type": "MANUAL"
+                          },
+                          "queryParams": {
+                            "type": "MANUAL"
+                          },
+                          "response_is_binary": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Create a Sales Receipt"
+                    },
+                    "displayName": "Create a Customer"
+                  }
+                ],
+                "settings": {
+                  "branches": [
+                    {
+                      "branchName": "If customer exists",
+                      "branchType": "CONDITION",
+                      "conditions": [
+                        [
+                          {
+                            "operator": "BOOLEAN_IS_TRUE",
+                            "firstValue": "{{step_2['found']}}"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "branchName": "Otherwise",
+                      "branchType": "FALLBACK"
+                    }
+                  ],
+                  "sampleData": {},
+                  "executionType": "EXECUTE_FIRST_MATCH"
+                },
+                "displayName": "Router"
+              },
+              "displayName": "Format Created Date"
+            },
+            "displayName": "Find Customer"
+          },
+          "displayName": "Retrieve Customer"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "13"
+    }
+  ]
+}

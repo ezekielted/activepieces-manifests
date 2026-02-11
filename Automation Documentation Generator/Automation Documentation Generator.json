@@ -1,0 +1,474 @@
+﻿{
+  "name": "Automation Documentation Generator",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-open-router",
+    "@activepieces/piece-http",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "Npg5GU9uKTHn5RtWvBhOJ"
+  },
+  "flows": [
+    {
+      "displayName": "Automation Documentation Generator",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            },
+            "liveMarkdown": {
+              "type": "MANUAL"
+            },
+            "syncMarkdown": {
+              "type": "MANUAL"
+            },
+            "testMarkdown": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.25",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_8",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "file": "{{trigger['body']['data'][1]['value']['url']}}",
+              "readOptions": "text"
+            },
+            "pieceName": "@activepieces/piece-file-helper",
+            "pieceType": "OFFICIAL",
+            "actionName": "read_file",
+            "packageType": "REGISTRY",
+            "pieceVersion": "0.1.14",
+            "propertySettings": {
+              "file": {
+                "type": "MANUAL"
+              },
+              "readOptions": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-05-14T08:33:12.070Z",
+              "sampleDataFileId": "uyW7odwPOCKeW9KpKfUuE",
+              "sampleDataInputFileId": "WB6AcB2v6ia54jjJnxcUb"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_7",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['straico']}}",
+                "model": "openai/gpt-4.1-mini",
+                "prompt": "Please generate comprehensive documentation in **Markdown** syntax using the following automation details (in not less than 1500 words): \nTitle: {{trigger['body']['data'][0]['value']}}; Automation File: {{step_8['text']}}; \nOutput - Destination/format: {{trigger['body']['data'][2]['value']}}; \nSlack Notification Channels: {{trigger['body']['data'][3]['value']}}; \nPurpose: {{trigger['body']['data'][4]['value']}}. \nInclude a title, summary paragraph and bullet points where applicable."
+              },
+              "pieceName": "@activepieces/piece-straico",
+              "actionName": "prompt_completion",
+              "sampleData": {},
+              "pieceVersion": "0.0.2",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "model": {
+                  "type": "MANUAL"
+                },
+                "prompt": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": true
+                },
+                "continueOnFailure": {
+                  "value": true
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_10",
+              "skip": true,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['Vz40UvZXDfnI8JSP4IOyB']}}",
+                  "model": "openai/gpt-5-mini",
+                  "prompt": "Please generate comprehensive documentation in **Markdown** syntax using the following automation details (in not less than 1500 words): \nTitle: {{trigger['body']['data'][0]['value']}}; Automation File: {{step_8['text']}}; \nOutput - Destination/format: {{trigger['body']['data'][2]['value']}}; \nSlack Notification Channels: {{trigger['body']['data'][3]['value']}}; \nPurpose: {{trigger['body']['data'][4]['value']}}. \nInclude a title, summary paragraph and bullet points where applicable."
+                },
+                "pieceName": "@activepieces/piece-open-router",
+                "actionName": "ask-lmm",
+                "pieceVersion": "0.0.16",
+                "propertySettings": {
+                  "auth": {
+                    "type": "MANUAL"
+                  },
+                  "model": {
+                    "type": "MANUAL"
+                  },
+                  "prompt": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_1",
+                "skip": true,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "url": "https://ollamapi.e4eweb.space/api/generate",
+                    "body": {
+                      "data": {
+                        "model": "llama3.2-vision:11b",
+                        "prompt": "can you summarize the goal the clay platform?",
+                        "stream": false,
+                        "options": {
+                          "temperature": 0.6
+                        }
+                      }
+                    },
+                    "method": "POST",
+                    "headers": {},
+                    "failsafe": false,
+                    "body_type": "json",
+                    "use_proxy": false,
+                    "queryParams": {},
+                    "proxy_settings": {}
+                  },
+                  "pieceName": "@activepieces/piece-http",
+                  "actionName": "send_request",
+                  "pieceVersion": "0.6.2",
+                  "propertySettings": {
+                    "url": {
+                      "type": "MANUAL"
+                    },
+                    "body": {
+                      "type": "MANUAL",
+                      "schema": {
+                        "data": {
+                          "type": "JSON",
+                          "required": true,
+                          "displayName": "JSON Body"
+                        }
+                      }
+                    },
+                    "method": {
+                      "type": "MANUAL"
+                    },
+                    "headers": {
+                      "type": "MANUAL"
+                    },
+                    "failsafe": {
+                      "type": "MANUAL"
+                    },
+                    "body_type": {
+                      "type": "MANUAL"
+                    },
+                    "use_proxy": {
+                      "type": "MANUAL"
+                    },
+                    "queryParams": {
+                      "type": "MANUAL"
+                    },
+                    "proxy_settings": {
+                      "type": "MANUAL",
+                      "schema": {}
+                    }
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_2",
+                  "skip": true,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "text": "{{step_1['body']['response']}}",
+                      "searchValue": "<think>[\\s\\S]*?<\\/think>",
+                      "replaceOnlyFirst": false
+                    },
+                    "pieceName": "@activepieces/piece-text-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "replace",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "0.4.9",
+                    "propertySettings": {
+                      "text": {
+                        "type": "MANUAL"
+                      },
+                      "searchValue": {
+                        "type": "MANUAL"
+                      },
+                      "replaceOnlyFirst": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-05-14T09:04:45.672Z",
+                      "sampleDataFileId": "jra6eEYn3Nd8VeRkLPepQ",
+                      "sampleDataInputFileId": "T0YK9bzJcrFu4jNuobAAi"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_4",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "flavor": "github",
+                        "tables": true,
+                        "markdown": "{{step_7}}",
+                        "noHeaderId": false,
+                        "headerLevelStart": 1,
+                        "simpleLineBreaks": false,
+                        "openLinksInNewWindow": false
+                      },
+                      "pieceName": "@activepieces/piece-text-helper",
+                      "actionName": "markdown_to_html",
+                      "pieceVersion": "0.4.9",
+                      "propertySettings": {
+                        "flavor": {
+                          "type": "MANUAL"
+                        },
+                        "tables": {
+                          "type": "MANUAL"
+                        },
+                        "markdown": {
+                          "type": "MANUAL"
+                        },
+                        "noHeaderId": {
+                          "type": "MANUAL"
+                        },
+                        "headerLevelStart": {
+                          "type": "MANUAL"
+                        },
+                        "simpleLineBreaks": {
+                          "type": "MANUAL"
+                        },
+                        "openLinksInNewWindow": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_3",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n</head>\n<body>\n{{step_4}}\n</body>\n</html>",
+                          "encoding": "ascii",
+                          "fileName": "Documentation: {{trigger['body']['data'][0]['value']}}.docx"
+                        },
+                        "pieceName": "@activepieces/piece-file-helper",
+                        "actionName": "createFile",
+                        "sampleData": {},
+                        "pieceVersion": "0.1.14",
+                        "propertySettings": {
+                          "content": {
+                            "type": "MANUAL"
+                          },
+                          "encoding": {
+                            "type": "MANUAL"
+                          },
+                          "fileName": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-08-20T12:21:02.072Z",
+                          "sampleDataFileId": "3KCu59yTB8cWxfNib5hq0"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_5",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['AI_google-drive']}}",
+                            "file": "{{step_3['url']}}",
+                            "fileName": "Documentation: {{trigger['body']['data'][0]['value']}}.docx",
+                            "parentFolder": "1hkzfcZWni0MoxSv_bvIH5MUmRvA6wGft",
+                            "include_team_drives": true
+                          },
+                          "pieceName": "@activepieces/piece-google-drive",
+                          "actionName": "upload_gdrive_file",
+                          "sampleData": {},
+                          "pieceVersion": "0.5.53",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "file": {
+                              "type": "MANUAL"
+                            },
+                            "fileName": {
+                              "type": "MANUAL"
+                            },
+                            "parentFolder": {
+                              "type": "DYNAMIC"
+                            },
+                            "include_team_drives": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_6",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['slack']}}",
+                              "text": "Hey! @channel\n\nFind attached a Documentation: on the {{trigger['body']['data'][0]['value']}}\n\nClick the link below to view the document: \nhttps://docs.google.com/document/d/{{step_5['id']}}/edit?usp=drive_link\n",
+                              "channel": "C07NNUA4VA5"
+                            },
+                            "pieceName": "@activepieces/piece-slack",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "send_channel_message",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.7.15",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "text": {
+                                "type": "MANUAL"
+                              },
+                              "channel": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Send Message To A Channel"
+                        },
+                        "displayName": "Upload file"
+                      },
+                      "displayName": "Create file"
+                    },
+                    "displayName": "Markdown to HTML"
+                  },
+                  "displayName": "Replace"
+                },
+                "displayName": "Deepseek"
+              },
+              "displayName": "Ask LLM"
+            },
+            "displayName": "Ask AI"
+          },
+          "displayName": "Read File"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

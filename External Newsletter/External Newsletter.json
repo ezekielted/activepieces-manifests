@@ -1,0 +1,1135 @@
+﻿{
+  "name": "External Newsletter",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-json",
+    "@activepieces/piece-http",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-store",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-google-sheets"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "UqgT4qxfL3sskqLFvhUyJ"
+  },
+  "flows": [
+    {
+      "displayName": "External Newsletter",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "~0.1.13",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_5",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "text": "[\"{{trigger['body']['data'][3]['value']}}\", \"{{trigger['body']['data'][4]['value']}}\", \"{{trigger['body']['data'][5]['value']}}\", \"{{trigger['body']['data'][6]['value']}}\"]"
+            },
+            "pieceName": "@activepieces/piece-json",
+            "pieceType": "OFFICIAL",
+            "actionName": "convert_text_to_json",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.0.2",
+            "propertySettings": {
+              "text": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-02-03T19:31:58.198Z",
+              "sampleDataFileId": "VxShQXRXBs8WwATFjqECX"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_24",
+            "skip": false,
+            "type": "LOOP_ON_ITEMS",
+            "valid": true,
+            "settings": {
+              "items": "{{step_5}}",
+              "propertySettings": {},
+              "sampleDataSettings": {
+                "lastTestDate": "2025-02-03T18:38:38.365Z",
+                "sampleDataFileId": "S4mSAxz27oIAAzBk50KCg"
+              }
+            },
+            "nextAction": {
+              "name": "step_9",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "key": "apify_list",
+                  "store_scope": "RUN",
+                  "defaultValue": "[]"
+                },
+                "pieceName": "@activepieces/piece-store",
+                "pieceType": "OFFICIAL",
+                "actionName": "get",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.5.4",
+                "propertySettings": {
+                  "key": {
+                    "type": "MANUAL"
+                  },
+                  "store_scope": {
+                    "type": "MANUAL"
+                  },
+                  "defaultValue": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-02-03T20:00:29.785Z",
+                  "sampleDataFileId": "Plw5BWg9BlkNLkLlOPf1o"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_26",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "texts": [
+                      "{{step_9[0]}}{{step_9[1]}}{{step_9[2]}}{{step_9[3]}}"
+                    ]
+                  },
+                  "pieceName": "@activepieces/piece-text-helper",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "concat",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.4.0",
+                  "propertySettings": {
+                    "texts": {
+                      "type": "MANUAL"
+                    },
+                    "separator": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-02-03T21:28:51.279Z",
+                    "sampleDataFileId": "t92jZDaPY3P2eYbU6nUK8"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_27",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "text": "{{step_26}}",
+                      "delimiter": "##$"
+                    },
+                    "pieceName": "@activepieces/piece-text-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "split",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.4.0",
+                    "propertySettings": {
+                      "text": {
+                        "type": "MANUAL"
+                      },
+                      "delimiter": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-02-03T21:29:38.325Z",
+                      "sampleDataFileId": "5O6lKQCYpDuycoWkyUwlR"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_11",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": "https://api.apify.com/v2/acts/lukaskrivka~article-extractor-smart/run-sync-get-dataset-items?token=REPLACE_WITH_API_KEY",
+                        "body": {
+                          "data": {
+                            "minWords": 5,
+                            "useBrowser": false,
+                            "articleUrls": [
+                              {
+                                "url": "{{trigger['body']['data'][7]['value']}}"
+                              }
+                            ],
+                            "mustHaveDate": false,
+                            "scanSitemaps": false,
+                            "saveSnapshots": false,
+                            "onlyNewArticles": false,
+                            "onlyInsideArticles": false,
+                            "crawlWholeSubdomain": false,
+                            "enqueueFromArticles": false,
+                            "navigationWaitUntil": "load",
+                            "useGoogleBotHeaders": false,
+                            "onlySubdomainArticles": false,
+                            "onlyNewArticlesPerDomain": false
+                          }
+                        },
+                        "method": "POST",
+                        "headers": {
+                          "Content-Type": "application/json"
+                        },
+                        "failsafe": false,
+                        "body_type": "json",
+                        "use_proxy": false,
+                        "queryParams": {},
+                        "proxy_settings": {}
+                      },
+                      "pieceName": "@activepieces/piece-http",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "send_request",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "~0.6.2",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL"
+                        },
+                        "body": {
+                          "type": "MANUAL"
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "use_proxy": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "proxy_settings": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-02-03T21:44:33.223Z",
+                        "sampleDataFileId": "zsMb7GaTRNTgBXXBkqKfP"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_12",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "url": "https://api.apify.com/v2/acts/lukaskrivka~article-extractor-smart/run-sync-get-dataset-items?token=REPLACE_WITH_API_KEY",
+                          "body": {
+                            "data": {
+                              "minWords": 5,
+                              "useBrowser": false,
+                              "articleUrls": [
+                                {
+                                  "url": "{{trigger['body']['data'][8]['value']}}"
+                                }
+                              ],
+                              "mustHaveDate": false,
+                              "scanSitemaps": false,
+                              "saveSnapshots": false,
+                              "onlyNewArticles": false,
+                              "onlyInsideArticles": false,
+                              "crawlWholeSubdomain": false,
+                              "enqueueFromArticles": false,
+                              "navigationWaitUntil": "load",
+                              "useGoogleBotHeaders": false,
+                              "onlySubdomainArticles": false,
+                              "onlyNewArticlesPerDomain": false
+                            }
+                          },
+                          "method": "POST",
+                          "headers": {
+                            "Content-Type": "application/json"
+                          },
+                          "failsafe": false,
+                          "body_type": "json",
+                          "use_proxy": false,
+                          "queryParams": {},
+                          "proxy_settings": {}
+                        },
+                        "pieceName": "@activepieces/piece-http",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "send_request",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.6.2",
+                        "propertySettings": {
+                          "url": {
+                            "type": "MANUAL"
+                          },
+                          "body": {
+                            "type": "MANUAL"
+                          },
+                          "method": {
+                            "type": "MANUAL"
+                          },
+                          "headers": {
+                            "type": "MANUAL"
+                          },
+                          "failsafe": {
+                            "type": "MANUAL"
+                          },
+                          "body_type": {
+                            "type": "MANUAL"
+                          },
+                          "use_proxy": {
+                            "type": "MANUAL"
+                          },
+                          "queryParams": {
+                            "type": "MANUAL"
+                          },
+                          "proxy_settings": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-02-03T21:44:00.273Z",
+                          "sampleDataFileId": "8OQLE4E5tWPQnVWnXNAbT"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_13",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "url": "https://api.apify.com/v2/acts/lukaskrivka~article-extractor-smart/run-sync-get-dataset-items?token=REPLACE_WITH_API_KEY",
+                            "body": {
+                              "data": {
+                                "minWords": 5,
+                                "useBrowser": false,
+                                "articleUrls": [
+                                  {
+                                    "url": "{{trigger['body']['data'][9]['value']}}"
+                                  }
+                                ],
+                                "mustHaveDate": false,
+                                "scanSitemaps": false,
+                                "saveSnapshots": false,
+                                "onlyNewArticles": false,
+                                "onlyInsideArticles": false,
+                                "crawlWholeSubdomain": false,
+                                "enqueueFromArticles": false,
+                                "navigationWaitUntil": "load",
+                                "useGoogleBotHeaders": false,
+                                "onlySubdomainArticles": false,
+                                "onlyNewArticlesPerDomain": false
+                              }
+                            },
+                            "method": "POST",
+                            "headers": {
+                              "Content-Type": "application/json"
+                            },
+                            "failsafe": false,
+                            "body_type": "json",
+                            "use_proxy": false,
+                            "queryParams": {},
+                            "proxy_settings": {}
+                          },
+                          "pieceName": "@activepieces/piece-http",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "send_request",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.6.2",
+                          "propertySettings": {
+                            "url": {
+                              "type": "MANUAL"
+                            },
+                            "body": {
+                              "type": "MANUAL"
+                            },
+                            "method": {
+                              "type": "MANUAL"
+                            },
+                            "headers": {
+                              "type": "MANUAL"
+                            },
+                            "failsafe": {
+                              "type": "MANUAL"
+                            },
+                            "body_type": {
+                              "type": "MANUAL"
+                            },
+                            "use_proxy": {
+                              "type": "MANUAL"
+                            },
+                            "queryParams": {
+                              "type": "MANUAL"
+                            },
+                            "proxy_settings": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-02-03T21:48:25.951Z",
+                            "sampleDataFileId": "NItc2AMOiPZ6TLNY550tB"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_1",
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "cc": [],
+                              "to": [
+                                "ai@e4email.net",
+                                "ezekiel.tedunjaiye@e4email.net"
+                              ],
+                              "bcc": [
+                                "bassey.nta@e4email.net",
+                                "karl.ezeh@e4email.net",
+                                "ummi.abdulsalam@e4email.net",
+                                "oghenewoke.atariata@e4email.net",
+                                "ime@e4email.net",
+                                "mojubaoluwa.amakurugbonwo@e4email.net"
+                              ],
+                              "auth": "{{connections['smtp.office365.com']}}",
+                              "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n<style>\n    * {\n        -webkit-box-sizing: border-box;\n        -moz-box-sizing: border-box;\n        box-sizing: border-box;\n    }\n    body {\n        font-family: Arial, sans-serif;\n        color: #000;\n        background-color: #f9f9f9;\n        text-align: center;\n        font-size: 14px;\n        margin: 0;\n        padding: 0;\n    }\n    .container {\n        max-width: 600px;\n        margin: 50px auto;\n        padding: 20px;\n        background-color: #ffffff;\n        border-radius: 8px;\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n        position: relative;\n    }\n    .header-image {\n        background-color: #01a79c;\n        width: 100%;\n        padding: 10px 0;\n        margin-bottom: 20px;\n        overflow: hidden;\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n    }\n    .header-image img {\n        width: 100%;\n        max-width: 200px;\n        height: auto;\n        display: block;\n        margin: 0 auto;\n    }\n    h1 {\n        color: #2c3e50;\n        font-size: 36px;\n        margin: 10px 0;\n    }\n    h2 {\n        color: #2c3e50;\n        font-size: 24px;\n        margin: 0;\n        padding: 20px 0;\n    }\n    h3 {\n        font-size: 16px;\n        color: #2c3e50;\n        text-align: left;\n        margin: 0;\n    }\n    .section h2 {\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n        text-align: center;\n    }\n    .section h3, .section p {\n        text-align: left;\n        margin: auto;\n        max-width: 500px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .useful-reads h2 {\n        text-align: left;\n        margin-left: 0;\n        padding: 10px 0;\n    }\n    .header, .footer {\n        font-size: 14px;\n        color: #7f8c8d;\n        line-height: 1.5;\n        margin: 10px 0;\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n    }\n    .footer {\n        width: 100%;\n        margin: 0 auto;\n        padding: 24px 0;\n        text-align: center !important;\n    }\n    .separator {\n        width: 100%;\n        height: 2px;\n        background-color: black;\n        margin: 32px auto;\n    }\n    .social-icons {\n        width: 100%;\n        text-align: center;\n        font-size: 0;\n        padding: 0;\n        margin: 16px 0;\n    }\n    .icon-link {\n        display: inline-block;\n        width: 40px;\n        height: 40px;\n        margin: 0 10px;\n        border-radius: 50%;\n        text-align: center;\n        vertical-align: middle;\n    }\n    .icon {\n        width: 25px;\n        height: 25px;\n        display: inline-block;\n        vertical-align: middle;\n    }\n    .copyright, .preferences {\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-size: 13px;\n        margin: 16px 0;\n    }\n    .mailchimp-image img {\n        max-width: 150px;\n        height: auto;\n        display: block;\n        margin: 10px auto;\n    }\n    p {\n        margin-bottom: 20px;\n    }\n    .job-listing {\n        display: flex;\n        justify-content: center;\n        margin: 5px 0;\n    }\n    .job-list {\n        list-style-type: disc;\n        column-count: 2;\n        column-gap: 20px;\n        padding: 30px;\n        text-align: left;\n        width: 100%;\n        max-width: 450px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .job-list li {\n        margin-bottom: 5px;\n    }\n    .useful-reads, .thanks-reading, .join-team {\n        text-align: left;\n        margin: auto;\n        max-width: 500px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .useful-reads a {\n        text-decoration: none;\n        color: #007BFF;\n    }\n    .useful-reads a:hover {\n        text-decoration: underline;\n    }\n    .miscellaneous-images img {\n        width: 500px;\n        height: auto;\n        display: block;\n        margin: 0 auto;\n        max-width: 100%;\n    }\n    .list-of-links {\n        max-width: 500px;\n        text-align: left;\n        margin-left: auto;\n        margin-right: auto;\n        word-wrap: break-word;\n        line-height: 1.5;\n        font-size: 14px;\n    }\n</style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header-image\">\n            <img src=\"https://drive.google.com/thumbnail?id=1XrIgrHZztllYk2weZVxEwlutD_V6hWdS&sz=s4000\" alt=\"Newsletter Header Image\">        \n        </div>\n        <h1>Health, Technology & E4E</h1>\n        <h1>{{trigger['body']['data'][11]['value']}}</h1>\n        \n        <p>Hello there,</p>\n        <p>Take a look into our Digital Health world,</p>\n        <p>Warm Regards,</p>\n        <p>{{trigger['body']['data'][10]['value']}}</p>\n        <i>for the e4e Team</i><br><br><br>\n        \n        <div class=\"section\">\n            <h2>What Have We Been Up to Recently?</h2>\n            <h3>{{trigger['body']['data'][0]['value']}}</h3>\n            <p>{{trigger['body']['data'][1]['value']}}</p><br>\n            \n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{trigger['body']['data'][2]['value']['url']}}\" alt=\"Newsletter Image\">          \n            </div><br><br><br>\n            <h2>What's Happening Around Us?</h2>\n            <h3>{{step_27[0]}}</h3><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[1]}}\">        \n            </div><br>\n            <p>{{step_27[2]}}<a href=\"{{trigger['body']['data'][3]['value']}}\">Read more here.</a></p><br><br><br>\n            <h3>{{step_27[3]}}</h3>\n            <p>{{step_27[5]}} <a href=\"{{trigger['body']['data'][4]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[4]}}\" alt=\"Newsletter Image\">        \n            </div><br><br><br>\n            <h3>{{step_27[6]}}</h3>\n            <p>{{step_27[8]}} <a href=\"{{trigger['body']['data'][5]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[7]}}\"alt=\"Newsletter Image\">        \n            </div><br><br><br>\n            <h3>{{step_27[9]}}</h3>\n            <p>{{step_27[11]}} <a href=\"{{trigger['body']['data'][6]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[10]}}\" alt=\"Newsletter Image\">        \n            </div><br><br><br>\n           \n            <h2>We’ve Got Something for Everyone!</h2>\n            <h3>Collect and Analyse Data with Datakojo</h3>\n            <p>Tired of the cumbersome process of manually collecting, validating and analysing data? We have the right solution for you! Datakojo, a mobile data collection platform developed by eHealth4everyone, allows you to collect data in electronic forms with or without an internet connection and helps you quickly analyse your data. To use this platform for your data collection needs, visit <a href=\"http://datakojo.com/\">datakojo.com</a>.</p><br><br><br>\n            <h2>Opportunities for you or someone you may know</h2>\n\t       <div class=\"miscellaneous-images\">\n                <img src=\"https://drive.google.com/thumbnail?id=1DjPUSz4DIjiG7dbnfHy-Iw3lsSjs8cJt&sz=s4000\" alt=\"Newsletter Image\">        \n               </div>\n            <p>Interested In The HDA Graduate Fellowship? Apply Now!</p>\n            <p>The eHealth for Everyone Foundation is accepting submissions for the Health Data Analytics (HDA) graduate fellowship. If you’re looking for an opportunity to develop your capacity in health data analytics and related areas at higher academic and research levels, this might be for you. Visit the website to <a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\">read more about this fellowship</a> and apply.</p><br><br><br>\n            </div>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"https://drive.google.com/thumbnail?id=14zjwXbcFOYrbmCYNwmKnq25L0RqftZw4&sz=s4000\" alt=\"Newsletter Image\">        \n            </div><br><br>\n        <div class=\"section join-team\">\n            <h3>Join Our Team!</h3>\n            <p>We are looking for innovative and self-motivated tech enthusiasts to join our amazing team in the following positions:</p>\n            \n            <div class=\"job-listing\">\n                <ul class=\"job-list\">\n                    <li>Data Analysts</li>\n                    <li>Digital Engagement Intern</li>\n                    <li>Admin Support Intern</li>\n                    <li>Python Web Developer</li>\n                    <li>General Manager</li>\n                    <li>Python Data Scientist</li>\n                    <li>People and Business Lead</li>\n                    <li>DevOps Engineer</li>\n                    <li>Backend Developer</li>\n                    <li>Biz Dev Intern</li>\n                    <li>AI/GPT Research Assistant</li>\n                    <li>AI Assistant</li>\n                    <li>Data Engineer</li>\n                    <li>HR Assistant</li>\n                    <li>General Manager</li>\n                    <li>Software Project Manager</li>\n                    <li>AI PM</li>\n                    <li>PM Admin</li>\n                    <li>VR PM</li>\n                </ul>\n            </div>\n            \n            <p>Visit our <a href=\"https://ehealth4everyone.com/careers-applications/\" target=\"_blank\">careers page</a> to view the requirements and apply.</p>\n        </div>\n        \n        <div class=\"section useful-reads\">\n            <h2>Useful Reads for the Month</h2>\n            <ol>\n                <li><a href=\"{{step_11['body'][0]['url']}}\">{{step_11['body'][0]['title']}}</a></li>\n                <li><a href=\"{{step_12['body'][0]['url']}}\">{{step_12['body'][0]['title']}}</a></li>\n                <li><a href=\"{{step_13['body'][0]['url']}}\">{{step_13['body'][0]['title']}}</a></li>\n            </ol>\n        </div>\n        \n        <div class=\"thanks-reading\">\n            <h3>THANK YOU FOR READING</h3>\n            <i>Don’t forget to follow us on all our social media pages for daily updates.</i>\n        </div>\n\t<div class=\"list-of-links\">\n\t   <h4>Links on the newsletter in the order of their appearance</h4>\n           <ol>\n    <li><a href=\"{{trigger['body']['data'][3]['value']}}\" target=\"_blank\">{{trigger['body']['data'][3]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][4]['value']}}\" target=\"_blank\">{{trigger['body']['data'][4]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][5]['value']}}\" target=\"_blank\">{{trigger['body']['data'][5]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][6]['value']}}\" target=\"_blank\">{{trigger['body']['data'][6]['value']}}</a></li>\n    <li><a href=\"http://datakojo.com/\" target=\"_blank\">http://datakojo.com/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\" target=\"_blank\">https://ehealth4everyone.com/hda-graduateresearchfellowship/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\" target=\"_blank\">https://ehealth4everyone.com/hda-graduateresearchfellowship/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/careers/\" target=\"_blank\">https://ehealth4everyone.com/careers/</a></li>\n    <li><a href=\"{{trigger['body']['data'][7]['value']}}\" target=\"_blank\">{{trigger['body']['data'][7]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][8]['value']}}\" target=\"_blank\">{{trigger['body']['data'][8]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][9]['value']}}\" target=\"_blank\">{{trigger['body']['data'][9]['value']}}</a></li>\n</ol>\n</div>\n        \n<div class=\"footer\">\n    <div class=\"separator\"></div>\n    <div class=\"social-icons\">\n        <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n        </a>\n        <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n        </a>\n        <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n        </a>\n        <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n        </a>\n    </div><br>\n    <i class=\"copyright\">Copyright (C) 2024 eHealth4everyone. All rights reserved.</i>\n    <div class=\"preferences\">\n        Want to change how you receive these emails?<br>\n        You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=06ea4526d5&e=[UNIQID]&c=f27477ad35\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=06ea4526d5&t=b&e=[UNIQID]&c=f27477ad35\">unsubscribe</a>\n    </div>\n    <div class=\"mailchimp-image\">\n        <a href=\"http://eepurl.com/iCZabA\">\n            <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n        </a>\n    </div>\n</div>\n    </div>\n</body>\n</html>",
+                              "from": "automationagent@e4email.net",
+                              "subject": "Health, Technology & E4E",
+                              "body_type": "html",
+                              "senderName": "ehealth4everyone",
+                              "customHeaders": {}
+                            },
+                            "pieceName": "@activepieces/piece-smtp",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "send-email",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.2.4",
+                            "propertySettings": {
+                              "cc": {
+                                "type": "MANUAL"
+                              },
+                              "to": {
+                                "type": "MANUAL"
+                              },
+                              "bcc": {
+                                "type": "MANUAL"
+                              },
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "body": {
+                                "type": "MANUAL"
+                              },
+                              "from": {
+                                "type": "MANUAL"
+                              },
+                              "subject": {
+                                "type": "MANUAL"
+                              },
+                              "body_type": {
+                                "type": "MANUAL"
+                              },
+                              "senderName": {
+                                "type": "MANUAL"
+                              },
+                              "customHeaders": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-02-03T21:53:26.110Z",
+                              "sampleDataFileId": "WhHSmMeJ458y3Ojgtm9IH"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_3",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n<style>\n    * {\n        -webkit-box-sizing: border-box;\n        -moz-box-sizing: border-box;\n        box-sizing: border-box;\n    }\n    body {\n        font-family: Arial, sans-serif;\n        color: #000;\n        background-color: #f9f9f9;\n        text-align: center;\n        font-size: 14px;\n        margin: 0;\n        padding: 0;\n    }\n    .container {\n        max-width: 600px;\n        margin: 50px auto;\n        padding: 20px;\n        background-color: #ffffff;\n        border-radius: 8px;\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n        position: relative;\n    }\n    .header-image {\n        background-color: #01a79c;\n        width: 100%;\n        padding: 10px 0;\n        margin-bottom: 20px;\n        overflow: hidden;\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n    }\n    .header-image img {\n        width: 100%;\n        max-width: 200px;\n        height: auto;\n        display: block;\n        margin: 0 auto;\n    }\n    h1 {\n        color: #2c3e50;\n        font-size: 36px;\n        margin: 10px 0;\n    }\n    h2 {\n        color: #2c3e50;\n        font-size: 24px;\n        margin: 0;\n        padding: 20px 0;\n    }\n    h3 {\n        font-size: 16px;\n        color: #2c3e50;\n        text-align: left;\n        margin: 0;\n    }\n    .section h2 {\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n        text-align: center;\n    }\n    .section h3, .section p {\n        text-align: left;\n        margin: auto;\n        max-width: 500px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .useful-reads h2 {\n        text-align: left;\n        margin-left: 0;\n        padding: 10px 0;\n    }\n    .header, .footer {\n        font-size: 14px;\n        color: #7f8c8d;\n        line-height: 1.5;\n        margin: 10px 0;\n        max-width: 500px;\n        margin-left: auto;\n        margin-right: auto;\n    }\n    .footer {\n        width: 100%;\n        margin: 0 auto;\n        padding: 24px 0;\n        text-align: center !important;\n    }\n    .separator {\n        width: 100%;\n        height: 2px;\n        background-color: black;\n        margin: 32px auto;\n    }\n    .social-icons {\n        width: 100%;\n        text-align: center;\n        font-size: 0;\n        padding: 0;\n        margin: 16px 0;\n    }\n    .icon-link {\n        display: inline-block;\n        width: 40px;\n        height: 40px;\n        margin: 0 10px;\n        border-radius: 50%;\n        text-align: center;\n        vertical-align: middle;\n    }\n    .icon {\n        width: 25px;\n        height: 25px;\n        display: inline-block;\n        vertical-align: middle;\n    }\n    .copyright, .preferences {\n        display: block;\n        width: 100%;\n        text-align: center;\n        font-size: 13px;\n        margin: 16px 0;\n    }\n    .mailchimp-image img {\n        max-width: 150px;\n        height: auto;\n        display: block;\n        margin: 10px auto;\n    }\n    p {\n        margin-bottom: 20px;\n    }\n    .job-listing {\n        display: flex;\n        justify-content: center;\n        margin: 5px 0;\n    }\n    .job-list {\n        list-style-type: disc;\n        column-count: 2;\n        column-gap: 20px;\n        padding: 30px;\n        text-align: left;\n        width: 100%;\n        max-width: 450px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .job-list li {\n        margin-bottom: 5px;\n    }\n    .useful-reads, .thanks-reading, .join-team {\n        text-align: left;\n        margin: auto;\n        max-width: 500px;\n        font-size: 14px;\n        line-height: 1.5;\n    }\n    .useful-reads a {\n        text-decoration: none;\n        color: #007BFF;\n    }\n    .useful-reads a:hover {\n        text-decoration: underline;\n    }\n    .miscellaneous-images img {\n        width: 500px;\n        height: auto;\n        display: block;\n        margin: 0 auto;\n        max-width: 100%;\n    }\n    .list-of-links {\n        max-width: 500px;\n        text-align: left;\n        margin-left: auto;\n        margin-right: auto;\n        word-wrap: break-word;\n        line-height: 1.5;\n        font-size: 14px;\n    }\n</style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header-image\">\n            <img src=\"https://drive.google.com/thumbnail?id=1XrIgrHZztllYk2weZVxEwlutD_V6hWdS&sz=s4000\" alt=\"Newsletter Header Image\">        \n        </div>\n        <h1>Health, Technology & E4E</h1>\n        <h1>{{trigger['body']['data'][11]['value']}}</h1>\n        \n        <p>Hello there,</p>\n        <p>Take a look into our Digital Health world,</p>\n        <p>Warm Regards,</p>\n        <p>{{trigger['body']['data'][10]['value']}}</p>\n        <i>for the e4e Team</i><br><br><br>\n        \n        <div class=\"section\">\n            <h2>What Have We Been Up to Recently?</h2>\n            <h3>{{trigger['body']['data'][0]['value']}}</h3>\n            <p>{{trigger['body']['data'][1]['value']}}</p><br>\n            \n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{trigger['body']['data'][2]['value']['url']}}\" alt=\"Newsletter Image\">          \n            </div><br><br><br>\n            <h2>What's Happening Around Us?</h2>\n            <h3>{{step_27[0]}}</h3><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[1]}}\">        \n            </div><br>\n            <p>{{step_27[2]}}<a href=\"{{trigger['body']['data'][3]['value']}}\">Read more here.</a></p><br><br><br>\n            <h3>{{step_27[3]}}</h3>\n            <p>{{step_27[5]}} <a href=\"{{trigger['body']['data'][4]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[4]}}\" alt=\"Newsletter Image\">        \n            </div><br><br><br>\n            <h3>{{step_27[6]}}</h3>\n            <p>{{step_27[8]}} <a href=\"{{trigger['body']['data'][5]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[7]}}\"alt=\"Newsletter Image\">        \n            </div><br><br><br>\n            <h3>{{step_27[9]}}</h3>\n            <p>{{step_27[11]}} <a href=\"{{trigger['body']['data'][6]['value']}}\">Learn more here.</a></p><br>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"{{step_27[10]}}\" alt=\"Newsletter Image\">        \n            </div><br><br><br>\n           \n            <h2>We’ve Got Something for Everyone!</h2>\n            <h3>Collect and Analyse Data with Datakojo</h3>\n            <p>Tired of the cumbersome process of manually collecting, validating and analysing data? We have the right solution for you! Datakojo, a mobile data collection platform developed by eHealth4everyone, allows you to collect data in electronic forms with or without an internet connection and helps you quickly analyse your data. To use this platform for your data collection needs, visit <a href=\"http://datakojo.com/\">datakojo.com</a>.</p><br><br><br>\n            <h2>Opportunities for you or someone you may know</h2>\n\t       <div class=\"miscellaneous-images\">\n                <img src=\"https://drive.google.com/thumbnail?id=1DjPUSz4DIjiG7dbnfHy-Iw3lsSjs8cJt&sz=s4000\" alt=\"Newsletter Image\">        \n               </div>\n            <p>Interested In The HDA Graduate Fellowship? Apply Now!</p>\n            <p>The eHealth for Everyone Foundation is accepting submissions for the Health Data Analytics (HDA) graduate fellowship. If you’re looking for an opportunity to develop your capacity in health data analytics and related areas at higher academic and research levels, this might be for you. Visit the website to <a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\">read more about this fellowship</a> and apply.</p><br><br><br>\n            </div>\n\t    <div class=\"miscellaneous-images\">\n                <img src=\"https://drive.google.com/thumbnail?id=14zjwXbcFOYrbmCYNwmKnq25L0RqftZw4&sz=s4000\" alt=\"Newsletter Image\">        \n            </div><br><br>\n        <div class=\"section join-team\">\n            <h3>Join Our Team!</h3>\n            <p>We are looking for innovative and self-motivated tech enthusiasts to join our amazing team in the following positions:</p>\n            \n            <div class=\"job-listing\">\n                <ul class=\"job-list\">\n                    <li>Data Analysts</li>\n                    <li>Digital Engagement Intern</li>\n                    <li>Admin Support Intern</li>\n                    <li>Python Web Developer</li>\n                    <li>General Manager</li>\n                    <li>Python Data Scientist</li>\n                    <li>People and Business Lead</li>\n                    <li>DevOps Engineer</li>\n                    <li>Backend Developer</li>\n                    <li>Biz Dev Intern</li>\n                    <li>AI/GPT Research Assistant</li>\n                    <li>AI Assistant</li>\n                    <li>Data Engineer</li>\n                    <li>HR Assistant</li>\n                    <li>General Manager</li>\n                    <li>Software Project Manager</li>\n                    <li>AI PM</li>\n                    <li>PM Admin</li>\n                    <li>VR PM</li>\n                </ul>\n            </div>\n            \n            <p>Visit our <a href=\"https://ehealth4everyone.com/careers-applications/\" target=\"_blank\">careers page</a> to view the requirements and apply.</p>\n        </div>\n        \n        <div class=\"section useful-reads\">\n            <h2>Useful Reads for the Month</h2>\n            <ol>\n                <li><a href=\"{{step_11['body'][0]['url']}}\">{{step_11['body'][0]['title']}}</a></li>\n                <li><a href=\"{{step_12['body'][0]['url']}}\">{{step_12['body'][0]['title']}}</a></li>\n                <li><a href=\"{{step_13['body'][0]['url']}}\">{{step_13['body'][0]['title']}}</a></li>\n            </ol>\n        </div>\n        \n        <div class=\"thanks-reading\">\n            <h3>THANK YOU FOR READING</h3>\n            <i>Don’t forget to follow us on all our social media pages for daily updates.</i>\n        </div>\n\t<div class=\"list-of-links\">\n\t   <h4>Links on the newsletter in the order of their appearance</h4>\n           <ol>\n    <li><a href=\"{{trigger['body']['data'][3]['value']}}\" target=\"_blank\">{{trigger['body']['data'][3]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][4]['value']}}\" target=\"_blank\">{{trigger['body']['data'][4]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][5]['value']}}\" target=\"_blank\">{{trigger['body']['data'][5]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][6]['value']}}\" target=\"_blank\">{{trigger['body']['data'][6]['value']}}</a></li>\n    <li><a href=\"http://datakojo.com/\" target=\"_blank\">http://datakojo.com/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\" target=\"_blank\">https://ehealth4everyone.com/hda-graduateresearchfellowship/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/hda-graduateresearchfellowship/\" target=\"_blank\">https://ehealth4everyone.com/hda-graduateresearchfellowship/</a></li>\n    <li><a href=\"https://ehealth4everyone.com/careers/\" target=\"_blank\">https://ehealth4everyone.com/careers/</a></li>\n    <li><a href=\"{{trigger['body']['data'][7]['value']}}\" target=\"_blank\">{{trigger['body']['data'][7]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][8]['value']}}\" target=\"_blank\">{{trigger['body']['data'][8]['value']}}</a></li>\n    <li><a href=\"{{trigger['body']['data'][9]['value']}}\" target=\"_blank\">{{trigger['body']['data'][9]['value']}}</a></li>\n</ol>\n</div>\n        \n<div class=\"footer\">\n    <div class=\"separator\"></div>\n    <div class=\"social-icons\">\n        <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n        </a>\n        <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n        </a>\n        <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n        </a>\n        <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n        </a>\n    </div><br>\n    <i class=\"copyright\">Copyright (C) 2024 eHealth4everyone. All rights reserved.</i>\n    <div class=\"preferences\">\n        Want to change how you receive these emails?<br>\n        You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=06ea4526d5&e=[UNIQID]&c=f27477ad35\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=06ea4526d5&t=b&e=[UNIQID]&c=f27477ad35\">unsubscribe</a>\n    </div>\n    <div class=\"mailchimp-image\">\n        <a href=\"http://eepurl.com/iCZabA\">\n            <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n        </a>\n    </div>\n</div>\n    </div>\n</body>\n</html>",
+                                "encoding": "utf8",
+                                "fileName": "{{trigger['body']['data'][11]['value']}} Newsletter draft.html"
+                              },
+                              "pieceName": "@activepieces/piece-file-helper",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "createFile",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "~0.1.5",
+                              "propertySettings": {
+                                "content": {
+                                  "type": "MANUAL"
+                                },
+                                "encoding": {
+                                  "type": "MANUAL"
+                                },
+                                "fileName": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-03-27T15:19:22.504Z",
+                                "sampleDataFileId": "CFp78ooBoWS6LPid3ECwp",
+                                "sampleDataInputFileId": "AbY9RlpubXZu6xq0TgG1x"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_6",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['AI_google-drive']}}",
+                                  "file": "{{step_3['url']}}",
+                                  "fileName": "{{step_3['fileName']}}",
+                                  "parentFolder": "1qMO5aWHPKfuatY0RfSeQ7INwNrI7ACw5",
+                                  "include_team_drives": true
+                                },
+                                "pieceName": "@activepieces/piece-google-drive",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "upload_gdrive_file",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "~0.5.38",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "file": {
+                                    "type": "MANUAL"
+                                  },
+                                  "fileName": {
+                                    "type": "MANUAL"
+                                  },
+                                  "parentFolder": {
+                                    "type": "MANUAL"
+                                  },
+                                  "include_team_drives": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2025-02-04T08:43:30.269Z",
+                                  "sampleDataFileId": "Q3SGYB6qhrsPxVnrHJaBx"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_14",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['slack']}}",
+                                    "text": "Hello there,\n\nI trust you have received the sample for the {{trigger['body']['data'][11]['value']}} newsletter. \n\nFind attached the html draft:\nhttps://drive.google.com/file/d/{{step_6['id']}}/view?usp=drive_link\n\nMay I proceed with sending it out to the targeted audience?",
+                                    "channel": "C4W0CPB9N"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "request_approval_message",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "~0.7.15",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "channel": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2024-11-27T11:06:30.896Z",
+                                    "sampleDataFileId": "sCf9dZi1xqxaEXJy8GYar"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_2",
+                                  "type": "ROUTER",
+                                  "valid": true,
+                                  "children": [
+                                    {
+                                      "name": "step_7",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                                          "row_id": "2",
+                                          "values": {
+                                            "A": "0",
+                                            "B": "{{step_3['url']}}"
+                                          },
+                                          "sheetId": 0,
+                                          "spreadsheetId": "1p5TMTRFouUSUx13T2amjceLvPJgO01xcK51yjqDw6NQ",
+                                          "first_row_headers": true,
+                                          "includeTeamDrives": true
+                                        },
+                                        "pieceName": "@activepieces/piece-google-sheets",
+                                        "pieceType": "OFFICIAL",
+                                        "actionName": "update_row",
+                                        "packageType": "REGISTRY",
+                                        "pieceVersion": "~0.12.2",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "row_id": {
+                                            "type": "MANUAL"
+                                          },
+                                          "values": {
+                                            "type": "MANUAL"
+                                          },
+                                          "sheetId": {
+                                            "type": "MANUAL"
+                                          },
+                                          "spreadsheetId": {
+                                            "type": "MANUAL"
+                                          },
+                                          "first_row_headers": {
+                                            "type": "MANUAL"
+                                          },
+                                          "includeTeamDrives": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {
+                                          "lastTestDate": "2025-03-27T15:19:34.233Z",
+                                          "sampleDataFileId": "j0eKlW3jAdmaP6nGbOwzK",
+                                          "sampleDataInputFileId": "fLOJb2xWHQCp4mD0NQJId"
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_18",
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "auth": "{{connections['slack']}}",
+                                            "text": "Hey! @channel\n\nThe external newsletter for {{trigger['body']['data'][11]['value']}} campaign has been successfully launched\n\nThanks!",
+                                            "channel": "C4W0CPB9N"
+                                          },
+                                          "pieceName": "@activepieces/piece-slack",
+                                          "pieceType": "OFFICIAL",
+                                          "actionName": "send_channel_message",
+                                          "packageType": "REGISTRY",
+                                          "pieceVersion": "~0.7.15",
+                                          "propertySettings": {
+                                            "auth": {
+                                              "type": "MANUAL"
+                                            },
+                                            "text": {
+                                              "type": "MANUAL"
+                                            },
+                                            "channel": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "sampleDataSettings": {},
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_17",
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "auth": "{{connections['slack']}}",
+                                              "text": "Hey! @channel\n\nThe external newsletter for {{trigger['body']['data'][11]['value']}} campaign has been successfully launched\n\nThanks!",
+                                              "channel": "C07NNUA4VA5"
+                                            },
+                                            "pieceName": "@activepieces/piece-slack",
+                                            "pieceType": "OFFICIAL",
+                                            "actionName": "send_channel_message",
+                                            "packageType": "REGISTRY",
+                                            "pieceVersion": "~0.7.15",
+                                            "propertySettings": {
+                                              "auth": {
+                                                "type": "MANUAL"
+                                              },
+                                              "text": {
+                                                "type": "MANUAL"
+                                              },
+                                              "channel": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "sampleDataSettings": {
+                                              "lastTestDate": "2024-11-13T18:19:14.052Z",
+                                              "sampleDataFileId": "XNpaxGjasms0gYbS7gZvu"
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "displayName": "Send Message To Automation logs"
+                                        },
+                                        "displayName": "Send Message To Newsletter channel"
+                                      },
+                                      "displayName": "Update Row"
+                                    },
+                                    {
+                                      "name": "step_20",
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['slack']}}",
+                                          "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                                          "channel": "C4W0CPB9N"
+                                        },
+                                        "pieceName": "@activepieces/piece-slack",
+                                        "pieceType": "OFFICIAL",
+                                        "actionName": "send_channel_message",
+                                        "packageType": "REGISTRY",
+                                        "pieceVersion": "~0.7.15",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "text": {
+                                            "type": "MANUAL"
+                                          },
+                                          "channel": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {},
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_19",
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "auth": "{{connections['slack']}}",
+                                            "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                                            "channel": "C07NNUA4VA5"
+                                          },
+                                          "pieceName": "@activepieces/piece-slack",
+                                          "pieceType": "OFFICIAL",
+                                          "actionName": "send_channel_message",
+                                          "packageType": "REGISTRY",
+                                          "pieceVersion": "~0.7.15",
+                                          "propertySettings": {
+                                            "auth": {
+                                              "type": "MANUAL"
+                                            },
+                                            "text": {
+                                              "type": "MANUAL"
+                                            },
+                                            "channel": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "sampleDataSettings": {
+                                            "lastTestDate": "2024-11-27T11:02:04.074Z",
+                                            "sampleDataFileId": "WYyRvZkBf9a6rVl42VzhQ"
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "displayName": "Send Message To Automation logs"
+                                      },
+                                      "displayName": "Send Message To Newsletter channel"
+                                    }
+                                  ],
+                                  "settings": {
+                                    "branches": [
+                                      {
+                                        "branchName": "Branch 1",
+                                        "branchType": "CONDITION",
+                                        "conditions": [
+                                          [
+                                            {
+                                              "operator": "BOOLEAN_IS_TRUE",
+                                              "firstValue": "{{step_14['approved']}}"
+                                            }
+                                          ]
+                                        ]
+                                      },
+                                      {
+                                        "branchName": "Otherwise",
+                                        "branchType": "FALLBACK"
+                                      }
+                                    ],
+                                    "executionType": "EXECUTE_FIRST_MATCH",
+                                    "propertySettings": {},
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-03-27T10:45:16.283Z",
+                                      "sampleDataFileId": "d8WrifwIcNTgyg7V4fy3F",
+                                      "sampleDataInputFileId": "tD973zD3QbnCZxw49WiMQ"
+                                    }
+                                  },
+                                  "displayName": "Router"
+                                },
+                                "displayName": "Request Approval in a Channel"
+                              },
+                              "displayName": "Upload file"
+                            },
+                            "displayName": "Create file"
+                          },
+                          "displayName": "Send Email to cc"
+                        },
+                        "displayName": "3rd Useful read"
+                      },
+                      "displayName": "2nd Useful read"
+                    },
+                    "displayName": "1st Useful read"
+                  },
+                  "displayName": "Split"
+                },
+                "displayName": "Concatenate"
+              },
+              "displayName": "Get apify"
+            },
+            "displayName": "Loop on Items",
+            "firstLoopAction": {
+              "name": "step_21",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "url": "https://api.apify.com/v2/acts/lukaskrivka~article-extractor-smart/run-sync-get-dataset-items?token=REPLACE_WITH_API_KEY",
+                  "body": {
+                    "data": {
+                      "minWords": 5,
+                      "useBrowser": false,
+                      "articleUrls": [
+                        {
+                          "url": "{{step_24['item']}}"
+                        }
+                      ],
+                      "mustHaveDate": false,
+                      "scanSitemaps": false,
+                      "saveSnapshots": false,
+                      "onlyNewArticles": false,
+                      "onlyInsideArticles": false,
+                      "crawlWholeSubdomain": false,
+                      "enqueueFromArticles": false,
+                      "navigationWaitUntil": "load",
+                      "useGoogleBotHeaders": false,
+                      "onlySubdomainArticles": false,
+                      "onlyNewArticlesPerDomain": false
+                    }
+                  },
+                  "method": "POST",
+                  "headers": {
+                    "Content-Type": "application/json"
+                  },
+                  "failsafe": false,
+                  "body_type": "json",
+                  "use_proxy": false,
+                  "queryParams": {},
+                  "proxy_settings": {}
+                },
+                "pieceName": "@activepieces/piece-http",
+                "pieceType": "OFFICIAL",
+                "actionName": "send_request",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.6.2",
+                "propertySettings": {
+                  "url": {
+                    "type": "MANUAL"
+                  },
+                  "body": {
+                    "type": "MANUAL"
+                  },
+                  "method": {
+                    "type": "MANUAL"
+                  },
+                  "headers": {
+                    "type": "MANUAL"
+                  },
+                  "failsafe": {
+                    "type": "MANUAL"
+                  },
+                  "body_type": {
+                    "type": "MANUAL"
+                  },
+                  "use_proxy": {
+                    "type": "MANUAL"
+                  },
+                  "queryParams": {
+                    "type": "MANUAL"
+                  },
+                  "proxy_settings": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-02-03T18:43:52.038Z",
+                  "sampleDataFileId": "drXEplXsLmbv6fyyO0sEr"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_8",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "auth": "{{connections['straico']}}",
+                    "model": "openai/o3-mini",
+                    "prompt": "Summarize the main ideas of the article into a single, concise, and well-structured 2-3 line paragraph within the range of 20-40 words. Eliminate filler, redundant, or non-essential language like 'Here is the article', and ensure the summary is presented in plain text without any numbering or formatting, focusing solely on clarity and coherence: {{step_21['body'][0]['text']}}"
+                  },
+                  "pieceName": "@activepieces/piece-straico",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "prompt_completion",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.0.2",
+                  "propertySettings": {
+                    "auth": {
+                      "type": "MANUAL"
+                    },
+                    "model": {
+                      "type": "MANUAL"
+                    },
+                    "prompt": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-03-04T14:16:13.893Z",
+                    "sampleDataFileId": "1pUD1l4UJfovoBUsDhlI9",
+                    "sampleDataInputFileId": "8V6cKmJEFVIuwcu0HK40x"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_4",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "apify_list",
+                      "value": "{{step_21['body'][0]['title']}}##${{step_21['body'][0]['image']}}##${{step_8}}##$",
+                      "store_scope": "RUN",
+                      "ignore_if_exists": false
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "add_to_list",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.5.4",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "value": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "ignore_if_exists": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-02-03T19:21:41.881Z",
+                      "sampleDataFileId": "u6ibbIKiLnqdHgswqfcyN"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "displayName": "Add To List"
+                },
+                "displayName": "Summarize article"
+              },
+              "displayName": "Try apify api"
+            }
+          },
+          "displayName": "Convert links to Json"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

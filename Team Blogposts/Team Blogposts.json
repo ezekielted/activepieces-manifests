@@ -1,0 +1,1213 @@
+﻿{
+  "name": "Team Blogposts",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-http",
+    "@activepieces/piece-store",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "lVTDIro59aO2Ib1tghl3A"
+  },
+  "flows": [
+    {
+      "displayName": "Team Blogposts",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.28",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_31",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "pieceVersion": "0.1.26",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-08-13T14:19:15.930Z",
+              "sampleDataFileId": "JaZFtpljWgvhypWYPaq3Y"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_5",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "url": "https://google-search122.p.rapidapi.com/",
+                "body": {
+                  "data": {
+                    "actor": "scraper.google.search",
+                    "input": {
+                      "q": "{{trigger['body']['data'][1]['value']}}",
+                      "gl": "ng",
+                      "hl": "en"
+                    }
+                  }
+                },
+                "method": "POST",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "x-rapidapi-key": "REPLACE_WITH_API_KEY",
+                  "x-rapidapi-host": "google-search122.p.rapidapi.com"
+                },
+                "failsafe": false,
+                "body_type": "json",
+                "use_proxy": false,
+                "queryParams": {},
+                "proxy_settings": {}
+              },
+              "pieceName": "@activepieces/piece-http",
+              "actionName": "send_request",
+              "pieceVersion": "0.6.2",
+              "propertySettings": {
+                "url": {
+                  "type": "MANUAL"
+                },
+                "body": {
+                  "type": "MANUAL"
+                },
+                "method": {
+                  "type": "MANUAL"
+                },
+                "headers": {
+                  "type": "MANUAL"
+                },
+                "failsafe": {
+                  "type": "MANUAL"
+                },
+                "body_type": {
+                  "type": "MANUAL"
+                },
+                "use_proxy": {
+                  "type": "MANUAL"
+                },
+                "queryParams": {
+                  "type": "MANUAL"
+                },
+                "proxy_settings": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-08-13T14:19:31.199Z",
+                "sampleDataFileId": "2kj8E4OddmgZuMkY0U56Y"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_6",
+              "skip": false,
+              "type": "LOOP_ON_ITEMS",
+              "valid": true,
+              "settings": {
+                "items": "{{step_5['body']['organic']}}",
+                "propertySettings": {},
+                "sampleDataSettings": {}
+              },
+              "nextAction": {
+                "name": "step_39",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "key": "publication_title",
+                    "store_scope": "RUN",
+                    "defaultValue": "[]"
+                  },
+                  "pieceName": "@activepieces/piece-store",
+                  "actionName": "get",
+                  "pieceVersion": "0.6.13",
+                  "propertySettings": {
+                    "key": {
+                      "type": "MANUAL"
+                    },
+                    "store_scope": {
+                      "type": "MANUAL"
+                    },
+                    "defaultValue": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {},
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_40",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "publication_body",
+                      "store_scope": "RUN",
+                      "defaultValue": "[]"
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "actionName": "get",
+                    "pieceVersion": "0.6.13",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "defaultValue": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_41",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "publication_image",
+                        "store_scope": "RUN",
+                        "defaultValue": "[]"
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "actionName": "get",
+                      "pieceVersion": "0.6.13",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "defaultValue": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_42",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "key": "publication_url",
+                          "store_scope": "RUN",
+                          "defaultValue": "[]"
+                        },
+                        "pieceName": "@activepieces/piece-store",
+                        "actionName": "get",
+                        "pieceVersion": "0.6.13",
+                        "propertySettings": {
+                          "key": {
+                            "type": "MANUAL"
+                          },
+                          "store_scope": {
+                            "type": "MANUAL"
+                          },
+                          "defaultValue": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_23",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "url": "https://api.groq.com/openai/v1/chat/completions",
+                            "body": {
+                              "data": {
+                                "stop": null,
+                                "model": "llama-3.3-70b-versatile",
+                                "top_p": 1,
+                                "stream": false,
+                                "messages": [
+                                  {
+                                    "role": "user",
+                                    "content": "Create a compelling blog post focusing on **{{trigger['body']['data'][0]['value']}}**. Follow these guidelines to ensure the blog is engaging, insightful, and well-structured:\n\n**Title** – Craft a catchy and captivating title centered around the topic: **{{trigger['body']['data'][1]['value']}}**. Ensure the title is between 40–60 characters for optimal readability. Avoid adding unnecessary words like “Title”—simply present the title directly.\n\n**Content Guidelines**\n- Focus exclusively on statistical data and insights from African countries, highlighting regional trends and context where relevant.\n- Ensure the blog content aligns with the interests of **{{trigger['body']['data'][0]['value']}}** and supports the topic with in-depth, data-driven insights.\n- Use expert opinions and information from the provided publication: title **{{step_39}}**, body **{{step_40}}**, page URL **{{step_42}}**, and image URL **{{step_41}}**.\n- Ensure the image URLs of the publications are inserted into the blog post using an image tag, for example:\n  `<img src='{{image link}}' alt='Blogpost Image'>`\n- If the publication image URL (**{{step_41}}**) is unavailable, use the next available image URL from the array.\n\n**Outline**\n1. **Overview** – Introduce the topic and explain its relevance in the African context.\n2. **Key Discussions** – Present detailed insights supported by African country data. You may divide this into sections:\n   - **Statistical Trends** – Analyze specific African statistics.\n   - **Regional Analysis** – Highlight variations across African nations or regions.\n3. **Implications** – Discuss the significance of the findings, their impact, and potential future implications for Africa.\n\n**Word Count**\n- The blog should be at least 1,000 words.\n\n**Readability and Quality**\n- Ensure smooth transitions between sections and use proper formatting for clarity.\n- Proofread thoroughly to remove grammatical errors or typos.\n- Present insights in an engaging, easy-to-read manner, particularly for health or analytical topics.\n\n**Referencing**\n- Number and list all sources using only the provided link: **{{step_42}}** (no additional APA-style citations).\n\n**Tags**\n- Include 3–7 relevant tags or keywords to improve searchability.\n\n**Summary**\n- Conclude with a brief note highlighting the key points and takeaways from the blog.\n\n**Additional Requirements**\n- Seamlessly incorporate **{{trigger['body']['data'][2]['value']}}** into the blog, such as in metadata or as additional context where applicable.\n- Ensure all provided image URLs are correctly included."
+                                  }
+                                ],
+                                "max_tokens": 1024,
+                                "temperature": 0.2
+                              }
+                            },
+                            "method": "POST",
+                            "headers": {
+                              "Authorization": "Bearer REPLACE_WITH_API_KEY"
+                            },
+                            "failsafe": false,
+                            "body_type": "json",
+                            "use_proxy": false,
+                            "queryParams": {},
+                            "proxy_settings": {}
+                          },
+                          "pieceName": "@activepieces/piece-http",
+                          "actionName": "send_request",
+                          "pieceVersion": "0.6.2",
+                          "propertySettings": {
+                            "url": {
+                              "type": "MANUAL"
+                            },
+                            "body": {
+                              "type": "MANUAL"
+                            },
+                            "method": {
+                              "type": "MANUAL"
+                            },
+                            "headers": {
+                              "type": "MANUAL"
+                            },
+                            "failsafe": {
+                              "type": "MANUAL"
+                            },
+                            "body_type": {
+                              "type": "MANUAL"
+                            },
+                            "use_proxy": {
+                              "type": "MANUAL"
+                            },
+                            "queryParams": {
+                              "type": "MANUAL"
+                            },
+                            "proxy_settings": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-08-13T14:49:25.309Z",
+                            "sampleDataFileId": "LSZuDmFsUgO2CgAWOpnLG"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_24",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "flavor": "github",
+                              "tables": true,
+                              "markdown": "{{step_23['body']['choices'][0]['message']['content']}}",
+                              "noHeaderId": false,
+                              "headerLevelStart": 1,
+                              "simpleLineBreaks": false,
+                              "openLinksInNewWindow": false
+                            },
+                            "pieceName": "@activepieces/piece-text-helper",
+                            "actionName": "markdown_to_html",
+                            "pieceVersion": "0.2.7",
+                            "propertySettings": {
+                              "flavor": {
+                                "type": "MANUAL"
+                              },
+                              "tables": {
+                                "type": "MANUAL"
+                              },
+                              "markdown": {
+                                "type": "MANUAL"
+                              },
+                              "noHeaderId": {
+                                "type": "MANUAL"
+                              },
+                              "headerLevelStart": {
+                                "type": "MANUAL"
+                              },
+                              "simpleLineBreaks": {
+                                "type": "MANUAL"
+                              },
+                              "openLinksInNewWindow": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-08-13T14:50:16.932Z",
+                              "sampleDataFileId": "cHphOKQdabww2hjv00jvA"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_1",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "cc": [],
+                                "to": [
+                                  "{{trigger['body']['data'][3]['value']}}"
+                                ],
+                                "bcc": [],
+                                "auth": "{{connections['smtp.office365.com']}}",
+                                "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n</style>\n</head>\n<body>\n{{step_24}}</body>\n</html>",
+                                "from": "automationagent@e4email.net",
+                                "subject": "{{trigger['body']['data'][1]['value']}}",
+                                "body_type": "html",
+                                "senderName": "ehealth4everyone",
+                                "attachments": [],
+                                "customHeaders": {}
+                              },
+                              "pieceName": "@activepieces/piece-smtp",
+                              "actionName": "send-email",
+                              "pieceVersion": "0.3.11",
+                              "propertySettings": {
+                                "cc": {
+                                  "type": "MANUAL"
+                                },
+                                "to": {
+                                  "type": "MANUAL"
+                                },
+                                "bcc": {
+                                  "type": "MANUAL"
+                                },
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "body": {
+                                  "type": "MANUAL"
+                                },
+                                "from": {
+                                  "type": "MANUAL"
+                                },
+                                "subject": {
+                                  "type": "MANUAL"
+                                },
+                                "body_type": {
+                                  "type": "MANUAL"
+                                },
+                                "senderName": {
+                                  "type": "MANUAL"
+                                },
+                                "attachments": {
+                                  "type": "MANUAL"
+                                },
+                                "customHeaders": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-08-13T14:50:36.235Z",
+                                "sampleDataFileId": "n5kgBqv975tGuQTkroHqH"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_25",
+                              "skip": true,
+                              "type": "CODE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "reportHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n</style>\n</head>\n<body>\n{{step_24}}</body>\n</html>"
+                                },
+                                "sourceCode": {
+                                  "code": "export const code = async (inputs) => {\n  // Example input: HTML content\n  const htmlContent = inputs.reportHtml;\n\n  // Create a JSON object with a key-value pair\n  const jsonBody = {\n    reportHtml: htmlContent\n  };\n\n  // Return the JSON object (you can use this for further processing or API requests)\n  return jsonBody;\n};\n",
+                                  "packageJson": "{}"
+                                },
+                                "propertySettings": {
+                                  "reportHtml": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_26",
+                                "skip": true,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "url": "https://api.pdfshift.io/v3/convert/pdf",
+                                    "body": {
+                                      "data": {
+                                        "encode": true,
+                                        "margin": "50px",
+                                        "source": "{{step_25['reportHtml']}}",
+                                        "landscape": false,
+                                        "use_print": false
+                                      }
+                                    },
+                                    "method": "POST",
+                                    "headers": {
+                                      "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                    },
+                                    "failsafe": false,
+                                    "body_type": "json",
+                                    "use_proxy": false,
+                                    "queryParams": {},
+                                    "proxy_settings": {}
+                                  },
+                                  "pieceName": "@activepieces/piece-http",
+                                  "actionName": "send_request",
+                                  "pieceVersion": "0.6.2",
+                                  "propertySettings": {
+                                    "url": {
+                                      "type": "MANUAL"
+                                    },
+                                    "body": {
+                                      "type": "MANUAL"
+                                    },
+                                    "method": {
+                                      "type": "MANUAL"
+                                    },
+                                    "headers": {
+                                      "type": "MANUAL"
+                                    },
+                                    "failsafe": {
+                                      "type": "MANUAL"
+                                    },
+                                    "body_type": {
+                                      "type": "MANUAL"
+                                    },
+                                    "use_proxy": {
+                                      "type": "MANUAL"
+                                    },
+                                    "queryParams": {
+                                      "type": "MANUAL"
+                                    },
+                                    "proxy_settings": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {},
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_8",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n</style>\n</head>\n<body>\n{{step_24}}</body>\n</html>",
+                                      "encoding": "utf8",
+                                      "fileName": "{{trigger['body']['data'][1]['value']}}.html"
+                                    },
+                                    "pieceName": "@activepieces/piece-file-helper",
+                                    "actionName": "createFile",
+                                    "pieceVersion": "0.1.21",
+                                    "propertySettings": {
+                                      "content": {
+                                        "type": "MANUAL"
+                                      },
+                                      "encoding": {
+                                        "type": "MANUAL"
+                                      },
+                                      "fileName": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-08-13T15:39:35.322Z",
+                                      "sampleDataFileId": "ryRe563mjQJUYq7HlVGfh"
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_9",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "url": "https://v2.convertapi.com/convert/html/to/pdf",
+                                        "body": {
+                                          "data": {
+                                            "File": "{{step_8['url']}}",
+                                            "StoreFile": "true",
+                                            "CssMediaType": "print"
+                                          }
+                                        },
+                                        "method": "POST",
+                                        "headers": {
+                                          "Authorization": "Bearer REPLACE_WITH_API_KEY"
+                                        },
+                                        "failsafe": false,
+                                        "body_type": "form_data",
+                                        "use_proxy": false,
+                                        "queryParams": {},
+                                        "proxy_settings": {}
+                                      },
+                                      "pieceName": "@activepieces/piece-http",
+                                      "actionName": "send_request",
+                                      "pieceVersion": "0.6.2",
+                                      "propertySettings": {
+                                        "url": {
+                                          "type": "MANUAL"
+                                        },
+                                        "body": {
+                                          "type": "MANUAL",
+                                          "schema": {
+                                            "data": {
+                                              "type": "OBJECT",
+                                              "required": true,
+                                              "displayName": "Form Data"
+                                            }
+                                          }
+                                        },
+                                        "method": {
+                                          "type": "MANUAL"
+                                        },
+                                        "headers": {
+                                          "type": "MANUAL"
+                                        },
+                                        "failsafe": {
+                                          "type": "MANUAL"
+                                        },
+                                        "body_type": {
+                                          "type": "MANUAL"
+                                        },
+                                        "use_proxy": {
+                                          "type": "MANUAL"
+                                        },
+                                        "queryParams": {
+                                          "type": "MANUAL"
+                                        },
+                                        "proxy_settings": {
+                                          "type": "MANUAL",
+                                          "schema": {}
+                                        }
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_27",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['AI_google-drive']}}",
+                                          "file": "{{step_9['body']['Files'][0]['Url']}}",
+                                          "fileName": "A blogpost on {{trigger['body']['data'][1]['value']}} -{{trigger['body']['data'][0]['value']}}.pdf",
+                                          "parentFolder": "1YH7OQoaAXSRC1EKm1HrPBxtTF649Vz4O",
+                                          "include_team_drives": true
+                                        },
+                                        "pieceName": "@activepieces/piece-google-drive",
+                                        "actionName": "upload_gdrive_file",
+                                        "pieceVersion": "0.5.53",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "file": {
+                                            "type": "MANUAL"
+                                          },
+                                          "fileName": {
+                                            "type": "MANUAL"
+                                          },
+                                          "parentFolder": {
+                                            "type": "MANUAL"
+                                          },
+                                          "include_team_drives": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {},
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_3",
+                                        "skip": false,
+                                        "type": "ROUTER",
+                                        "valid": true,
+                                        "children": [
+                                          {
+                                            "name": "step_28",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "auth": "{{connections['slack']}}",
+                                                "text": "Hello @channel\n\nPlease find attached a link to the {{trigger['body']['data'][0]['value']}} blog post on the topic: \"{{trigger['body']['data'][1]['value']}}\"\nWe hope you find it insightful and engaging.\n\nurl: https://drive.google.com/file/d/{{step_27['id']}}/view?usp=drive_link\n\nBest regards,",
+                                                "channel": "C073HECD16X"
+                                              },
+                                              "pieceName": "@activepieces/piece-slack",
+                                              "actionName": "send_channel_message",
+                                              "pieceVersion": "0.7.15",
+                                              "propertySettings": {
+                                                "auth": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "text": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "channel": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "sampleDataSettings": {},
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "displayName": "Send Message To A Channel"
+                                          },
+                                          {
+                                            "name": "step_4",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "auth": "{{connections['slack']}}",
+                                                "text": "Hello @channel\n\nPlease find attached a link to the {{trigger['body']['data'][0]['value']}} blog post on the topic: \"{{trigger['body']['data'][1]['value']}}\"\nWe hope you find it insightful and engaging.\n\nurl: https://drive.google.com/file/d/{{step_27['id']}}/view?usp=drive_link\n\nBest regards,",
+                                                "channel": "C071ZTPGJHE"
+                                              },
+                                              "pieceName": "@activepieces/piece-slack",
+                                              "actionName": "send_channel_message",
+                                              "pieceVersion": "0.7.15",
+                                              "propertySettings": {
+                                                "auth": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "text": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "channel": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "sampleDataSettings": {},
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "displayName": "Send Message To A Channel"
+                                          }
+                                        ],
+                                        "settings": {
+                                          "branches": [
+                                            {
+                                              "branchName": "Branch 1",
+                                              "branchType": "CONDITION",
+                                              "conditions": [
+                                                [
+                                                  {
+                                                    "operator": "TEXT_EXACTLY_MATCHES",
+                                                    "firstValue": "{{trigger['body']['data'][0]['value']}}",
+                                                    "secondValue": "Bizdev",
+                                                    "caseSensitive": false
+                                                  }
+                                                ]
+                                              ]
+                                            },
+                                            {
+                                              "branchName": "Otherwise",
+                                              "branchType": "FALLBACK"
+                                            }
+                                          ],
+                                          "executionType": "EXECUTE_FIRST_MATCH",
+                                          "propertySettings": {},
+                                          "sampleDataSettings": {}
+                                        },
+                                        "nextAction": {
+                                          "name": "step_29",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "auth": "{{connections['slack']}}",
+                                              "text": "Hello @channel\n\nPlease find attached a link to the {{trigger['body']['data'][0]['value']}} blog post on the topic: \"{{trigger['body']['data'][1]['value']}}\"\nWe hope you find it insightful and engaging.\n\nurl: https://drive.google.com/file/d/{{step_27['id']}}/view?usp=drive_link\n\nBest regards,",
+                                              "channel": "C07NNUA4VA5"
+                                            },
+                                            "pieceName": "@activepieces/piece-slack",
+                                            "actionName": "send_channel_message",
+                                            "pieceVersion": "0.7.15",
+                                            "propertySettings": {
+                                              "auth": {
+                                                "type": "MANUAL"
+                                              },
+                                              "text": {
+                                                "type": "MANUAL"
+                                              },
+                                              "channel": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "sampleDataSettings": {},
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "displayName": "Send Message To Automation logs"
+                                        },
+                                        "displayName": "Router"
+                                      },
+                                      "displayName": "Upload file"
+                                    },
+                                    "displayName": "html file to pdf"
+                                  },
+                                  "displayName": "Create file"
+                                },
+                                "displayName": "Print html to pdf"
+                              },
+                              "displayName": "convert html to json object Copy"
+                            },
+                            "displayName": "Send Email"
+                          },
+                          "displayName": "Markdown to HTML"
+                        },
+                        "displayName": "compose blogpost"
+                      },
+                      "displayName": "Get page url"
+                    },
+                    "displayName": "Get image"
+                  },
+                  "displayName": "Get body"
+                },
+                "displayName": "Get title"
+              },
+              "displayName": "Loop on Items",
+              "firstLoopAction": {
+                "name": "step_21",
+                "skip": false,
+                "type": "ROUTER",
+                "valid": true,
+                "children": [
+                  {
+                    "name": "step_7",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": "https://api.diffbot.com/v3/article?url={{step_6['item']['link']}}&token=REPLACE_WITH_API_KEY",
+                        "body": {},
+                        "method": "GET",
+                        "headers": {},
+                        "failsafe": false,
+                        "body_type": "none",
+                        "use_proxy": false,
+                        "queryParams": {},
+                        "proxy_settings": {}
+                      },
+                      "pieceName": "@activepieces/piece-http",
+                      "actionName": "send_request",
+                      "pieceVersion": "0.6.2",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL"
+                        },
+                        "body": {
+                          "type": "MANUAL"
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "use_proxy": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "proxy_settings": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_22",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "key": "publication_title",
+                          "value": [
+                            "{{step_7['body']['objects'][0]['title']}}"
+                          ],
+                          "store_scope": "RUN",
+                          "ignore_if_exists": false
+                        },
+                        "pieceName": "@activepieces/piece-store",
+                        "actionName": "add_to_list",
+                        "pieceVersion": "0.6.13",
+                        "propertySettings": {
+                          "key": {
+                            "type": "MANUAL"
+                          },
+                          "value": {
+                            "type": "MANUAL"
+                          },
+                          "store_scope": {
+                            "type": "MANUAL"
+                          },
+                          "ignore_if_exists": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_36",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "publication_body",
+                            "value": [
+                              "{{step_6['item']['snippet']}}"
+                            ],
+                            "store_scope": "RUN",
+                            "ignore_if_exists": false
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "add_to_list",
+                          "pieceVersion": "0.6.13",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "value": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "ignore_if_exists": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {},
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_37",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "key": "publication_image",
+                              "value": [
+                                "{{step_7['body']['objects'][0]['images'][0]['url']}}"
+                              ],
+                              "store_scope": "RUN",
+                              "ignore_if_exists": false
+                            },
+                            "pieceName": "@activepieces/piece-store",
+                            "actionName": "add_to_list",
+                            "pieceVersion": "0.6.13",
+                            "propertySettings": {
+                              "key": {
+                                "type": "MANUAL"
+                              },
+                              "value": {
+                                "type": "MANUAL"
+                              },
+                              "store_scope": {
+                                "type": "MANUAL"
+                              },
+                              "ignore_if_exists": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_38",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "key": "publication_url",
+                                "value": [
+                                  "{{step_7['body']['objects'][0]['pageUrl']}}"
+                                ],
+                                "store_scope": "RUN",
+                                "ignore_if_exists": false
+                              },
+                              "pieceName": "@activepieces/piece-store",
+                              "actionName": "add_to_list",
+                              "pieceVersion": "0.6.13",
+                              "propertySettings": {
+                                "key": {
+                                  "type": "MANUAL"
+                                },
+                                "value": {
+                                  "type": "MANUAL"
+                                },
+                                "store_scope": {
+                                  "type": "MANUAL"
+                                },
+                                "ignore_if_exists": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {},
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "displayName": "Add page url to list"
+                          },
+                          "displayName": "Add image to list"
+                        },
+                        "displayName": "Add body to list"
+                      },
+                      "displayName": "Add title to list"
+                    },
+                    "displayName": "Get article content"
+                  },
+                  null
+                ],
+                "settings": {
+                  "branches": [
+                    {
+                      "branchName": "Branch 1",
+                      "branchType": "CONDITION",
+                      "conditions": [
+                        [
+                          {
+                            "operator": "NUMBER_IS_LESS_THAN",
+                            "firstValue": "{{step_6['index']}}",
+                            "secondValue": "3"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "branchName": "Otherwise",
+                      "branchType": "FALLBACK"
+                    }
+                  ],
+                  "executionType": "EXECUTE_FIRST_MATCH",
+                  "propertySettings": {},
+                  "sampleDataSettings": {}
+                },
+                "displayName": "Router"
+              }
+            },
+            "displayName": "Get Publications"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

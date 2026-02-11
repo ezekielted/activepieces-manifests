@@ -1,0 +1,873 @@
+﻿{
+  "name": "NCDC Situation Report retrieval ",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-math-helper",
+    "@activepieces/piece-http",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "7IWHLRcdIRXjhKuffXelr"
+  },
+  "flows": [
+    {
+      "displayName": "NCDC Situation Report retrieval ",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Week",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "day_of_the_week": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "~0.1.5",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "day_of_the_week": 5,
+            "hour_of_the_day": 14
+          },
+          "triggerName": "every_week"
+        },
+        "nextAction": {
+          "name": "step_14",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "pieceType": "OFFICIAL",
+            "actionName": "get_current_date",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.1.6",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-02-03T09:14:00.767Z",
+              "sampleDataFileId": "G9L7Pctby1o40PZttwqQs"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_3",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                "values": {
+                  "A": "NCDC Situation Report retrieval",
+                  "B": "{{step_14['result']}}",
+                  "C": "Schedule (Every Week) on Friday",
+                  "E": "ai@e4email.net"
+                },
+                "sheetId": 1211720957,
+                "as_string": false,
+                "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                "first_row_headers": true,
+                "includeTeamDrives": true
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "pieceType": "OFFICIAL",
+              "actionName": "insert_row",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.12.1",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "values": {
+                  "type": "MANUAL"
+                },
+                "sheetId": {
+                  "type": "MANUAL"
+                },
+                "as_string": {
+                  "type": "MANUAL"
+                },
+                "spreadsheetId": {
+                  "type": "MANUAL"
+                },
+                "first_row_headers": {
+                  "type": "MANUAL"
+                },
+                "includeTeamDrives": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-03-12T13:08:40.938Z",
+                "sampleDataFileId": "dC6lHgQT483OnbnYQizFs",
+                "sampleDataInputFileId": "4kOrZrODgEqMhE4eLgwft"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_4",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "first_number": "0",
+                  "second_number": "10000"
+                },
+                "pieceName": "@activepieces/piece-math-helper",
+                "pieceType": "OFFICIAL",
+                "actionName": "generateRandom_math",
+                "packageType": "REGISTRY",
+                "pieceVersion": "~0.0.11",
+                "propertySettings": {
+                  "first_number": {
+                    "type": "MANUAL"
+                  },
+                  "second_number": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-01-31T15:42:46.139Z",
+                  "sampleDataFileId": "nP5D0IxL17pcdbvpnqKaq"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_2",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                    "memKey": "{{step_4}}",
+                    "sheet_id": 1210014260,
+                    "startRow": "2",
+                    "groupSize": "10000",
+                    "spreadsheet_id": "1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw",
+                    "include_team_drives": true
+                  },
+                  "pieceName": "@activepieces/piece-google-sheets",
+                  "pieceType": "OFFICIAL",
+                  "actionName": "get_next_rows",
+                  "packageType": "REGISTRY",
+                  "pieceVersion": "~0.11.14",
+                  "propertySettings": {
+                    "auth": {
+                      "type": "MANUAL"
+                    },
+                    "memKey": {
+                      "type": "MANUAL"
+                    },
+                    "sheet_id": {
+                      "type": "MANUAL"
+                    },
+                    "startRow": {
+                      "type": "MANUAL"
+                    },
+                    "groupSize": {
+                      "type": "MANUAL"
+                    },
+                    "spreadsheet_id": {
+                      "type": "MANUAL"
+                    },
+                    "include_team_drives": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-01-31T15:43:12.720Z",
+                    "sampleDataFileId": "fLd7xv7dpLRkbDiXpgvzb"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_18",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "url": "https://scrapers-proxy2.p.rapidapi.com/parser?url=https://ncdc.gov.ng/themes/common/files/sitreps/&auto_detect=true",
+                      "body": {},
+                      "method": "GET",
+                      "headers": {
+                        "x-rapidapi-key": "REPLACE_WITH_API_KEY",
+                        "x-rapidapi-host": "scrapers-proxy2.p.rapidapi.com"
+                      },
+                      "failsafe": false,
+                      "body_type": "none",
+                      "use_proxy": false,
+                      "queryParams": {},
+                      "proxy_settings": {}
+                    },
+                    "pieceName": "@activepieces/piece-http",
+                    "actionName": "send_request",
+                    "pieceVersion": "~0.6.1",
+                    "propertySettings": {
+                      "url": {
+                        "type": "MANUAL"
+                      },
+                      "body": {
+                        "type": "MANUAL",
+                        "schema": {}
+                      },
+                      "method": {
+                        "type": "MANUAL"
+                      },
+                      "headers": {
+                        "type": "MANUAL"
+                      },
+                      "failsafe": {
+                        "type": "MANUAL"
+                      },
+                      "body_type": {
+                        "type": "MANUAL"
+                      },
+                      "use_proxy": {
+                        "type": "MANUAL"
+                      },
+                      "queryParams": {
+                        "type": "MANUAL"
+                      },
+                      "proxy_settings": {
+                        "type": "MANUAL",
+                        "schema": {}
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_10",
+                    "skip": false,
+                    "type": "ROUTER",
+                    "valid": true,
+                    "children": [
+                      {
+                        "name": "step_7",
+                        "skip": false,
+                        "type": "CODE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "existingReports": "{{step_2}}",
+                            "newScrapedReports": "{{step_18['body']['links']}}"
+                          },
+                          "sourceCode": {
+                            "code": "export const code = async (inputs) => {\n  const { existingReports, newScrapedReports } = inputs;\n\n  // Flatten existing report links into a simple array of URLs\n  const existingLinks = existingReports.map(report => report.values.A);\n\n  // Filter out links from the new reports that are not in the existing links\n  const newPdfLinks = newScrapedReports.filter(url => \n    !existingLinks.includes(url) && url.endsWith('.pdf')\n  );\n\n  // If there are no new PDF links, return false\n  if (newPdfLinks.length === 0) {\n    return false;\n  }\n\n  // Return the new links found\n  return newPdfLinks;\n};",
+                            "packageJson": "{}"
+                          },
+                          "propertySettings": {
+                            "existingReports": {
+                              "type": "MANUAL"
+                            },
+                            "newScrapedReports": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-02-04T12:36:38.693Z",
+                            "sampleDataFileId": "WIKsiwLFmXfvGM30wPheI"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_1",
+                          "skip": false,
+                          "type": "ROUTER",
+                          "valid": true,
+                          "children": [
+                            {
+                              "name": "step_5",
+                              "skip": false,
+                              "type": "LOOP_ON_ITEMS",
+                              "valid": true,
+                              "settings": {
+                                "items": "{{step_7}}",
+                                "propertySettings": {},
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2025-01-31T15:44:40.175Z",
+                                  "sampleDataFileId": "jJsvjjHNsdjTqliHC2KgF"
+                                }
+                              },
+                              "displayName": "Loop on Items",
+                              "firstLoopAction": {
+                                "name": "step_6",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                                    "values": {
+                                      "values": [
+                                        {
+                                          "A": "{{step_5['item']}}"
+                                        }
+                                      ]
+                                    },
+                                    "sheet_id": 1210014260,
+                                    "as_string": false,
+                                    "overwrite": false,
+                                    "input_type": "column_names",
+                                    "spreadsheet_id": "1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw",
+                                    "check_for_duplicate": false,
+                                    "include_team_drives": true,
+                                    "check_for_duplicate_column": {}
+                                  },
+                                  "pieceName": "@activepieces/piece-google-sheets",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "google-sheets-insert-multiple-rows",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "~0.11.14",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "values": {
+                                      "type": "MANUAL"
+                                    },
+                                    "sheet_id": {
+                                      "type": "MANUAL"
+                                    },
+                                    "as_string": {
+                                      "type": "MANUAL"
+                                    },
+                                    "overwrite": {
+                                      "type": "MANUAL"
+                                    },
+                                    "input_type": {
+                                      "type": "MANUAL"
+                                    },
+                                    "spreadsheet_id": {
+                                      "type": "MANUAL"
+                                    },
+                                    "check_for_duplicate": {
+                                      "type": "MANUAL"
+                                    },
+                                    "include_team_drives": {
+                                      "type": "MANUAL"
+                                    },
+                                    "check_for_duplicate_column": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2025-01-17T15:09:27.185Z",
+                                    "sampleDataFileId": "KF1Rwuko5EwHa2WCeKO13"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": true
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_13",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['AI_google-drive']}}",
+                                      "file": "{{step_5['item']}}",
+                                      "fileName": "ncdc_data_\n{{step_6['updates']['updatedRange']}}",
+                                      "parentFolder": "1pGEaTi_-YRCLuqG0L9t7LDLAQ3pl02CD",
+                                      "include_team_drives": true
+                                    },
+                                    "pieceName": "@activepieces/piece-google-drive",
+                                    "pieceType": "OFFICIAL",
+                                    "actionName": "upload_gdrive_file",
+                                    "packageType": "REGISTRY",
+                                    "pieceVersion": "~0.5.37",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "file": {
+                                        "type": "MANUAL"
+                                      },
+                                      "fileName": {
+                                        "type": "MANUAL"
+                                      },
+                                      "parentFolder": {
+                                        "type": "MANUAL"
+                                      },
+                                      "include_team_drives": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {},
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "displayName": "Upload file"
+                                },
+                                "displayName": "Append new entries"
+                              }
+                            },
+                            {
+                              "name": "step_8",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['slack']}}",
+                                  "text": "Hey! @channel\n\nAfter another tour of the NCDC website no new pdf was added this week.\n\nThe NCDC Situation Report sheet remains unchanged:\nhttps://docs.google.com/spreadsheets/d/1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw/edit?usp=drive_link",
+                                  "channel": "C0719G7FKCP"
+                                },
+                                "pieceName": "@activepieces/piece-slack",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "send_channel_message",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "~0.7.13",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "text": {
+                                    "type": "MANUAL"
+                                  },
+                                  "channel": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_9",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['slack']}}",
+                                    "text": "Hey! @channel\n\nAfter another tour of the NCDC website no new pdf was added this week.\n\nThe NCDC Situation Report sheet remains unchanged:\nhttps://docs.google.com/spreadsheets/d/1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw/edit?usp=drive_link",
+                                    "channel": "C07NNUA4VA5"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "send_channel_message",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "~0.7.13",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "channel": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {},
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "displayName": "Send Message To Automation logs"
+                              },
+                              "displayName": "Send Message To A Channel"
+                            }
+                          ],
+                          "settings": {
+                            "branches": [
+                              {
+                                "branchName": "Branch 1",
+                                "branchType": "CONDITION",
+                                "conditions": [
+                                  [
+                                    {
+                                      "operator": "BOOLEAN_IS_TRUE",
+                                      "firstValue": "{{step_7}}"
+                                    }
+                                  ]
+                                ]
+                              },
+                              {
+                                "branchName": "Otherwise",
+                                "branchType": "FALLBACK"
+                              }
+                            ],
+                            "executionType": "EXECUTE_FIRST_MATCH",
+                            "propertySettings": {},
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-01-17T15:52:34.527Z",
+                              "sampleDataFileId": "EcYJusFcOKG5Bb88gKtPo"
+                            }
+                          },
+                          "displayName": "Router"
+                        },
+                        "displayName": "Check & filter new entries"
+                      },
+                      {
+                        "name": "step_11",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['slack']}}",
+                            "text": "Hello! @channel\n\nThe retrieval process for the NCDC Situation Reports has failed due to site downtime. \nStatus code: {{step_3['body']['title']}}\n\nThe NCDC Situation Report sheet remains unchanged:\nhttps://docs.google.com/spreadsheets/d/1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw/edit?usp=drive_link",
+                            "channel": "C0719G7FKCP"
+                          },
+                          "pieceName": "@activepieces/piece-slack",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "send_channel_message",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.7.13",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "text": {
+                              "type": "MANUAL"
+                            },
+                            "channel": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {},
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_12",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['slack']}}",
+                              "text": "Hello! @channel\n\nThe retrieval process for the NCDC Situation Reports has failed due to site downtime. \nStatus code: {{step_3['body']['title']}}\n\nThe NCDC Situation Report sheet remains unchanged:\nhttps://docs.google.com/spreadsheets/d/1lbvUcXbZOpjl3v73eHJgI31UwYNsywxFJWqiiP5ygOw/edit?usp=drive_link",
+                              "channel": "C07NNUA4VA5"
+                            },
+                            "pieceName": "@activepieces/piece-slack",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "send_channel_message",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.7.13",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "text": {
+                                "type": "MANUAL"
+                              },
+                              "channel": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Send Message To Automation logs"
+                        },
+                        "displayName": "Send Message To A Channel"
+                      }
+                    ],
+                    "settings": {
+                      "branches": [
+                        {
+                          "branchName": "Branch 1",
+                          "branchType": "CONDITION",
+                          "conditions": [
+                            [
+                              {
+                                "operator": "LIST_IS_NOT_EMPTY",
+                                "firstValue": "{{step_18['body']['links']}}"
+                              }
+                            ]
+                          ]
+                        },
+                        {
+                          "branchName": "Otherwise",
+                          "branchType": "FALLBACK"
+                        }
+                      ],
+                      "executionType": "EXECUTE_FIRST_MATCH",
+                      "propertySettings": {},
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-02-04T12:36:11.549Z",
+                        "sampleDataFileId": "Sh5rrMsVoljZVYN4j9bkU"
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_15",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "timeZone": "Africa/Lagos",
+                          "timeFormat": "MMMM DD YYYY HH:mm:ss"
+                        },
+                        "pieceName": "@activepieces/piece-date-helper",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "get_current_date",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.1.6",
+                        "propertySettings": {
+                          "timeZone": {
+                            "type": "MANUAL"
+                          },
+                          "timeFormat": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-02-03T09:14:26.188Z",
+                          "sampleDataFileId": "zaGcqVM8FABTvJ3OTxzKB"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_16",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "endDate": "{{step_15['result']}}",
+                            "startDate": "{{step_14['result']}}",
+                            "endDateFormat": "MMMM DD YYYY HH:mm:ss",
+                            "unitDifference": [
+                              "hour",
+                              "minute",
+                              "second"
+                            ],
+                            "startDateFormat": "MMMM DD YYYY HH:mm:ss"
+                          },
+                          "pieceName": "@activepieces/piece-date-helper",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "date_difference",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.1.6",
+                          "propertySettings": {
+                            "endDate": {
+                              "type": "MANUAL"
+                            },
+                            "startDate": {
+                              "type": "MANUAL"
+                            },
+                            "endDateFormat": {
+                              "type": "MANUAL"
+                            },
+                            "unitDifference": {
+                              "type": "MANUAL"
+                            },
+                            "startDateFormat": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-03-12T13:09:22.438Z",
+                            "sampleDataFileId": "BHx70cbPt23GoOmIyyNHl",
+                            "sampleDataInputFileId": "INadcLtz0ApIVLpXDFva3"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_19",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                              "row_id": "{{step_3['row']}}",
+                              "values": {
+                                "D": "{{step_16['hour']}}hr {{step_16['minute']}}min {{step_16['second']}}sec",
+                                "F": "ai-data-team-automation"
+                              },
+                              "sheetId": 1211720957,
+                              "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                              "first_row_headers": true,
+                              "includeTeamDrives": true
+                            },
+                            "pieceName": "@activepieces/piece-google-sheets",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "update_row",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "~0.12.1",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "row_id": {
+                                "type": "MANUAL"
+                              },
+                              "values": {
+                                "type": "MANUAL"
+                              },
+                              "sheetId": {
+                                "type": "MANUAL"
+                              },
+                              "spreadsheetId": {
+                                "type": "MANUAL"
+                              },
+                              "first_row_headers": {
+                                "type": "MANUAL"
+                              },
+                              "includeTeamDrives": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Update Log tracking sheet"
+                        },
+                        "displayName": "Date Difference"
+                      },
+                      "displayName": "Get Current Date"
+                    },
+                    "displayName": "Check http request status"
+                  },
+                  "displayName": "Get NCDC reports"
+                },
+                "displayName": "Existing Reports"
+              },
+              "displayName": "Generate Random Number"
+            },
+            "displayName": "Insert Log tracking sheet"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

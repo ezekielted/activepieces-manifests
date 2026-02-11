@@ -1,0 +1,1706 @@
+﻿{
+  "name": "MSDAT Google Analytics report",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-gmail",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-pdf",
+    "@activepieces/piece-image-helper",
+    "@activepieces/piece-store",
+    "@activepieces/piece-json",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-http",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "PP0YqNcP5sauAVrFse6uq"
+  },
+  "flows": [
+    {
+      "displayName": "MSDAT Google Analytics report",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New Email",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "to": {
+              "type": "MANUAL"
+            },
+            "auth": {
+              "type": "MANUAL"
+            },
+            "from": {
+              "type": "MANUAL"
+            },
+            "label": {
+              "type": "MANUAL"
+            },
+            "subject": {
+              "type": "MANUAL"
+            },
+            "category": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-gmail",
+          "pieceVersion": "0.7.2",
+          "input": {
+            "auth": "{{connections['e4edevs_Gmail']}}",
+            "label": {
+              "id": "INBOX",
+              "name": "INBOX",
+              "type": "system",
+              "labelListVisibility": "labelShow",
+              "messageListVisibility": "hide"
+            },
+            "subject": "MSDAT Google Analytics Snapshots",
+            "category": "primary"
+          },
+          "triggerName": "gmail_new_email_received"
+        },
+        "nextAction": {
+          "name": "step_29",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "pieceType": "OFFICIAL",
+            "actionName": "get_current_date",
+            "packageType": "REGISTRY",
+            "pieceVersion": "0.1.24",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-01-29T11:07:53.373Z",
+              "sampleDataFileId": "V7Oo4Fim0sEhHdGBd0JBI"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_8",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                "values": {
+                  "A": "MSDAT Google Analytics report",
+                  "B": "{{step_29['result']}}",
+                  "C": "New Email from Looker Studio",
+                  "E": "ai@e4email.net"
+                },
+                "sheetId": 1187061349,
+                "as_string": false,
+                "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                "first_row_headers": true,
+                "includeTeamDrives": true
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "pieceType": "OFFICIAL",
+              "actionName": "insert_row",
+              "packageType": "REGISTRY",
+              "pieceVersion": "0.12.20",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "values": {
+                  "type": "MANUAL"
+                },
+                "sheetId": {
+                  "type": "MANUAL"
+                },
+                "as_string": {
+                  "type": "MANUAL"
+                },
+                "spreadsheetId": {
+                  "type": "MANUAL"
+                },
+                "first_row_headers": {
+                  "type": "MANUAL"
+                },
+                "includeTeamDrives": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-03-11T10:19:08.204Z",
+                "sampleDataFileId": "pPYccn4NurPDkHtATyMUJ",
+                "sampleDataInputFileId": "s2dAqF16UT0PhgXrxUcHY"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "file": "{{trigger['message']['attachments'][0]['data']}}",
+                  "imageOutputType": "multiple"
+                },
+                "pieceName": "@activepieces/piece-pdf",
+                "pieceType": "OFFICIAL",
+                "actionName": "convertToImage",
+                "packageType": "REGISTRY",
+                "pieceVersion": "0.1.5",
+                "propertySettings": {
+                  "file": {
+                    "type": "MANUAL"
+                  },
+                  "imageOutputType": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-05-02T08:51:54.189Z",
+                  "sampleDataFileId": "L1lIQznQMrpi0czTlAwfp",
+                  "sampleDataInputFileId": "Srd9SfJsPxP2klEKpUIeb"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": true
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_32",
+                "type": "CODE",
+                "valid": true,
+                "settings": {
+                  "input": {},
+                  "sourceCode": {
+                    "code": "export const code = async (inputs: any): Promise<{ currentMonth: string; previousMonth: string; year: number }> => {\n  // Define the time zone\n  const timeZone = 'Africa/Lagos';\n\n  // Get the current date in the specified time zone\n  const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone }));\n\n  // Adjust the date for the currentMonth (last month)\n  const currentMonthDate = new Date(currentDate);\n  currentMonthDate.setMonth(currentMonthDate.getMonth() - 1);\n\n  // Adjust the date for the previousMonth (two months ago)\n  const previousMonthDate = new Date(currentMonthDate);\n  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);\n\n  // Format the months and year\n  const currentMonth = currentMonthDate.toLocaleString('en-US', { timeZone, month: 'long' });\n  const previousMonth = previousMonthDate.toLocaleString('en-US', { timeZone, month: 'long' });\n  const year = currentMonthDate.getFullYear(); // Use the year of the currentMonthDate for accuracy\n\n  return { currentMonth, previousMonth, year };\n};",
+                    "packageJson": "{}"
+                  },
+                  "propertySettings": {},
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-01-01T13:35:52.667Z",
+                    "sampleDataFileId": "vtZp5bRqoB3pXwURMfk3E"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_18",
+                  "type": "LOOP_ON_ITEMS",
+                  "valid": true,
+                  "settings": {
+                    "items": "{{step_2['images']}}",
+                    "propertySettings": {},
+                    "sampleDataSettings": {
+                      "lastTestDate": "2024-10-29T08:19:35.289Z",
+                      "sampleDataFileId": "G5fWkM5vaDl35JjNQC8kT"
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_6",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "snapshot_list1",
+                        "store_scope": "RUN",
+                        "defaultValue": "[]"
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "get",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "0.5.4",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "defaultValue": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2024-11-08T08:56:13.575Z",
+                        "sampleDataFileId": "CW3l3npxQtdrGNbvzHDZB"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_21",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "text": "{{step_6}}"
+                        },
+                        "pieceName": "@activepieces/piece-json",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "convert_text_to_json",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "0.0.9",
+                        "propertySettings": {
+                          "text": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2024-11-08T08:59:07.661Z",
+                          "sampleDataFileId": "bWcp0yWjgyZ5BfAxeEXaq"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_11",
+                        "type": "CODE",
+                        "valid": true,
+                        "settings": {
+                          "input": {},
+                          "sourceCode": {
+                            "code": "export const code = async (inputs) => {\n  let key0 = Math.round(Math.random()*10000);\n  let key1 = Math.round(Math.random()*10000);\n  let key2 = Math.round(Math.random()*10000);\n  let key3 = Math.round(Math.random()*10000);\n  let key4 = Math.round(Math.random()*10000);\n  let key5 = Math.round(Math.random()*10000);\n  let key6 = Math.round(Math.random()*10000);\n  return [key0, key1, key2, key3, key4, key5, key6]\n};",
+                            "packageJson": "\n      {\n        \"dependencies\": {\n        }\n      }"
+                          },
+                          "propertySettings": {},
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-02-01T07:24:24.753Z",
+                            "sampleDataFileId": "tyenKlXIwFfhJVSx0zlBn"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_20",
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "auth": "{{connections['e4edevs-google-sheets']}}",
+                              "memKey": "{{step_11[0]}}",
+                              "sheet_id": 476180185,
+                              "startRow": "1",
+                              "groupSize": "100",
+                              "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                              "include_team_drives": true
+                            },
+                            "pieceName": "@activepieces/piece-google-sheets",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "get_next_rows",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.11.14",
+                            "propertySettings": {
+                              "auth": {
+                                "type": "MANUAL"
+                              },
+                              "memKey": {
+                                "type": "MANUAL"
+                              },
+                              "sheet_id": {
+                                "type": "MANUAL"
+                              },
+                              "startRow": {
+                                "type": "MANUAL"
+                              },
+                              "groupSize": {
+                                "type": "MANUAL"
+                              },
+                              "spreadsheet_id": {
+                                "type": "MANUAL"
+                              },
+                              "include_team_drives": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-02-01T08:39:28.568Z",
+                              "sampleDataFileId": "JyrdDOC5uScWZIbyxlcpa"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": true
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_4",
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['e4edevs-google-sheets']}}",
+                                "memKey": "{{step_11[1]}}",
+                                "sheet_id": 743606497,
+                                "startRow": "1",
+                                "groupSize": "100",
+                                "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                "include_team_drives": true
+                              },
+                              "pieceName": "@activepieces/piece-google-sheets",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "get_next_rows",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "0.11.14",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "memKey": {
+                                  "type": "MANUAL"
+                                },
+                                "sheet_id": {
+                                  "type": "MANUAL"
+                                },
+                                "startRow": {
+                                  "type": "MANUAL"
+                                },
+                                "groupSize": {
+                                  "type": "MANUAL"
+                                },
+                                "spreadsheet_id": {
+                                  "type": "MANUAL"
+                                },
+                                "include_team_drives": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-02-01T08:39:49.773Z",
+                                "sampleDataFileId": "KollWeoJmv7r4qTz845kl"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": true
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_23",
+                              "type": "CODE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "currentBounceRate": "{{step_4[1]['values']['D']}}",
+                                  "previousBounceRate": "{{step_20[1]['values']['D']}}"
+                                },
+                                "sourceCode": {
+                                  "code": "export const code = async (inputs) => {\n  let { previousBounceRate, currentBounceRate } = inputs;\n  \n  previousBounceRate = (previousBounceRate * 100).toFixed(2) + '%';\n  currentBounceRate = (currentBounceRate * 100).toFixed(2) + '%';\n  \n  return { previousBounceRate, currentBounceRate };\n};\n",
+                                  "packageJson": "{}"
+                                },
+                                "propertySettings": {
+                                  "currentBounceRate": {
+                                    "type": "MANUAL"
+                                  },
+                                  "previousBounceRate": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2024-11-08T09:00:54.886Z",
+                                  "sampleDataFileId": "ymdtEhybWqAownPr5eHgS"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_1",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['e4edevs-google-sheets']}}",
+                                    "memKey": "{{step_11[2]}}",
+                                    "sheet_id": 280900644,
+                                    "startRow": "1",
+                                    "groupSize": "100",
+                                    "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                    "include_team_drives": true
+                                  },
+                                  "pieceName": "@activepieces/piece-google-sheets",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "get_next_rows",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "0.11.14",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "memKey": {
+                                      "type": "MANUAL"
+                                    },
+                                    "sheet_id": {
+                                      "type": "MANUAL"
+                                    },
+                                    "startRow": {
+                                      "type": "MANUAL"
+                                    },
+                                    "groupSize": {
+                                      "type": "MANUAL"
+                                    },
+                                    "spreadsheet_id": {
+                                      "type": "MANUAL"
+                                    },
+                                    "include_team_drives": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2025-02-01T08:40:06.141Z",
+                                    "sampleDataFileId": "mAXhZUoZYnFJnhJ5BnOkj"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": true
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_3",
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['e4edevs-google-sheets']}}",
+                                      "memKey": "{{step_11[3]}}",
+                                      "sheet_id": 458648884,
+                                      "startRow": "1",
+                                      "groupSize": "100",
+                                      "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                      "include_team_drives": true
+                                    },
+                                    "pieceName": "@activepieces/piece-google-sheets",
+                                    "pieceType": "OFFICIAL",
+                                    "actionName": "get_next_rows",
+                                    "packageType": "REGISTRY",
+                                    "pieceVersion": "0.11.14",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "memKey": {
+                                        "type": "MANUAL"
+                                      },
+                                      "sheet_id": {
+                                        "type": "MANUAL"
+                                      },
+                                      "startRow": {
+                                        "type": "MANUAL"
+                                      },
+                                      "groupSize": {
+                                        "type": "MANUAL"
+                                      },
+                                      "spreadsheet_id": {
+                                        "type": "MANUAL"
+                                      },
+                                      "include_team_drives": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-02-01T08:40:36.230Z",
+                                      "sampleDataFileId": "cAVq2WjUUZcdQo5ApkdxH"
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": true
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_7",
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "auth": "{{connections['e4edevs-google-sheets']}}",
+                                        "memKey": "{{step_11[4]}}",
+                                        "sheet_id": 500845268,
+                                        "startRow": "1",
+                                        "groupSize": "100",
+                                        "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                        "include_team_drives": true
+                                      },
+                                      "pieceName": "@activepieces/piece-google-sheets",
+                                      "pieceType": "OFFICIAL",
+                                      "actionName": "get_next_rows",
+                                      "packageType": "REGISTRY",
+                                      "pieceVersion": "0.11.14",
+                                      "propertySettings": {
+                                        "auth": {
+                                          "type": "MANUAL"
+                                        },
+                                        "memKey": {
+                                          "type": "MANUAL"
+                                        },
+                                        "sheet_id": {
+                                          "type": "MANUAL"
+                                        },
+                                        "startRow": {
+                                          "type": "MANUAL"
+                                        },
+                                        "groupSize": {
+                                          "type": "MANUAL"
+                                        },
+                                        "spreadsheet_id": {
+                                          "type": "MANUAL"
+                                        },
+                                        "include_team_drives": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "sampleDataSettings": {
+                                        "lastTestDate": "2025-02-01T08:41:00.229Z",
+                                        "sampleDataFileId": "eK1aVygRwohklhjHVuERe"
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": true
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_10",
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['e4edevs-google-sheets']}}",
+                                          "memKey": "{{step_11[5]}}",
+                                          "sheet_id": 1356574492,
+                                          "startRow": "1",
+                                          "groupSize": "100",
+                                          "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                          "include_team_drives": true
+                                        },
+                                        "pieceName": "@activepieces/piece-google-sheets",
+                                        "pieceType": "OFFICIAL",
+                                        "actionName": "get_next_rows",
+                                        "packageType": "REGISTRY",
+                                        "pieceVersion": "0.11.14",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "memKey": {
+                                            "type": "MANUAL"
+                                          },
+                                          "sheet_id": {
+                                            "type": "MANUAL"
+                                          },
+                                          "startRow": {
+                                            "type": "MANUAL"
+                                          },
+                                          "groupSize": {
+                                            "type": "MANUAL"
+                                          },
+                                          "spreadsheet_id": {
+                                            "type": "MANUAL"
+                                          },
+                                          "include_team_drives": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {
+                                          "lastTestDate": "2025-02-01T08:41:21.649Z",
+                                          "sampleDataFileId": "rt7b2QJtcxG2IdCLm7BVV"
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": true
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "nextAction": {
+                                        "name": "step_13",
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "auth": "{{connections['e4edevs-google-sheets']}}",
+                                            "memKey": "{{step_11[6]}}",
+                                            "sheet_id": 371638384,
+                                            "startRow": "1",
+                                            "groupSize": "100",
+                                            "spreadsheet_id": "1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM",
+                                            "include_team_drives": true
+                                          },
+                                          "pieceName": "@activepieces/piece-google-sheets",
+                                          "pieceType": "OFFICIAL",
+                                          "actionName": "get_next_rows",
+                                          "packageType": "REGISTRY",
+                                          "pieceVersion": "0.11.14",
+                                          "propertySettings": {
+                                            "auth": {
+                                              "type": "MANUAL"
+                                            },
+                                            "memKey": {
+                                              "type": "MANUAL"
+                                            },
+                                            "sheet_id": {
+                                              "type": "MANUAL"
+                                            },
+                                            "startRow": {
+                                              "type": "MANUAL"
+                                            },
+                                            "groupSize": {
+                                              "type": "MANUAL"
+                                            },
+                                            "spreadsheet_id": {
+                                              "type": "MANUAL"
+                                            },
+                                            "include_team_drives": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "sampleDataSettings": {
+                                            "lastTestDate": "2025-02-01T08:42:36.111Z",
+                                            "sampleDataFileId": "pEJX2Jnia9aceF0teVvZB"
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": true
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_35",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "auth": "{{connections['straico']}}",
+                                              "model": "openai/o3-mini",
+                                              "prompt": "Analyze and compare the google analytics data for the previous month {{step_32['previousMonth']}} and the current month {{step_32['currentMonth']}}, which correspond to {{step_20}} and {{step_4}}, respectively. Provide interpretations of 2-3 observable changes in metrics, including percentage increases or decreases. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                            },
+                                            "pieceName": "@activepieces/piece-straico",
+                                            "pieceType": "OFFICIAL",
+                                            "actionName": "prompt_completion",
+                                            "packageType": "REGISTRY",
+                                            "pieceVersion": "0.0.2",
+                                            "propertySettings": {
+                                              "auth": {
+                                                "type": "MANUAL"
+                                              },
+                                              "model": {
+                                                "type": "MANUAL"
+                                              },
+                                              "prompt": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "sampleDataSettings": {
+                                              "lastTestDate": "2025-03-03T12:54:41.991Z",
+                                              "sampleDataFileId": "rwNSPdMqKWqQOW2TNxTTI",
+                                              "sampleDataInputFileId": "eYgVsW3OsNkYXQkdjgo6p"
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "nextAction": {
+                                            "name": "step_36",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "auth": "{{connections['straico']}}",
+                                                "model": "openai/o3-mini",
+                                                "prompt": "Analyze and compare the google analytics data for event count by event name for the previous month {{step_32['previousMonth']}} and the current month {{step_32['currentMonth']}}, which correspond to {{step_20}} and {{step_1}}, respectively. Provide interpretations of 2-3 observable changes in metrics, including percentage increases or decreases. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                              },
+                                              "pieceName": "@activepieces/piece-straico",
+                                              "pieceType": "OFFICIAL",
+                                              "actionName": "prompt_completion",
+                                              "packageType": "REGISTRY",
+                                              "pieceVersion": "0.0.2",
+                                              "propertySettings": {
+                                                "auth": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "model": {
+                                                  "type": "MANUAL"
+                                                },
+                                                "prompt": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "sampleDataSettings": {
+                                                "lastTestDate": "2025-03-03T12:50:25.887Z",
+                                                "sampleDataFileId": "5DNy6r48DDxjwMYVdXRO7",
+                                                "sampleDataInputFileId": "XjGkeMz5hvmXtDnx2D9Sm"
+                                              },
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "nextAction": {
+                                              "name": "step_37",
+                                              "skip": false,
+                                              "type": "PIECE",
+                                              "valid": true,
+                                              "settings": {
+                                                "input": {
+                                                  "auth": "{{connections['straico']}}",
+                                                  "model": "openai/o3-mini",
+                                                  "prompt": "Analyze and interpret the google analytics data: {{step_3}}. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                                },
+                                                "pieceName": "@activepieces/piece-straico",
+                                                "pieceType": "OFFICIAL",
+                                                "actionName": "prompt_completion",
+                                                "packageType": "REGISTRY",
+                                                "pieceVersion": "0.0.2",
+                                                "propertySettings": {
+                                                  "auth": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "model": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "prompt": {
+                                                    "type": "MANUAL"
+                                                  }
+                                                },
+                                                "sampleDataSettings": {
+                                                  "lastTestDate": "2025-03-03T12:51:19.471Z",
+                                                  "sampleDataFileId": "980b3voJOkcHUZLi7SFC2",
+                                                  "sampleDataInputFileId": "M0LxptLgnnYyAB6GN9DDC"
+                                                },
+                                                "errorHandlingOptions": {
+                                                  "retryOnFailure": {
+                                                    "value": false
+                                                  },
+                                                  "continueOnFailure": {
+                                                    "value": false
+                                                  }
+                                                }
+                                              },
+                                              "nextAction": {
+                                                "name": "step_38",
+                                                "skip": false,
+                                                "type": "PIECE",
+                                                "valid": true,
+                                                "settings": {
+                                                  "input": {
+                                                    "auth": "{{connections['straico']}}",
+                                                    "model": "openai/o3-mini",
+                                                    "prompt": "Analyze and interpret the google analytics data: {{step_7}}. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                                  },
+                                                  "pieceName": "@activepieces/piece-straico",
+                                                  "pieceType": "OFFICIAL",
+                                                  "actionName": "prompt_completion",
+                                                  "packageType": "REGISTRY",
+                                                  "pieceVersion": "0.0.2",
+                                                  "propertySettings": {
+                                                    "auth": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "model": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "prompt": {
+                                                      "type": "MANUAL"
+                                                    }
+                                                  },
+                                                  "sampleDataSettings": {
+                                                    "lastTestDate": "2025-03-03T12:51:53.303Z",
+                                                    "sampleDataFileId": "8uxC44RtOUqeTfYjtWP9K",
+                                                    "sampleDataInputFileId": "n3uzvnHAUPcpFvlkhtJIG"
+                                                  },
+                                                  "errorHandlingOptions": {
+                                                    "retryOnFailure": {
+                                                      "value": false
+                                                    },
+                                                    "continueOnFailure": {
+                                                      "value": false
+                                                    }
+                                                  }
+                                                },
+                                                "nextAction": {
+                                                  "name": "step_39",
+                                                  "skip": false,
+                                                  "type": "PIECE",
+                                                  "valid": true,
+                                                  "settings": {
+                                                    "input": {
+                                                      "auth": "{{connections['straico']}}",
+                                                      "model": "openai/o3-mini",
+                                                      "prompt": "Analyze and interpret the google analytics data: {{step_10}}. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                                    },
+                                                    "pieceName": "@activepieces/piece-straico",
+                                                    "pieceType": "OFFICIAL",
+                                                    "actionName": "prompt_completion",
+                                                    "packageType": "REGISTRY",
+                                                    "pieceVersion": "0.0.2",
+                                                    "propertySettings": {
+                                                      "auth": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "model": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "prompt": {
+                                                        "type": "MANUAL"
+                                                      }
+                                                    },
+                                                    "sampleDataSettings": {
+                                                      "lastTestDate": "2025-03-03T12:52:36.484Z",
+                                                      "sampleDataFileId": "dKaLUNuaKtvRnr87gBod1",
+                                                      "sampleDataInputFileId": "YdPHlwo4R4eP3DlcJbJlL"
+                                                    },
+                                                    "errorHandlingOptions": {
+                                                      "retryOnFailure": {
+                                                        "value": false
+                                                      },
+                                                      "continueOnFailure": {
+                                                        "value": false
+                                                      }
+                                                    }
+                                                  },
+                                                  "nextAction": {
+                                                    "name": "step_40",
+                                                    "skip": false,
+                                                    "type": "PIECE",
+                                                    "valid": true,
+                                                    "settings": {
+                                                      "input": {
+                                                        "auth": "{{connections['straico']}}",
+                                                        "model": "openai/o3-mini",
+                                                        "prompt": "Analyze and interpret the google analytics data: {{step_13}}. Please make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting, ensure you use the proper units for duration and percentage metrics (do not use floating point values in your interpretations, convert the metrics into their proper units, i.e a bounce rate of 0.6 should be 60% and a value duration of 145.61 seconds should be 2min42sec, represent durations less than 1 minute as seconds (19.34 should be 19s). Give 6 interpretations, number them from 1 to 6. Your response should start directly from the list, avoiding introductory comments (like 'here are the') or filler language."
+                                                      },
+                                                      "pieceName": "@activepieces/piece-straico",
+                                                      "pieceType": "OFFICIAL",
+                                                      "actionName": "prompt_completion",
+                                                      "packageType": "REGISTRY",
+                                                      "pieceVersion": "0.0.2",
+                                                      "propertySettings": {
+                                                        "auth": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "model": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "prompt": {
+                                                          "type": "MANUAL"
+                                                        }
+                                                      },
+                                                      "sampleDataSettings": {
+                                                        "lastTestDate": "2025-03-03T12:53:22.996Z",
+                                                        "sampleDataFileId": "6pLBfI0IdLZkSyZ8DwUeY",
+                                                        "sampleDataInputFileId": "RcNxKNN9SzdadG3W45iyE"
+                                                      },
+                                                      "errorHandlingOptions": {
+                                                        "retryOnFailure": {
+                                                          "value": false
+                                                        },
+                                                        "continueOnFailure": {
+                                                          "value": false
+                                                        }
+                                                      }
+                                                    },
+                                                    "nextAction": {
+                                                      "name": "step_41",
+                                                      "skip": false,
+                                                      "type": "PIECE",
+                                                      "valid": true,
+                                                      "settings": {
+                                                        "input": {
+                                                          "auth": "{{connections['straico']}}",
+                                                          "model": "openai/o3-mini",
+                                                          "prompt": "From the google analytics interpretations please give 5 UX recommendations for the web app, to further improve user experience, they are given as follows; \n{{step_35}}, {{step_38}}, {{step_37}}, {{step_38}}, {{step_39}}, {{step_40}}.\nPlease make your interpretations simple and readable, your response should be in plain text avoiding any special characters or markdown formatting. Start directly from the recommendation list numbered 1 to 5, avoiding introductory comments (like 'here are the') or filler language"
+                                                        },
+                                                        "pieceName": "@activepieces/piece-straico",
+                                                        "pieceType": "OFFICIAL",
+                                                        "actionName": "prompt_completion",
+                                                        "packageType": "REGISTRY",
+                                                        "pieceVersion": "0.0.2",
+                                                        "propertySettings": {
+                                                          "auth": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "model": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "prompt": {
+                                                            "type": "MANUAL"
+                                                          }
+                                                        },
+                                                        "sampleDataSettings": {
+                                                          "lastTestDate": "2025-03-03T12:53:54.176Z",
+                                                          "sampleDataFileId": "OmWExlyrw0egaQnzEjbjp",
+                                                          "sampleDataInputFileId": "AXK2hCt1VLp8yBNykt55c"
+                                                        },
+                                                        "errorHandlingOptions": {
+                                                          "retryOnFailure": {
+                                                            "value": false
+                                                          },
+                                                          "continueOnFailure": {
+                                                            "value": false
+                                                          }
+                                                        }
+                                                      },
+                                                      "nextAction": {
+                                                        "name": "step_28",
+                                                        "type": "PIECE",
+                                                        "valid": true,
+                                                        "settings": {
+                                                          "input": {
+                                                            "cc": [],
+                                                            "to": [
+                                                              "ai@e4email.net",
+                                                              "msdat@e4email.net",
+                                                              "imeasangansi@e4email.net",
+                                                              "ime@e4email.net"
+                                                            ],
+                                                            "bcc": [
+                                                              "ummi.abdulsalam@e4email.net",
+                                                              "oeasani@gmail.com",
+                                                              "ajosephimafidon@yahoo.com",
+                                                              "victor.iwualla@e4email.net",
+                                                              "alle.odhiameh@e4email.net",
+                                                              "karl.ezeh@e4email.net",
+                                                              "msdat@e4email.net",
+                                                              "oghenewoke.atariata@e4email.net"
+                                                            ],
+                                                            "auth": "{{connections['smtp.office365.com']}}",
+                                                            "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>\n<style>\n    body {\n        font-family: 'Lexend';\n        font-size: 16px;\n    }\n    pre {\n        font-family: 'Lexend'; \n        font-size: 16px; \n        white-space: pre-wrap;\n        word-wrap: break-word; \n    }\n    .page-break {\n        page-break-after: always;\n    }\n    .container {\n        display: flex;\n        flex-direction: column;\n        padding: 10px;\n        justify-content: space-evenly;\n    }\n    .table-wrapper {\n        width: 100%;\n        margin-bottom: 20px;\n    }\n    table {\n        width: 100%;\n        border-collapse: collapse;\n    }\n    th, td {\n        border: 1px solid #000;\n        padding: 8px;\n        text-align: left;\n    }\n    #col-header {\n        background-color: #d0e4f5;\n    }\n    caption {\n        margin-bottom: 10px;\n        font-weight: bold;\n        font-size: 16px;\n    }\n</style>\n\n\n    <title>MSDAT Google Analytics {{step_32['currentMonth']}} Report {{step_32['year']}}</title>\n</head>\n<body>\n    <h2>MSDAT Google Analytics Report For {{step_32['currentMonth']}}</h2><br>\n     <div class=\"container\">\n<div class=\"table-wrapper\"><table><thead><tr><th>Month</th><th>{{step_32['currentMonth']}} {{step_32['year']}}</th></tr></thead><tbody><tr><td>Platform</td><td><a href=\"https://msdat.fmohconnect.gov.ng/\" target=\"_blank\">https://msdat.fmohconnect.gov.ng/</a></td></tr></tbody></table></div><br><br>\n<div class=\"table-wrapper\">\n<table><caption>Monthly Overview</caption><thead id=\"col-header\"><tr><th>Month</th><th>New Users</th><th>Total Users</th><th>Bounce Rate</th><th>Event Count</th></tr></thead><tbody><tr><td>{{step_32['previousMonth']}}</td><td>{{step_20[1]['values']['A']}}</td><td>{{step_20[1]['values']['B']}}</td><td>{{step_23['previousBounceRate']}}</td><td>{{step_20[1]['values']['C']}}</td></tr><tr><td>{{step_32['currentMonth']}}</td><td>{{step_4[1]['values']['A']}}</td><td>{{step_4[1]['values']['B']}}</td><td>{{step_23['currentBounceRate']}}</td><td>{{step_4[1]['values']['C']}}</td></tr></tbody></table></div>\n</div>\n    \n    <p>It is GA4 (Google Analytics 4) this time around.</p>\n    <p>Event count in Google Analytics 4 according to Google: “It is a report that shows you each triggered event and the number of times each event was triggered in the last 30 minutes by the users on your website or app. An event allows you to measure a specific interaction or occurrence on your website or app. For example, you can use an event to measure when someone loads a page, clicks a link, or to measure system behavior, such as when an app crashes or an impression is served.”</p>\n    <div class=\"page-break\"></div>\n    <h4>A. Analysis of New Users, Users, and Average Engagement Time in the Month of {{step_32['currentMonth']}}</h4>\n    <img src=\"{{step_21[0]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_35}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>B. Analysis of Event Counts in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[1]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_36}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>C. Analysis of Audience and User Acquisition in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[2]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_37}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>D. Analysis of Users by Country</h4>\n    <img src=\"{{step_21[3]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_38}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>E. Analysis of Pages and Screens</h4> \n    <img src=\"{{step_21[4]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_39}}</pre>\n\n  <div class=\"page-break\"></div>\n    <h4>F. Analysis of Landing Pages</h4>  \n   <img src=\"{{step_21[5]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_40}}</pre>\n    <div class=\"page-break\"></div>\n    <h4>UX Recommendations Based on the Report for the Month of {{step_32['currentMonth']}}</h4>\n    <pre>{{step_41}}</pre><br><br>\n<p>Kindly note that the charts are only visual representations of the underlying analytics data obtained using Looker studio. The actual figures used for interpretation are retrieved from a Google Sheet connected to MSDAT Google Analytics account via an add-on. This sheet contains more comprehensive data than what is displayed in the charts. Click <a href=\"https://docs.google.com/spreadsheets/d/1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM/edit?usp=drive_link\" target=\"_blank\">here</a> to view the Spreadsheet</p>\n\n\n</body>\n</html>",
+                                                            "from": "automationagent@e4email.net",
+                                                            "subject": "MSDAT Google Analytics Report for {{step_32['currentMonth']}} {{step_32['year']}}",
+                                                            "body_type": "html",
+                                                            "customHeaders": {}
+                                                          },
+                                                          "pieceName": "@activepieces/piece-smtp",
+                                                          "actionName": "send-email",
+                                                          "pieceVersion": "0.2.4",
+                                                          "propertySettings": {
+                                                            "cc": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "to": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "bcc": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "auth": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "body": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "from": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "subject": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "body_type": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "customHeaders": {
+                                                              "type": "MANUAL"
+                                                            }
+                                                          },
+                                                          "errorHandlingOptions": {
+                                                            "retryOnFailure": {
+                                                              "value": true
+                                                            },
+                                                            "continueOnFailure": {
+                                                              "value": false
+                                                            }
+                                                          }
+                                                        },
+                                                        "nextAction": {
+                                                          "name": "step_30",
+                                                          "type": "CODE",
+                                                          "valid": true,
+                                                          "settings": {
+                                                            "input": {
+                                                              "reportHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href='https://fonts.googleapis.com/css?family=Lexend' rel='stylesheet'>\n<style>\n    body {\n        font-family: 'Lexend';\n        font-size: 16px;\n    }\n    pre {\n        font-family: 'Lexend'; \n        font-size: 16px; \n        white-space: pre-wrap;\n        word-wrap: break-word; \n    }\n    .page-break {\n        page-break-after: always;\n    }\n    .container {\n        display: flex;\n        flex-direction: column;\n        padding: 10px;\n        justify-content: space-evenly;\n    }\n    .table-wrapper {\n        width: 100%;\n        margin-bottom: 20px;\n    }\n    table {\n        width: 100%;\n        border-collapse: collapse;\n    }\n    th, td {\n        border: 1px solid #000;\n        padding: 8px;\n        text-align: left;\n    }\n    #col-header {\n        background-color: #d0e4f5;\n    }\n    caption {\n        margin-bottom: 10px;\n        font-weight: bold;\n        font-size: 16px;\n    }\n</style>\n\n\n    <title>MSDAT Google Analytics {{step_32['currentMonth']}} Report {{step_32['year']}}</title>\n</head>\n<body>\n    <h2>MSDAT Google Analytics Report For {{step_32['currentMonth']}}</h2><br>\n     <div class=\"container\">\n<div class=\"table-wrapper\"><table><thead><tr><th>Month</th><th>{{step_32['currentMonth']}} {{step_32['year']}}</th></tr></thead><tbody><tr><td>Platform</td><td><a href=\"https://msdat.fmohconnect.gov.ng/\" target=\"_blank\">https://msdat.fmohconnect.gov.ng/</a></td></tr></tbody></table></div><br><br>\n<div class=\"table-wrapper\">\n<table><caption>Monthly Overview</caption><thead id=\"col-header\"><tr><th>Month</th><th>New Users</th><th>Total Users</th><th>Bounce Rate</th><th>Event Count</th></tr></thead><tbody><tr><td>{{step_32['previousMonth']}}</td><td>{{step_20[1]['values']['A']}}</td><td>{{step_20[1]['values']['B']}}</td><td>{{step_23['previousBounceRate']}}</td><td>{{step_20[1]['values']['C']}}</td></tr><tr><td>{{step_32['currentMonth']}}</td><td>{{step_4[1]['values']['A']}}</td><td>{{step_4[1]['values']['B']}}</td><td>{{step_23['currentBounceRate']}}</td><td>{{step_4[1]['values']['C']}}</td></tr></tbody></table></div>\n</div>\n    \n    <p>It is GA4 (Google Analytics 4) this time around.</p>\n    <p>Event count in Google Analytics 4 according to Google: “It is a report that shows you each triggered event and the number of times each event was triggered in the last 30 minutes by the users on your website or app. An event allows you to measure a specific interaction or occurrence on your website or app. For example, you can use an event to measure when someone loads a page, clicks a link, or to measure system behavior, such as when an app crashes or an impression is served.”</p>\n    <div class=\"page-break\"></div>\n    <h4>A. Analysis of New Users, Users, and Average Engagement Time in the Month of {{step_32['currentMonth']}}</h4>\n    <img src=\"{{step_21[0]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_35}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>B. Analysis of Event Counts in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[1]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_36}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>C. Analysis of Audience and User Acquisition in the Month of {{step_32['currentMonth']}}</h4> \n    <img src=\"{{step_21[2]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_37}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>D. Analysis of Users by Country</h4>\n    <img src=\"{{step_21[3]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_38}}</pre>\n\n    <div class=\"page-break\"></div>\n    <h4>E. Analysis of Pages and Screens</h4> \n    <img src=\"{{step_21[4]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_39}}</pre>\n\n  <div class=\"page-break\"></div>\n    <h4>F. Analysis of Landing Pages</h4>  \n   <img src=\"{{step_21[5]}}\">\n    <h4>Interpretation</h4>\n    <pre>{{step_40}}</pre>\n    <div class=\"page-break\"></div>\n    <h4>UX Recommendations Based on the Report for the Month of {{step_32['currentMonth']}}</h4>\n    <pre>{{step_41}}</pre><br><br>\n<p>Kindly note that the charts are only visual representations of the underlying analytics data obtained using Looker studio. The actual figures used for interpretation are retrieved from a Google Sheet connected to MSDAT Google Analytics account via an add-on. This sheet contains more comprehensive data than what is displayed in the charts. Click <a href=\"https://docs.google.com/spreadsheets/d/1hFiXwL4Df2cqsp2vR-pnY1NUn-4OQDV126ChYpGDrhM/edit?usp=drive_link\" target=\"_blank\">here</a> to view the Spreadsheet</p>\n\n\n</body>\n</html>"
+                                                            },
+                                                            "sourceCode": {
+                                                              "code": "export const code = async (inputs) => {\n  // Example input: HTML content\n  const htmlContent = inputs.reportHtml;\n\n  // Create a JSON object with a key-value pair\n  const jsonBody = {\n    reportHtml: htmlContent\n  };\n\n  // Return the JSON object (you can use this for further processing or API requests)\n  return jsonBody;\n};\n",
+                                                              "packageJson": "{}"
+                                                            },
+                                                            "propertySettings": {
+                                                              "reportHtml": {
+                                                                "type": "MANUAL"
+                                                              }
+                                                            },
+                                                            "sampleDataSettings": {
+                                                              "lastTestDate": "2025-03-03T12:57:06.607Z",
+                                                              "sampleDataFileId": "tTXKUTOycGZS3Ho9XlcAZ",
+                                                              "sampleDataInputFileId": "LcBty79tVec6BhWSITbi8"
+                                                            },
+                                                            "errorHandlingOptions": {
+                                                              "retryOnFailure": {
+                                                                "value": false
+                                                              },
+                                                              "continueOnFailure": {
+                                                                "value": false
+                                                              }
+                                                            }
+                                                          },
+                                                          "nextAction": {
+                                                            "name": "step_27",
+                                                            "type": "PIECE",
+                                                            "valid": true,
+                                                            "settings": {
+                                                              "input": {
+                                                                "url": "https://api.pdfshift.io/v3/convert/pdf",
+                                                                "body": {
+                                                                  "data": {
+                                                                    "encode": true,
+                                                                    "margin": "50px",
+                                                                    "source": "{{step_30['reportHtml']}}",
+                                                                    "landscape": false,
+                                                                    "use_print": false
+                                                                  }
+                                                                },
+                                                                "method": "POST",
+                                                                "headers": {
+                                                                  "Authorization": "Basic REPLACE_WITH_API_KEY"
+                                                                },
+                                                                "failsafe": false,
+                                                                "body_type": "json",
+                                                                "use_proxy": false,
+                                                                "queryParams": {},
+                                                                "proxy_settings": {}
+                                                              },
+                                                              "pieceName": "@activepieces/piece-http",
+                                                              "actionName": "send_request",
+                                                              "pieceVersion": "0.5.1",
+                                                              "propertySettings": {
+                                                                "url": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "body": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "method": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "headers": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "failsafe": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "body_type": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "use_proxy": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "queryParams": {
+                                                                  "type": "MANUAL"
+                                                                },
+                                                                "proxy_settings": {
+                                                                  "type": "MANUAL",
+                                                                  "schema": {}
+                                                                }
+                                                              },
+                                                              "errorHandlingOptions": {
+                                                                "retryOnFailure": {
+                                                                  "value": false
+                                                                },
+                                                                "continueOnFailure": {
+                                                                  "value": false
+                                                                }
+                                                              }
+                                                            },
+                                                            "nextAction": {
+                                                              "name": "step_24",
+                                                              "type": "PIECE",
+                                                              "valid": true,
+                                                              "settings": {
+                                                                "input": {
+                                                                  "auth": "{{connections['e4edevs-google-drive']}}",
+                                                                  "file": "data:application/pdf;base64,{{step_27['body']}}",
+                                                                  "fileName": "MSDAT Google Analytics Report {{step_32['currentMonth']}} {{step_32['year']}}.pdf",
+                                                                  "parentFolder": "19yzE6IjINkWAsH6szNVrhHqZTPJ_73Tv",
+                                                                  "include_team_drives": false
+                                                                },
+                                                                "pieceName": "@activepieces/piece-google-drive",
+                                                                "pieceType": "OFFICIAL",
+                                                                "actionName": "upload_gdrive_file",
+                                                                "packageType": "REGISTRY",
+                                                                "pieceVersion": "0.5.53",
+                                                                "propertySettings": {
+                                                                  "auth": {
+                                                                    "type": "MANUAL"
+                                                                  },
+                                                                  "file": {
+                                                                    "type": "MANUAL"
+                                                                  },
+                                                                  "fileName": {
+                                                                    "type": "MANUAL"
+                                                                  },
+                                                                  "parentFolder": {
+                                                                    "type": "MANUAL"
+                                                                  },
+                                                                  "include_team_drives": {
+                                                                    "type": "MANUAL"
+                                                                  }
+                                                                },
+                                                                "sampleDataSettings": {
+                                                                  "lastTestDate": "2024-11-08T14:37:16.976Z",
+                                                                  "sampleDataFileId": "1BmyJ9YyBCqAUeFzhNPUp"
+                                                                },
+                                                                "errorHandlingOptions": {
+                                                                  "retryOnFailure": {
+                                                                    "value": true
+                                                                  },
+                                                                  "continueOnFailure": {
+                                                                    "value": false
+                                                                  }
+                                                                }
+                                                              },
+                                                              "nextAction": {
+                                                                "name": "step_26",
+                                                                "type": "PIECE",
+                                                                "valid": true,
+                                                                "settings": {
+                                                                  "input": {
+                                                                    "auth": "{{connections['slack']}}",
+                                                                    "text": "Hello! @channel\n\nPlease find attached link to MSDAT Google Analytics report for {{step_32['currentMonth']}} {{step_32['year']}}. \n\nURL: https://drive.google.com/file/d/{{step_24['id']}}/view?usp=drive_link\n\n\n",
+                                                                    "channel": "C013C3Y929W"
+                                                                  },
+                                                                  "pieceName": "@activepieces/piece-slack",
+                                                                  "pieceType": "OFFICIAL",
+                                                                  "actionName": "send_channel_message",
+                                                                  "packageType": "REGISTRY",
+                                                                  "pieceVersion": "0.7.15",
+                                                                  "propertySettings": {
+                                                                    "auth": {
+                                                                      "type": "MANUAL"
+                                                                    },
+                                                                    "text": {
+                                                                      "type": "MANUAL"
+                                                                    },
+                                                                    "channel": {
+                                                                      "type": "MANUAL"
+                                                                    }
+                                                                  },
+                                                                  "sampleDataSettings": {},
+                                                                  "errorHandlingOptions": {
+                                                                    "retryOnFailure": {
+                                                                      "value": false
+                                                                    },
+                                                                    "continueOnFailure": {
+                                                                      "value": false
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "nextAction": {
+                                                                  "name": "step_25",
+                                                                  "type": "PIECE",
+                                                                  "valid": true,
+                                                                  "settings": {
+                                                                    "input": {
+                                                                      "auth": "{{connections['slack']}}",
+                                                                      "text": "Hello! @channel\n\nPlease find attached link to MSDAT Google Analytics report for {{step_32['currentMonth']}} {{step_32['year']}}. \n\nURL: https://drive.google.com/file/d/{{step_24['id']}}/view?usp=drive_link",
+                                                                      "channel": "C07NNUA4VA5"
+                                                                    },
+                                                                    "pieceName": "@activepieces/piece-slack",
+                                                                    "pieceType": "OFFICIAL",
+                                                                    "actionName": "send_channel_message",
+                                                                    "packageType": "REGISTRY",
+                                                                    "pieceVersion": "0.7.15",
+                                                                    "propertySettings": {
+                                                                      "auth": {
+                                                                        "type": "MANUAL"
+                                                                      },
+                                                                      "text": {
+                                                                        "type": "MANUAL"
+                                                                      },
+                                                                      "channel": {
+                                                                        "type": "MANUAL"
+                                                                      }
+                                                                    },
+                                                                    "sampleDataSettings": {},
+                                                                    "errorHandlingOptions": {
+                                                                      "retryOnFailure": {
+                                                                        "value": false
+                                                                      },
+                                                                      "continueOnFailure": {
+                                                                        "value": false
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "nextAction": {
+                                                                    "name": "step_31",
+                                                                    "skip": false,
+                                                                    "type": "PIECE",
+                                                                    "valid": true,
+                                                                    "settings": {
+                                                                      "input": {
+                                                                        "timeZone": "Africa/Lagos",
+                                                                        "timeFormat": "MMMM DD YYYY HH:mm:ss"
+                                                                      },
+                                                                      "pieceName": "@activepieces/piece-date-helper",
+                                                                      "pieceType": "OFFICIAL",
+                                                                      "actionName": "get_current_date",
+                                                                      "packageType": "REGISTRY",
+                                                                      "pieceVersion": "0.1.24",
+                                                                      "propertySettings": {
+                                                                        "timeZone": {
+                                                                          "type": "MANUAL"
+                                                                        },
+                                                                        "timeFormat": {
+                                                                          "type": "MANUAL"
+                                                                        }
+                                                                      },
+                                                                      "sampleDataSettings": {
+                                                                        "lastTestDate": "2025-01-29T11:08:30.633Z",
+                                                                        "sampleDataFileId": "EQ6XZcumHBmBFxJQeslPg"
+                                                                      },
+                                                                      "errorHandlingOptions": {
+                                                                        "retryOnFailure": {
+                                                                          "value": false
+                                                                        },
+                                                                        "continueOnFailure": {
+                                                                          "value": false
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    "nextAction": {
+                                                                      "name": "step_33",
+                                                                      "skip": false,
+                                                                      "type": "PIECE",
+                                                                      "valid": true,
+                                                                      "settings": {
+                                                                        "input": {
+                                                                          "endDate": "{{step_31['result']}}",
+                                                                          "startDate": "{{step_29['result']}}",
+                                                                          "endDateFormat": "MMMM DD YYYY HH:mm:ss",
+                                                                          "unitDifference": [
+                                                                            "hour",
+                                                                            "minute",
+                                                                            "second"
+                                                                          ],
+                                                                          "startDateFormat": "MMMM DD YYYY HH:mm:ss"
+                                                                        },
+                                                                        "pieceName": "@activepieces/piece-date-helper",
+                                                                        "pieceType": "OFFICIAL",
+                                                                        "actionName": "date_difference",
+                                                                        "packageType": "REGISTRY",
+                                                                        "pieceVersion": "0.1.24",
+                                                                        "propertySettings": {
+                                                                          "endDate": {
+                                                                            "type": "MANUAL"
+                                                                          },
+                                                                          "startDate": {
+                                                                            "type": "MANUAL"
+                                                                          },
+                                                                          "endDateFormat": {
+                                                                            "type": "MANUAL"
+                                                                          },
+                                                                          "unitDifference": {
+                                                                            "type": "MANUAL"
+                                                                          },
+                                                                          "startDateFormat": {
+                                                                            "type": "MANUAL"
+                                                                          }
+                                                                        },
+                                                                        "sampleDataSettings": {
+                                                                          "lastTestDate": "2025-03-11T10:19:24.793Z",
+                                                                          "sampleDataFileId": "bmIUkDZ7zdYSLWZUiMIIL",
+                                                                          "sampleDataInputFileId": "teWBwdnQQKrekb3XgH2ea"
+                                                                        },
+                                                                        "errorHandlingOptions": {
+                                                                          "retryOnFailure": {
+                                                                            "value": false
+                                                                          },
+                                                                          "continueOnFailure": {
+                                                                            "value": false
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      "nextAction": {
+                                                                        "name": "step_9",
+                                                                        "skip": false,
+                                                                        "type": "PIECE",
+                                                                        "valid": true,
+                                                                        "settings": {
+                                                                          "input": {
+                                                                            "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                                                                            "row_id": "{{step_8['row']}}",
+                                                                            "values": {
+                                                                              "D": "{{step_33['hour']}}hr {{step_33['minute']}}min {{step_33['second']}}sec",
+                                                                              "F": "msdat-ai"
+                                                                            },
+                                                                            "sheetId": 1187061349,
+                                                                            "spreadsheetId": "13JQvo2e4H4LVXZp1FcdXLmoUbNAZzWMfKrfuE-WVp44",
+                                                                            "first_row_headers": true,
+                                                                            "includeTeamDrives": true
+                                                                          },
+                                                                          "pieceName": "@activepieces/piece-google-sheets",
+                                                                          "actionName": "update_row",
+                                                                          "pieceVersion": "0.12.20",
+                                                                          "propertySettings": {
+                                                                            "auth": {
+                                                                              "type": "MANUAL"
+                                                                            },
+                                                                            "row_id": {
+                                                                              "type": "MANUAL"
+                                                                            },
+                                                                            "values": {
+                                                                              "type": "MANUAL",
+                                                                              "schema": {
+                                                                                "A": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Automations",
+                                                                                  "displayName": "Automations",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "B": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Date/Time Automation ran",
+                                                                                  "displayName": "Date/Time Automation ran",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "C": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Automation Details (Triggers and Usage)",
+                                                                                  "displayName": "Automation Details (Triggers and Usage)",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "D": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Time taken to run automation",
+                                                                                  "displayName": "Time taken to run automation",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "E": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Email Connection Used",
+                                                                                  "displayName": "Email Connection Used",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "F": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Slack Channel sent to",
+                                                                                  "displayName": "Slack Channel sent to",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "G": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "General Meeting Notes",
+                                                                                  "displayName": "General Meeting Notes",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "H": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "",
+                                                                                  "displayName": "",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "I": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "",
+                                                                                  "displayName": "",
+                                                                                  "defaultValue": ""
+                                                                                },
+                                                                                "J": {
+                                                                                  "type": "SHORT_TEXT",
+                                                                                  "required": false,
+                                                                                  "description": "Assignee",
+                                                                                  "displayName": "Assignee",
+                                                                                  "defaultValue": ""
+                                                                                }
+                                                                              }
+                                                                            },
+                                                                            "sheetId": {
+                                                                              "type": "MANUAL"
+                                                                            },
+                                                                            "spreadsheetId": {
+                                                                              "type": "MANUAL"
+                                                                            },
+                                                                            "first_row_headers": {
+                                                                              "type": "MANUAL"
+                                                                            },
+                                                                            "includeTeamDrives": {
+                                                                              "type": "MANUAL"
+                                                                            }
+                                                                          },
+                                                                          "errorHandlingOptions": {
+                                                                            "retryOnFailure": {
+                                                                              "value": false
+                                                                            },
+                                                                            "continueOnFailure": {
+                                                                              "value": false
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        "displayName": "Update Row"
+                                                                      },
+                                                                      "displayName": "Date Difference"
+                                                                    },
+                                                                    "displayName": "Get Current Date"
+                                                                  },
+                                                                  "displayName": "Send Message To Automation logs"
+                                                                },
+                                                                "displayName": "Send Message To A MSDAT channel"
+                                                              },
+                                                              "displayName": "Upload file"
+                                                            },
+                                                            "displayName": "Print html to pdf"
+                                                          },
+                                                          "displayName": "Convert html to json object"
+                                                        },
+                                                        "displayName": "Send Email"
+                                                      },
+                                                      "displayName": "UX recommendations"
+                                                    },
+                                                    "displayName": "Analysis of Landing pages"
+                                                  },
+                                                  "displayName": "Analysis of Pages by screen"
+                                                },
+                                                "displayName": "Analysis of Users by Country"
+                                              },
+                                              "displayName": "Analysis of Audience & User acquisition"
+                                            },
+                                            "displayName": "Analysis of Event count"
+                                          },
+                                          "displayName": "Analysis of users"
+                                        },
+                                        "displayName": "Analysis of Landing pages"
+                                      },
+                                      "displayName": "Analysis of Pages by screen"
+                                    },
+                                    "displayName": "Analysis of Users by Country"
+                                  },
+                                  "displayName": "Analysis of Audience & User Acquisition"
+                                },
+                                "displayName": "Analysis of Event count"
+                              },
+                              "displayName": "Bounce rates as percent"
+                            },
+                            "displayName": "Analysis of New Users, Users"
+                          },
+                          "displayName": "Analysis of Users for previous month"
+                        },
+                        "displayName": "Get memory key"
+                      },
+                      "displayName": "Convert Text to Json"
+                    },
+                    "displayName": "Get"
+                  },
+                  "displayName": "Loop on Items",
+                  "firstLoopAction": {
+                    "name": "step_19",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "image": "{{step_18['item']}}",
+                        "width": "1000",
+                        "height": "1000",
+                        "aspectRatio": true
+                      },
+                      "pieceName": "@activepieces/piece-image-helper",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "resize_image",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "0.1.10",
+                      "propertySettings": {
+                        "image": {
+                          "type": "MANUAL"
+                        },
+                        "width": {
+                          "type": "MANUAL"
+                        },
+                        "height": {
+                          "type": "MANUAL"
+                        },
+                        "aspectRatio": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2024-10-29T12:44:21.039Z",
+                        "sampleDataFileId": "3RuWKvM4bWb5FEiwwvSs3"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_5",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "key": "snapshot_list1",
+                          "value": "{{step_19}}",
+                          "store_scope": "RUN",
+                          "ignore_if_exists": false
+                        },
+                        "pieceName": "@activepieces/piece-store",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "add_to_list",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "0.5.4",
+                        "propertySettings": {
+                          "key": {
+                            "type": "MANUAL"
+                          },
+                          "value": {
+                            "type": "MANUAL"
+                          },
+                          "store_scope": {
+                            "type": "MANUAL"
+                          },
+                          "ignore_if_exists": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2024-10-29T13:14:04.496Z",
+                          "sampleDataFileId": "IHQxEIXDVTuvKflvbo7oG"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Add To List"
+                    },
+                    "displayName": "Resize an image"
+                  }
+                },
+                "displayName": "Get date"
+              },
+              "displayName": "Convert to Image"
+            },
+            "displayName": "Insert Row"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

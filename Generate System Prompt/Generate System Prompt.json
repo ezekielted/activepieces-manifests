@@ -1,0 +1,127 @@
+﻿{
+  "name": "Generate System Prompt",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-manual-trigger",
+    "@activepieces/piece-ai"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "6kBSLwA0IDJweEq9G9b3w"
+  },
+  "flows": [
+    {
+      "displayName": "Generate System Prompt",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Manual Trigger",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "markdown": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-manual-trigger",
+          "pieceVersion": "0.0.4",
+          "input": {},
+          "sampleData": {},
+          "triggerName": "manual_trigger"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "prompt": "Explore our Postgres tables and create detailed internal instructions for efficient data retrieval. Use them to construct a structured system prompt for a separate AI agent. The system prompt must exclude any thinking artifacts, filler language, or meta commentary. Store this prompt in the \"Storage\" tool.",
+              "maxSteps": 20,
+              "agentTools": [
+                {
+                  "type": "PIECE",
+                  "toolName": "_activepieces_piece-postgres-run-query",
+                  "pieceMetadata": {
+                    "pieceName": "@activepieces/piece-postgres",
+                    "actionName": "run-query",
+                    "pieceVersion": "0.2.0",
+                    "predefinedInput": {
+                      "auth": "{{connections['1NTQ6J0lfVq3T0zL0hO8A']}}",
+                      "fields": {}
+                    }
+                  }
+                },
+                {
+                  "type": "PIECE",
+                  "toolName": "_activepieces_piece-store-put",
+                  "pieceMetadata": {
+                    "pieceName": "@activepieces/piece-store",
+                    "actionName": "put",
+                    "pieceVersion": "0.6.13",
+                    "predefinedInput": {
+                      "fields": {
+                        "key": {
+                          "mode": "choose-yourself",
+                          "value": "system_prompt"
+                        },
+                        "store_scope": {
+                          "mode": "choose-yourself",
+                          "value": "COLLECTION"
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "aiProviderModel": {
+                "model": "google/gemini-3-flash-preview",
+                "provider": "activepieces"
+              },
+              "structuredOutput": []
+            },
+            "pieceName": "@activepieces/piece-ai",
+            "actionName": "run_agent",
+            "sampleData": {},
+            "pieceVersion": "0.1.5",
+            "propertySettings": {
+              "prompt": {
+                "type": "MANUAL"
+              },
+              "maxSteps": {
+                "type": "MANUAL"
+              },
+              "agentTools": {
+                "type": "MANUAL"
+              },
+              "aiProviderModel": {
+                "type": "MANUAL"
+              },
+              "structuredOutput": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "displayName": "Run Agent"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

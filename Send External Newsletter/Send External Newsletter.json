@@ -1,0 +1,499 @@
+﻿{
+  "name": "Send External Newsletter",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-delay"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "ygkmZFwpQen7vR9QNGTvP"
+  },
+  "flows": [
+    {
+      "displayName": "Send External Newsletter",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New or Updated Row",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "auth": {
+              "type": "MANUAL"
+            },
+            "sheetId": {
+              "type": "MANUAL"
+            },
+            "spreadsheetId": {
+              "type": "MANUAL"
+            },
+            "trigger_column": {
+              "type": "MANUAL"
+            },
+            "includeTeamDrives": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-google-sheets",
+          "pieceVersion": "0.12.2",
+          "input": {
+            "auth": "{{connections['AI-drive-GoogleSheets']}}",
+            "sheetId": 0,
+            "spreadsheetId": "1p5TMTRFouUSUx13T2amjceLvPJgO01xcK51yjqDw6NQ",
+            "trigger_column": "A",
+            "includeTeamDrives": true
+          },
+          "triggerName": "google-sheets-new-or-updated-row"
+        },
+        "nextAction": {
+          "name": "step_3",
+          "skip": false,
+          "type": "CODE",
+          "valid": true,
+          "settings": {
+            "input": {},
+            "sourceCode": {
+              "code": "export const code = async () => {\n  const startTime = Date.now(); // Capture start time\n  return { message: \"Timer started\", startTime }; // Return startTime so it can be stored externally\n};",
+              "packageJson": "{\n  \"dependencies\": {\n    \"@activepieces/pieces-common\": \"0.4.3\"\n  }\n}"
+            },
+            "propertySettings": {},
+            "sampleDataSettings": {
+              "lastTestDate": "2025-03-27T11:23:46.525Z",
+              "sampleDataFileId": "9wuScWnuuOEVT1EVuDHYN",
+              "sampleDataInputFileId": "6t4gaM19S3s2jwpyRdhSj"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_7",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "file": "{{trigger['values']['B']}}",
+                "readOptions": "text"
+              },
+              "pieceName": "@activepieces/piece-file-helper",
+              "pieceType": "OFFICIAL",
+              "actionName": "read_file",
+              "packageType": "REGISTRY",
+              "pieceVersion": "0.1.5",
+              "propertySettings": {
+                "file": {
+                  "type": "MANUAL"
+                },
+                "readOptions": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-03-27T15:21:37.410Z",
+                "sampleDataFileId": "2hgK9gNwDfOSPlIUAK5kg",
+                "sampleDataInputFileId": "NyJgkRFcG51TxLdA1IS09"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "skip": false,
+              "type": "CODE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "list_id": "06ea4526d5",
+                  "authorization": "REPLACE_WITH_API_KEY"
+                },
+                "sourceCode": {
+                  "code": "import axios from \"axios\";\n\nexport const code = async (inputs) => {\n  const { authorization, list_id } = inputs;\n  const baseUrl = `https://us11.api.mailchimp.com/3.0/lists/${list_id}/members`;\n  let offset = 0;\n  const count = 1000; // Maximum Mailchimp allows per request\n  let allSubscribers = [];\n\n  while (true) {\n    try {\n      const response = await axios.get(baseUrl, {\n        params: { status: \"subscribed\", count, offset },\n        headers: {\n          \"Authorization\": `Basic ${authorization}`,\n          \"Content-Type\": \"application/json\"\n        }\n      });\n\n      const members = response.data.members || [];\n      allSubscribers = allSubscribers.concat(members);\n\n      if (members.length < count) {\n        break; // No more subscribers to fetch\n      }\n\n      offset += count;\n    } catch (error) {\n      throw new Error(`Error fetching data: ${error.response?.statusText || error.message}`);\n    }\n  }\n\n  return allSubscribers;\n};",
+                  "packageJson": "{\n  \"dependencies\": {\n    \"axios\": \"1.8.4\"\n  }\n}"
+                },
+                "propertySettings": {
+                  "list_id": {
+                    "type": "MANUAL"
+                  },
+                  "authorization": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-03-27T13:05:49.529Z",
+                  "sampleDataFileId": "NpW79wvoR6wwE2HXKO6WY",
+                  "sampleDataInputFileId": "loeiS2PaquIbjS7bjwEA2"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_29",
+                "type": "LOOP_ON_ITEMS",
+                "valid": true,
+                "settings": {
+                  "items": "{{step_2}}",
+                  "propertySettings": {},
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-03-27T10:27:53.642Z",
+                    "sampleDataFileId": "0Hf6f6z7bHDTFNzkVQquv",
+                    "sampleDataInputFileId": "lZdeX85jPvGNEhkJ2Cb8G"
+                  }
+                },
+                "displayName": "Send out Newsletter",
+                "firstLoopAction": {
+                  "name": "step_4",
+                  "skip": false,
+                  "type": "CODE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "startTime": "{{step_3['startTime']}}"
+                    },
+                    "sourceCode": {
+                      "code": "export const code = async (inputs) => {\n  if (!inputs.startTime) return { elapsedTime: 0 }; // If no startTime is passed, return 0\n  const elapsedTime = Math.floor((Date.now() - inputs.startTime) / 1000);\n  return { elapsedTime };\n};",
+                      "packageJson": "{\n  \"dependencies\": {\n  }\n}"
+                    },
+                    "propertySettings": {
+                      "startTime": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-03-27T11:23:57.158Z",
+                      "sampleDataFileId": "A9jespdr70fjcCvjvBoyo",
+                      "sampleDataInputFileId": "HPoMJdjWRNGGTiyY342Re"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_5",
+                    "skip": false,
+                    "type": "ROUTER",
+                    "valid": true,
+                    "children": [
+                      {
+                        "name": "step_6",
+                        "skip": false,
+                        "type": "ROUTER",
+                        "valid": true,
+                        "children": [
+                          {
+                            "name": "step_8",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "text": "{{step_7['text']}}",
+                                "searchValue": "Hello there,",
+                                "replaceValue": "Hello {{step_29['item']['full_name']}},",
+                                "replaceOnlyFirst": true
+                              },
+                              "pieceName": "@activepieces/piece-text-helper",
+                              "pieceType": "OFFICIAL",
+                              "actionName": "replace",
+                              "packageType": "REGISTRY",
+                              "pieceVersion": "0.4.0",
+                              "propertySettings": {
+                                "text": {
+                                  "type": "MANUAL"
+                                },
+                                "searchValue": {
+                                  "type": "MANUAL"
+                                },
+                                "replaceValue": {
+                                  "type": "MANUAL"
+                                },
+                                "replaceOnlyFirst": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-03-27T15:25:32.881Z",
+                                "sampleDataFileId": "XOoGF6bHX5rbzC2FdOwak",
+                                "sampleDataInputFileId": "n6v1dVKWAWy0ZYZz0rOzg"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_15",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "cc": [],
+                                  "to": [
+                                    "{{step_29['item']['email_address']}}"
+                                  ],
+                                  "bcc": [],
+                                  "auth": "{{connections['smtp.office365.com']}}",
+                                  "body": "{{step_8}}",
+                                  "from": "automationagent@e4email.net",
+                                  "subject": "Health, Technology & E4E",
+                                  "body_type": "html",
+                                  "senderName": "ehealth4everyone",
+                                  "customHeaders": {}
+                                },
+                                "pieceName": "@activepieces/piece-smtp",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "send-email",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "0.2.4",
+                                "propertySettings": {
+                                  "cc": {
+                                    "type": "MANUAL"
+                                  },
+                                  "to": {
+                                    "type": "MANUAL"
+                                  },
+                                  "bcc": {
+                                    "type": "MANUAL"
+                                  },
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "body": {
+                                    "type": "MANUAL"
+                                  },
+                                  "from": {
+                                    "type": "MANUAL"
+                                  },
+                                  "subject": {
+                                    "type": "MANUAL"
+                                  },
+                                  "body_type": {
+                                    "type": "MANUAL"
+                                  },
+                                  "senderName": {
+                                    "type": "MANUAL"
+                                  },
+                                  "customHeaders": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_22",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "unit": "seconds",
+                                    "delayFor": "2"
+                                  },
+                                  "pieceName": "@activepieces/piece-delay",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "delayFor",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "0.3.12",
+                                  "propertySettings": {
+                                    "unit": {
+                                      "type": "MANUAL"
+                                    },
+                                    "delayFor": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {},
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "displayName": "Delay For"
+                              },
+                              "displayName": "Send Email to Audience"
+                            },
+                            "displayName": "Replace"
+                          },
+                          null
+                        ],
+                        "settings": {
+                          "branches": [
+                            {
+                              "branchName": "Branch 1",
+                              "branchType": "CONDITION",
+                              "conditions": [
+                                [
+                                  {
+                                    "operator": "NUMBER_IS_GREATER_THAN",
+                                    "firstValue": "{{step_29['index']}}",
+                                    "secondValue": "{{trigger['values']['A']}}"
+                                  }
+                                ]
+                              ]
+                            },
+                            {
+                              "branchName": "Otherwise",
+                              "branchType": "FALLBACK"
+                            }
+                          ],
+                          "executionType": "EXECUTE_FIRST_MATCH",
+                          "propertySettings": {},
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-03-27T10:39:43.614Z",
+                            "sampleDataFileId": "Ht0zMuJ4wvqM7LFITUTIU",
+                            "sampleDataInputFileId": "cSwDfClFNNIj9kHpgoDUI"
+                          }
+                        },
+                        "displayName": "Router"
+                      },
+                      {
+                        "name": "step_1",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                            "row_id": "{{trigger['row']}}",
+                            "values": {
+                              "A": "{{step_29['index']}}"
+                            },
+                            "sheetId": 0,
+                            "spreadsheetId": "1p5TMTRFouUSUx13T2amjceLvPJgO01xcK51yjqDw6NQ",
+                            "first_row_headers": true,
+                            "includeTeamDrives": true
+                          },
+                          "pieceName": "@activepieces/piece-google-sheets",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "update_row",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "0.12.2",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "row_id": {
+                              "type": "MANUAL"
+                            },
+                            "values": {
+                              "type": "MANUAL"
+                            },
+                            "sheetId": {
+                              "type": "MANUAL"
+                            },
+                            "spreadsheetId": {
+                              "type": "MANUAL"
+                            },
+                            "first_row_headers": {
+                              "type": "MANUAL"
+                            },
+                            "includeTeamDrives": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {},
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Update Row"
+                      }
+                    ],
+                    "settings": {
+                      "branches": [
+                        {
+                          "branchName": "Branch 1",
+                          "branchType": "CONDITION",
+                          "conditions": [
+                            [
+                              {
+                                "operator": "NUMBER_IS_LESS_THAN",
+                                "firstValue": "{{step_4['elapsedTime']}}",
+                                "secondValue": "590"
+                              }
+                            ]
+                          ]
+                        },
+                        {
+                          "branchName": "Otherwise",
+                          "branchType": "FALLBACK"
+                        }
+                      ],
+                      "executionType": "EXECUTE_ALL_MATCH",
+                      "propertySettings": {},
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-03-27T12:48:09.567Z",
+                        "sampleDataFileId": "J2UjxiMIv1vM9y8b4LCVK",
+                        "sampleDataInputFileId": "UYbnG20SetQ9QR656b6AF"
+                      }
+                    },
+                    "displayName": "Router"
+                  },
+                  "displayName": "Get elapsed time"
+                }
+              },
+              "displayName": "Retrieve mailchimp subcribers"
+            },
+            "displayName": "Read File"
+          },
+          "displayName": "start counter"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

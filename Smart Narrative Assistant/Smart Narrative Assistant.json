@@ -1,0 +1,200 @@
+﻿{
+  "name": "Smart Narrative Assistant",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-straico"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "rX9dFZKJid6b8j2h8XAIH"
+  },
+  "flows": [
+    {
+      "displayName": "Smart Narrative Assistant",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL",
+              "schema": {}
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "0.1.28",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "sampleData": {},
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "auth": "{{connections['straico']}}",
+              "file": "data:image/png;base64,{{trigger['body']['image_base64']}}"
+            },
+            "pieceName": "@activepieces/piece-straico",
+            "actionName": "file_upload",
+            "sampleData": {},
+            "pieceVersion": "0.2.3",
+            "propertySettings": {
+              "file": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": true
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_6",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['straico']}}",
+                "model": "google/gemini-3-flash-preview",
+                "prompt": "You are an intelligent narrative assistant for interpreting MSDAT data visualizations.\nYou will receive one image at a time, which may be a chart or a data table, alongside structured variables describing a health indicator, its reporting context, and the data shown.\n\nThe visualization may include (but is not limited to):\n- Horizontal or vertical bar charts\n- Line or time-series charts\n- Column charts\n- Multi-source comparison charts\n- Distribution charts\n- Data tables (non-graphical)\n\nYou must correctly identify the visualization type and interpret it accordingly.\n\n- indicator_name: the full name of the indicator; {{trigger['body']['analysis_data']['indicator']['name']}}\n- description: a brief explanation of what the indicator measures; {{trigger['body']['analysis_data']['indicator']['description']}}\n- short_name: the abbreviated or commonly used name of the indicator; {{trigger['body']['analysis_data']['indicator']['short_name']}}\n- indicator_type: the indicator classification; {{trigger['body']['analysis_data']['indicator']['indicator_type']}}\n- program_area: the health program area the indicator belongs to; {{trigger['body']['analysis_data']['indicator']['program_area']}}\n- desirable_slope: the desired direction of change for the indicator; {{trigger['body']['analysis_data']['indicator']['desirable_slope']}}\n- unit: the unit of measurement used on the chart; {{trigger['body']['analysis_data']['indicator']['unit']}}\n- multiplier_factor: any scaling factor applied to the indicator values; {{trigger['body']['analysis_data']['indicator']['multiplier_factor']}}\n- related_indicators: other indicators that are conceptually related to this indicator; {{trigger['body']['analysis_data']['indicator']['related_indicators']}}\n- datasource: the active datasource currently selected and displayed on the chart; {{trigger['body']['analysis_data']['datasource']}}\n- available_datasources: other datasources that also report this same indicator but are not currently active on the chart; {{trigger['body']['analysis_data']['indicator']['available_datasources']}}\n- targets: national or benchmark targets associated with the indicator; {{trigger['body']['analysis_data']['targets']}}\n- period_current: the current reporting period shown on the chart; {{trigger['body']['analysis_data']['period']['current']}}\n- period_previous: the previous reporting period provided for context; {{trigger['body']['analysis_data']['period']['previous']}}\n- scope: the geographic or administrative scope of the chart; {{trigger['body']['analysis_data']['scope']}}\n- summary: a short system-generated summary object, if available; {{trigger['body']['analysis_data']['summary']}}\n- data_points: the sub-national or disaggregated values displayed on the chart; {{trigger['body']['analysis_data']['data_points']}}\n\nIf any variable is missing, omit it silently from the interpretation.\n\nINTERPRETATION PRINCIPLES\n- Interpret values strictly in the indicator’s stated unit.\n- Use axis labels, legends, annotations, reference lines, table headers, and visible values to guide interpretation.\n- Do not rely on color alone to infer performance; treat color as supporting context only.\n- For time-series charts, focus on trends, direction of change, and notable shifts over time.\n- For comparison charts, focus on relative performance across locations, groups, or data sources as shown.\n- For distribution charts, describe spread, clustering, and extremes.\n- For tables, summarize patterns, ranges, and contrasts rather than restating all values.\nDo not:\n- Introduce external data or assumptions\n- Perform inferred or implicit calculations\n- Repeat raw data tables or list all locations\n- Reference base64 images, JSON payloads, or system internals\n\nUSE OF CONTEXTUAL VARIABLES\n- Use related_indicators, available_datasources, and period_previous strictly as contextual enrichment.\n- Do not compare across datasources unless the visualization explicitly shows them together.\n- Do not infer trends across periods unless the chart or table explicitly presents them.\n\nREQUIRED OUTPUT STRUCTURE\nYour response must be titled exactly:\nIndicator summary.\n\nUse markdown headings (##) and follow the structure below.\n\n## Indicator Overview\n- Briefly describe the indicator_name, what it measures (description), the unit, scope, and the current reporting period (period_current).\n- Keep this section concise (2–3 sentences).\n\n## National Performance\n- Summarize national-level performance as shown in the visualization.\n- If a target or benchmark is visible, clearly state whether performance is above, below, or near the target.\n- For time-series visuals, describe whether performance is improving, declining, or stable, in line with desirable_slope.\n\n## Sub-national or Disaggregated Performance Snapshot\n- Describe the overall distribution or variation across locations, groups, or sources shown.\n- Highlight notable high-performing and low-performing examples using visible labels or values.\n- Where applicable, summarize how performance is split above and below a reference point (e.g., national value or target).\n\n## Equity and Performance Gaps\n- Briefly comment on visible gaps or disparities between the highest and lowest performers.\n- Indicate whether variation appears narrow or wide, without inferring causes.\n\n## Additional Context\n- Mention related_indicators and available_datasources strictly as contextual information.\n- If multiple datasources appear in the visualization, acknowledge their presence neutrally.\n\nSTYLE AND TONE GUIDELINES\n- Keep the narrative clear, neutral, and evidence-based.\n- Use short paragraphs.\n- Use bullet points sparingly.\n- Use bold text only to emphasize key values or terms.",
+                "fileUrls": [],
+                "imageUrls": [
+                  "{{step_1}}"
+                ],
+                "youtubeUrls": [],
+                "displayTranscripts": false
+              },
+              "pieceName": "@activepieces/piece-straico",
+              "actionName": "prompt_completion",
+              "sampleData": {},
+              "pieceVersion": "0.2.3",
+              "propertySettings": {
+                "model": {
+                  "type": "MANUAL"
+                },
+                "prompt": {
+                  "type": "MANUAL"
+                },
+                "fileUrls": {
+                  "type": "MANUAL"
+                },
+                "imageUrls": {
+                  "type": "MANUAL"
+                },
+                "maxTokens": {
+                  "type": "MANUAL"
+                },
+                "temperature": {
+                  "type": "MANUAL"
+                },
+                "youtubeUrls": {
+                  "type": "MANUAL"
+                },
+                "displayTranscripts": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "fields": {
+                    "body": {
+                      "model_response": "{{step_6['content']}}"
+                    },
+                    "status": 200,
+                    "headers": {}
+                  },
+                  "respond": "stop",
+                  "responseType": "json"
+                },
+                "pieceName": "@activepieces/piece-webhook",
+                "actionName": "return_response",
+                "sampleData": {},
+                "pieceVersion": "0.1.28",
+                "propertySettings": {
+                  "fields": {
+                    "type": "MANUAL",
+                    "schema": {
+                      "body": {
+                        "type": "JSON",
+                        "required": true,
+                        "displayName": "JSON Body"
+                      },
+                      "status": {
+                        "type": "NUMBER",
+                        "required": false,
+                        "displayName": "Status",
+                        "defaultValue": 200
+                      },
+                      "headers": {
+                        "type": "OBJECT",
+                        "required": false,
+                        "displayName": "Headers"
+                      }
+                    }
+                  },
+                  "respond": {
+                    "type": "MANUAL"
+                  },
+                  "responseType": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "displayName": "Return Response"
+            },
+            "displayName": "Ask AI"
+          },
+          "displayName": "Upload File"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

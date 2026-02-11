@@ -1,0 +1,297 @@
+﻿{
+  "name": "Download email pdf attachments then convert to Images",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-gmail",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-pdf",
+    "@activepieces/piece-image-helper",
+    "@activepieces/piece-store"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "AKnXfRrSEiF1ywoDtplfB"
+  },
+  "flows": [
+    {
+      "displayName": "Download email pdf attachments then convert to Images",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "New Email",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "to": {
+              "type": "MANUAL"
+            },
+            "auth": {
+              "type": "MANUAL"
+            },
+            "from": {
+              "type": "MANUAL"
+            },
+            "label": {
+              "type": "MANUAL"
+            },
+            "subject": {
+              "type": "MANUAL"
+            },
+            "category": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-gmail",
+          "pieceVersion": "~0.7.2",
+          "input": {
+            "auth": "{{connections['e4edevs_Gmail']}}",
+            "label": {
+              "id": "INBOX",
+              "name": "INBOX",
+              "type": "system",
+              "labelListVisibility": "labelShow",
+              "messageListVisibility": "hide"
+            },
+            "subject": "e4e website Google Analytics Snapshots",
+            "category": "primary"
+          },
+          "triggerName": "gmail_new_email_received"
+        },
+        "nextAction": {
+          "name": "step_27",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "pieceType": "OFFICIAL",
+            "actionName": "get_current_date",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.1.6",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {},
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_2",
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "file": "{{trigger['message']['attachments'][5]['data']}}",
+                "imageOutputType": "multiple"
+              },
+              "pieceName": "@activepieces/piece-pdf",
+              "pieceType": "OFFICIAL",
+              "actionName": "convertToImage",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.1.5",
+              "propertySettings": {
+                "file": {
+                  "type": "MANUAL"
+                },
+                "imageOutputType": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {},
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": true
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_32",
+              "type": "CODE",
+              "valid": true,
+              "settings": {
+                "input": {},
+                "sourceCode": {
+                  "code": "export const code = async (inputs: any): Promise<{ currentMonth: string; previousMonth: string; year: number }> => {\n  // Define the time zone\n  const timeZone = 'Africa/Lagos';\n\n  // Get the current date in the specified time zone\n  const currentDate = new Date(new Date().toLocaleString('en-US', { timeZone }));\n\n  // Adjust the date for the currentMonth (last month)\n  const currentMonthDate = new Date(currentDate);\n  currentMonthDate.setMonth(currentMonthDate.getMonth() - 1);\n\n  // Adjust the date for the previousMonth (two months ago)\n  const previousMonthDate = new Date(currentMonthDate);\n  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);\n\n  // Format the months and year\n  const currentMonth = currentMonthDate.toLocaleString('en-US', { timeZone, month: 'long' });\n  const previousMonth = previousMonthDate.toLocaleString('en-US', { timeZone, month: 'long' });\n  const year = currentMonthDate.getFullYear(); // Use the year of the currentMonthDate for accuracy\n\n  return { currentMonth, previousMonth, year };\n};",
+                  "packageJson": "{}"
+                },
+                "propertySettings": {},
+                "sampleDataSettings": {},
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_18",
+                "type": "LOOP_ON_ITEMS",
+                "valid": true,
+                "settings": {
+                  "items": "{{step_2['images']}}",
+                  "propertySettings": {},
+                  "sampleDataSettings": {}
+                },
+                "nextAction": {
+                  "name": "step_6",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "snapshot_list3",
+                      "store_scope": "RUN",
+                      "defaultValue": "[]"
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "get",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.5.4",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "defaultValue": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "displayName": "Get"
+                },
+                "displayName": "Loop on Items",
+                "firstLoopAction": {
+                  "name": "step_19",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "image": "{{step_18['item']}}",
+                      "width": "1000",
+                      "height": "1000",
+                      "aspectRatio": true
+                    },
+                    "pieceName": "@activepieces/piece-image-helper",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "resize_image",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.1.0",
+                    "propertySettings": {
+                      "image": {
+                        "type": "MANUAL"
+                      },
+                      "width": {
+                        "type": "MANUAL"
+                      },
+                      "height": {
+                        "type": "MANUAL"
+                      },
+                      "aspectRatio": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_5",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "snapshot_list3",
+                        "value": "{{step_19}}",
+                        "store_scope": "RUN",
+                        "ignore_if_exists": false
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "add_to_list",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "~0.5.4",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "value": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "ignore_if_exists": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "displayName": "Add To List"
+                  },
+                  "displayName": "Resize an image"
+                }
+              },
+              "displayName": "Get date"
+            },
+            "displayName": "Convert to Image"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

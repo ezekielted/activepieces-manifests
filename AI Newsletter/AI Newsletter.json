@@ -1,0 +1,1024 @@
+﻿{
+  "name": "e4e AI Newsletter",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-http",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-store",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-delay",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "XDyqRYnDqtc57jsBIySdX"
+  },
+  "flows": [
+    {
+      "displayName": "e4e AI Newsletter",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Month",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "day_of_the_month": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.11",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 13,
+            "day_of_the_month": 1
+          },
+          "triggerName": "every_month"
+        },
+        "nextAction": {
+          "name": "step_12",
+          "type": "CODE",
+          "valid": true,
+          "settings": {
+            "input": {},
+            "sourceCode": {
+              "code": "export const code = async (inputs: any): Promise<{ currentMonth: string; previousMonth: string; year: number }> => {\n  const date = new Date();\n\n  // Options for retrieving the month name in full (e.g., \"October\")\n  const options: Intl.DateTimeFormatOptions = { month: 'long' };\n\n  // Retrieve the current month name\n  const currentMonth: string = date.toLocaleString('default', options);\n\n  // Calculate the previous month correctly by adjusting to the 1st of the month first\n  const previousMonthDate = new Date(date);\n  previousMonthDate.setDate(1); // Set to the 1st of the current month to avoid issues with the day\n  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1); // Move to the previous month\n  const previousMonth: string = previousMonthDate.toLocaleString('default', options);\n\n  // Retrieve the full year (e.g., 2024)\n  const year: number = date.getFullYear();\n\n  return { currentMonth, previousMonth, year };\n};\n",
+              "packageJson": "{}"
+            },
+            "propertySettings": {},
+            "sampleDataSettings": {
+              "lastTestDate": "2025-08-21T14:07:07.654Z",
+              "sampleDataFileId": "Qwpn9QDmYL3Y5lvUnBqDA"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_5",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "url": "https://google-search122.p.rapidapi.com/",
+                "body": {
+                  "data": {
+                    "actor": "scraper.google.search",
+                    "input": {
+                      "q": "AI in health care for Africa",
+                      "gl": "ng",
+                      "hl": "en"
+                    }
+                  }
+                },
+                "method": "POST",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "x-rapidapi-key": "REPLACE_WITH_API_KEY",
+                  "x-rapidapi-host": "google-search122.p.rapidapi.com"
+                },
+                "failsafe": false,
+                "body_type": "json",
+                "use_proxy": false,
+                "queryParams": {},
+                "proxy_settings": {}
+              },
+              "pieceName": "@activepieces/piece-http",
+              "actionName": "send_request",
+              "pieceVersion": "0.6.2",
+              "propertySettings": {
+                "url": {
+                  "type": "MANUAL"
+                },
+                "body": {
+                  "type": "MANUAL"
+                },
+                "method": {
+                  "type": "MANUAL"
+                },
+                "headers": {
+                  "type": "MANUAL"
+                },
+                "failsafe": {
+                  "type": "MANUAL"
+                },
+                "body_type": {
+                  "type": "MANUAL"
+                },
+                "use_proxy": {
+                  "type": "MANUAL"
+                },
+                "queryParams": {
+                  "type": "MANUAL"
+                },
+                "proxy_settings": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-08-13T10:09:17.477Z",
+                "sampleDataFileId": "pROZRwTcQkaaOYMwUJwuu"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_4",
+              "type": "LOOP_ON_ITEMS",
+              "valid": true,
+              "settings": {
+                "items": "{{step_5['body']['organic']}}",
+                "propertySettings": {},
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-08-01T10:24:48.497Z",
+                  "sampleDataFileId": "OV6bYb1nVZkJvqsDSSEM1"
+                }
+              },
+              "nextAction": {
+                "name": "step_9",
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "key": "title.",
+                    "store_scope": "RUN",
+                    "defaultValue": "[]"
+                  },
+                  "pieceName": "@activepieces/piece-store",
+                  "actionName": "get",
+                  "pieceVersion": "0.5.4",
+                  "propertySettings": {
+                    "key": {
+                      "type": "MANUAL"
+                    },
+                    "store_scope": {
+                      "type": "MANUAL"
+                    },
+                    "defaultValue": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-08-01T10:43:51.485Z",
+                    "sampleDataFileId": "mHlhIOHpmRYdNCIVmiR7A"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_22",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "image_url.",
+                      "store_scope": "RUN",
+                      "defaultValue": "[]"
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "actionName": "get",
+                    "pieceVersion": "0.5.4",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "defaultValue": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-08-01T10:44:40.297Z",
+                      "sampleDataFileId": "QnENYtDr5eRJVllJOO0Ao"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_23",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "page_url.",
+                        "store_scope": "RUN",
+                        "defaultValue": "[]"
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "actionName": "get",
+                      "pieceVersion": "0.5.4",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "defaultValue": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-08-01T10:44:34.873Z",
+                        "sampleDataFileId": "Fo4wQxH7JuRePbOHKhc3L"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_24",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "key": "text_body.",
+                          "store_scope": "RUN",
+                          "defaultValue": "[]"
+                        },
+                        "pieceName": "@activepieces/piece-store",
+                        "actionName": "get",
+                        "pieceVersion": "0.5.4",
+                        "propertySettings": {
+                          "key": {
+                            "type": "MANUAL"
+                          },
+                          "store_scope": {
+                            "type": "MANUAL"
+                          },
+                          "defaultValue": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-08-01T10:44:29.338Z",
+                          "sampleDataFileId": "RU1jmXrU7TK43DfvWGcg0"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_2",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "cc": [],
+                            "to": [
+                              "ai@e4email.net",
+                              "ezekiel.tedunjaiye@e4email.net"
+                            ],
+                            "bcc": [
+                              "bassey.nta@e4email.net",
+                              "oghenewoke.atariata@e4email.net",
+                              "ummi.abdulsalam@e4emal.net",
+                              "karl.ezeh@e4email.net",
+                              "imeasangansi@e4email.net",
+                              "mojubaoluwa.amakurugbonwo@e4email.net",
+                              "ime@e4email.net"
+                            ],
+                            "auth": "{{connections['smtp.office365.com']}}",
+                            "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #ffffff;\n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .section {\n            width: 100%;\n            padding: 10px 0;\n            margin: 10px 0;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .join-button {\n            display: inline-block;\n            width: 280px;\n            max-width: 100%;\n            padding: 15px 20px;\n            background-color: #0A0F4C;\n            color: white;\n            border: none;\n            border-radius: 40px;\n            font-size: 16px;\n            font-weight: normal;\n            cursor: pointer;\n            text-decoration: none;\n            text-align: center;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 25px;  /* Changed from 10px to 25px to increase spacing */\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 40px;\n            height: 40px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n            .join-button {\n                width: 100%;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/fa709fdf-f7e6-5ea7-b2c0-15ff49c50f86.png\" alt=\"Newsletter Header Image\">\n        \n        <div class=\"section\">\n            <h1>Exploring the Transformative Power of Artificial Intelligence in Healthcare Systems</h1>\n            <p>Hello there, How are you doing?</p>\n            <p>Welcome to the latest edition of our newsletter! We bring you a variety of updates and insights on how AI is advancing the medical field. From new technology to published research, we have put insightful articles and posts into this newsletter. Get ready to dive into the future of healthcare together!</p>\n            \n            <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/0838e6cd-dca4-042d-9e7c-e6015c8b6aec.png\" alt=\"AI in Healthcare Illustration\">\n            <h3>{{step_9[0]}}</h3>\n            <p>{{step_24[0]}} <a href=\"{{step_23[0]}}\">Read more here</a></p>\n            <img src=\"{{step_22[0]}}\" alt=\"Newsletter Image\">\n            <h3>{{step_9[1]}}</h3>\n            <p>{{step_24[1]}} <a href=\"{{step_23[1]}}\">Learn more here</a>.</p>\n            <img src=\"{{step_22[1]}}\" alt=\"Newsletter Image\">\n            <h2>AI Adoption in Healthcare</h2>\n            <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/e06bf113-6865-9305-6a9c-1bdfbac23df8.png\" alt=\"Newsletter Image\">\n            <h3>{{step_9[2]}}</h3>\n            <p>{{step_24[2]}} <a href=\"{{step_23[2]}}\">Learn more here</a></p>\n            <img src=\"{{step_22[2]}}\" alt=\"Newsletter Image\">\n            <h3>{{step_9[3]}}</h3>\n            <p>{{step_24[3]}} <a href=\"{{step_23[3]}}\">Learn more here</a>.</p>\n            <img src=\"{{step_22[3]}}\" alt=\"Newsletter Image\"><br>\n            <div class=\"connect-section\">\n                <h2>CONNECT WITH US</h2>\n                <div class=\"sub-heading\">AI in African Healthcare Community</div>\n                    <p>Why join our community?</p>\n                    <ul>\n                        <li>Be a part of engaging discussions about the latest developments in AI and healthcare in Africa.</li>\n                        <li>Gain early access to our events and opportunities (i.e. Beta testing programme, Hackathons, funding opportunities, webinars and many more!)</li>\n                        <li>Share your knowledge, insights, and experiences.</li>\n                        <li>Collaborate on projects and initiatives aimed at improving healthcare through AI.</li>\n                        <li>Connect with potential mentors, partners, and colleagues in the field.</li>\n                    </ul>\n                <p><strong>Together, we can drive innovation, address healthcare challenges, and create a healthier future for our continent through the power of AI. Don't miss out on this fantastic opportunity to be part of a vibrant community focused on African healthcare. Click the <a href=\"https://chat.whatsapp.com/IgtYGJFwEGR9KKrznQaVf9\">link</a> to join us now!</strong></p>\n            </div>\n        </div>\n  \n        <footer class=\"footer\">\n            <a href=\"https://chat.whatsapp.com/IgtYGJFwEGR9KKrznQaVf9\" class=\"join-button\">JOIN US NOW</a>\n            \n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) {{step_12['year']}} eHealth4everyone. All rights reserved.</i>\n            \n            <div class=\"preferences\">\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us21.list-manage.com/profile?u=42d7efe6c6ec0185a4fd16050&id=d5687ae74e&e=[UNIQID]&c=1a47f1b0f4\">update your preferences</a> or <a href=\"https://ehealth4everyone.us21.list-manage.com/unsubscribe?u=42d7efe6c6ec0185a4fd16050&id=d5687ae74e&t=b&e=[UNIQID]&c=1a47f1b0f4\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                            "from": "automationagent@e4email.net",
+                            "subject": "AI Monthly Newsletter {{step_12['previousMonth']}} {{step_12['year']}}.",
+                            "body_type": "html",
+                            "senderName": "ehealth4everyone",
+                            "customHeaders": {}
+                          },
+                          "pieceName": "@activepieces/piece-smtp",
+                          "actionName": "send-email",
+                          "pieceVersion": "0.2.4",
+                          "propertySettings": {
+                            "cc": {
+                              "type": "MANUAL"
+                            },
+                            "to": {
+                              "type": "MANUAL"
+                            },
+                            "bcc": {
+                              "type": "MANUAL"
+                            },
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "body": {
+                              "type": "MANUAL"
+                            },
+                            "from": {
+                              "type": "MANUAL"
+                            },
+                            "subject": {
+                              "type": "MANUAL"
+                            },
+                            "body_type": {
+                              "type": "MANUAL"
+                            },
+                            "senderName": {
+                              "type": "MANUAL"
+                            },
+                            "customHeaders": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {},
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_11",
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "url": "https://us21.api.mailchimp.com/3.0/lists/d5687ae74e/members?status=subscribed&count=1000\n",
+                              "body": {},
+                              "method": "GET",
+                              "headers": {
+                                "Authorization": "Basic REPLACE_WITH_API_KEY"
+                              },
+                              "failsafe": false,
+                              "body_type": "none",
+                              "use_proxy": false,
+                              "queryParams": {},
+                              "proxy_settings": {}
+                            },
+                            "pieceName": "@activepieces/piece-http",
+                            "pieceType": "OFFICIAL",
+                            "actionName": "send_request",
+                            "packageType": "REGISTRY",
+                            "pieceVersion": "0.6.2",
+                            "propertySettings": {
+                              "url": {
+                                "type": "MANUAL"
+                              },
+                              "body": {
+                                "type": "MANUAL"
+                              },
+                              "method": {
+                                "type": "MANUAL"
+                              },
+                              "headers": {
+                                "type": "MANUAL"
+                              },
+                              "failsafe": {
+                                "type": "MANUAL"
+                              },
+                              "body_type": {
+                                "type": "MANUAL"
+                              },
+                              "use_proxy": {
+                                "type": "MANUAL"
+                              },
+                              "queryParams": {
+                                "type": "MANUAL"
+                              },
+                              "proxy_settings": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2024-11-29T12:56:04.361Z",
+                              "sampleDataFileId": "fRsbU6alJ1JbtyQho4yxG"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_14",
+                            "type": "LOOP_ON_ITEMS",
+                            "valid": true,
+                            "settings": {
+                              "items": "{{step_11['body']['members']}}",
+                              "propertySettings": {},
+                              "sampleDataSettings": {
+                                "lastTestDate": "2024-11-29T12:45:16.090Z",
+                                "sampleDataFileId": "s7KyRrix20BQd9pH3bVrK"
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_13",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['slack']}}",
+                                  "text": "Hey! @channel\n\nThe e4e AI newsletter for {{step_12['previousMonth']}} {{step_12['year']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                                  "channel": "C05SZENQ07M"
+                                },
+                                "pieceName": "@activepieces/piece-slack",
+                                "actionName": "send_channel_message",
+                                "pieceVersion": "0.7.15",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "text": {
+                                    "type": "MANUAL"
+                                  },
+                                  "channel": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_10",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['slack']}}",
+                                    "text": "Hey! @channel\n\nThe e4e AI newsletter for {{step_12['previousMonth']}} {{step_12['year']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                                    "channel": "C07NNUA4VA5"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "actionName": "send_channel_message",
+                                  "pieceVersion": "0.7.15",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "channel": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {},
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "displayName": "Send Message To Automation Logs"
+                              },
+                              "displayName": "Send Message To Newsletter channel"
+                            },
+                            "displayName": "Send out Newsletter",
+                            "firstLoopAction": {
+                              "name": "step_15",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "cc": [],
+                                  "to": [
+                                    "{{step_14['item']['email_address']}}"
+                                  ],
+                                  "bcc": [],
+                                  "auth": "{{connections['smtp.office365.com']}}",
+                                  "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #ffffff;\n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .section {\n            width: 100%;\n            padding: 10px 0;\n            margin: 10px 0;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .join-button {\n            display: inline-block;\n            width: 280px;\n            max-width: 100%;\n            padding: 15px 20px;\n            background-color: #0A0F4C;\n            color: white;\n            border: none;\n            border-radius: 40px;\n            font-size: 16px;\n            font-weight: normal;\n            cursor: pointer;\n            text-decoration: none;\n            text-align: center;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 25px;  /* Changed from 10px to 25px to increase spacing */\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 40px;\n            height: 40px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n            .join-button {\n                width: 100%;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/fa709fdf-f7e6-5ea7-b2c0-15ff49c50f86.png\" alt=\"Newsletter Header Image\">\n        \n        <div class=\"section\">\n            <h1>Exploring the Transformative Power of Artificial Intelligence in Healthcare Systems</h1>\n            <p>Hello there, How are you doing?</p>\n            <p>Welcome to the latest edition of our newsletter! We bring you a variety of updates and insights on how AI is advancing the medical field. From new technology to published research, we have put insightful articles and posts into this newsletter. Get ready to dive into the future of healthcare together!</p>\n            \n            <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/0838e6cd-dca4-042d-9e7c-e6015c8b6aec.png\" alt=\"AI in Healthcare Illustration\">\n            <h3>{{step_9[0]}}</h3>\n            <p>{{step_24[0]}} <a href=\"{{step_23[0]}}\">Read more here</a></p>\n            <img src=\"{{step_22[0]}}\" alt=\"Newsletter Image\">\n            <h3>{{step_9[1]}}</h3>\n            <p>{{step_24[1]}} <a href=\"{{step_23[1]}}\">Learn more here</a>.</p>\n            <img src=\"{{step_22[1]}}\" alt=\"Newsletter Image\">\n            <h2>AI Adoption in Healthcare</h2>\n            <img src=\"https://mcusercontent.com/42d7efe6c6ec0185a4fd16050/images/e06bf113-6865-9305-6a9c-1bdfbac23df8.png\" alt=\"Newsletter Image\">\n            <h3>{{step_9[2]}}</h3>\n            <p>{{step_24[2]}} <a href=\"{{step_23[2]}}\">Learn more here</a></p>\n            <img src=\"{{step_22[2]}}\" alt=\"Newsletter Image\">\n            <h3>{{step_9[3]}}</h3>\n            <p>{{step_24[3]}} <a href=\"{{step_23[3]}}\">Learn more here</a>.</p>\n            <img src=\"{{step_22[3]}}\" alt=\"Newsletter Image\"><br>\n            <div class=\"connect-section\">\n                <h2>CONNECT WITH US</h2>\n                <div class=\"sub-heading\">AI in African Healthcare Community</div>\n                    <p>Why join our community?</p>\n                    <ul>\n                        <li>Be a part of engaging discussions about the latest developments in AI and healthcare in Africa.</li>\n                        <li>Gain early access to our events and opportunities (i.e. Beta testing programme, Hackathons, funding opportunities, webinars and many more!)</li>\n                        <li>Share your knowledge, insights, and experiences.</li>\n                        <li>Collaborate on projects and initiatives aimed at improving healthcare through AI.</li>\n                        <li>Connect with potential mentors, partners, and colleagues in the field.</li>\n                    </ul>\n                <p><strong>Together, we can drive innovation, address healthcare challenges, and create a healthier future for our continent through the power of AI. Don't miss out on this fantastic opportunity to be part of a vibrant community focused on African healthcare. Click the <a href=\"https://chat.whatsapp.com/IgtYGJFwEGR9KKrznQaVf9\">link</a> to join us now!</strong></p>\n            </div>\n        </div>\n  \n        <footer class=\"footer\">\n            <a href=\"https://chat.whatsapp.com/IgtYGJFwEGR9KKrznQaVf9\" class=\"join-button\">JOIN US NOW</a>\n            \n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) {{step_12['year']}} eHealth4everyone. All rights reserved.</i>\n            \n            <div class=\"preferences\">\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us21.list-manage.com/profile?u=42d7efe6c6ec0185a4fd16050&id=d5687ae74e&e=[UNIQID]&c=1a47f1b0f4\">update your preferences</a> or <a href=\"https://ehealth4everyone.us21.list-manage.com/unsubscribe?u=42d7efe6c6ec0185a4fd16050&id=d5687ae74e&t=b&e=[UNIQID]&c=1a47f1b0f4\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                                  "from": "automationagent@e4email.net",
+                                  "subject": "AI Monthly Newsletter {{step_12['previousMonth']}} {{step_12['year']}}.",
+                                  "body_type": "html",
+                                  "senderName": "ehealth4everyone",
+                                  "customHeaders": {}
+                                },
+                                "pieceName": "@activepieces/piece-smtp",
+                                "actionName": "send-email",
+                                "pieceVersion": "0.2.4",
+                                "propertySettings": {
+                                  "cc": {
+                                    "type": "MANUAL"
+                                  },
+                                  "to": {
+                                    "type": "MANUAL"
+                                  },
+                                  "bcc": {
+                                    "type": "MANUAL"
+                                  },
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "body": {
+                                    "type": "MANUAL"
+                                  },
+                                  "from": {
+                                    "type": "MANUAL"
+                                  },
+                                  "subject": {
+                                    "type": "MANUAL"
+                                  },
+                                  "body_type": {
+                                    "type": "MANUAL"
+                                  },
+                                  "senderName": {
+                                    "type": "MANUAL"
+                                  },
+                                  "customHeaders": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_3",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "unit": "seconds",
+                                    "delayFor": "2"
+                                  },
+                                  "pieceName": "@activepieces/piece-delay",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "delayFor",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "0.3.17",
+                                  "propertySettings": {
+                                    "unit": {
+                                      "type": "MANUAL"
+                                    },
+                                    "delayFor": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2024-11-11T11:54:28.137Z",
+                                    "sampleDataFileId": "Ba3pAr34mQb1l7UJLq16t"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "displayName": "Delay For"
+                              },
+                              "displayName": "Send Email to Audience"
+                            }
+                          },
+                          "displayName": "Retrieve Mailchimp Audience List"
+                        },
+                        "displayName": "Mail to cc"
+                      },
+                      "displayName": "Get body"
+                    },
+                    "displayName": "Get page url"
+                  },
+                  "displayName": "Get images"
+                },
+                "displayName": "Get title"
+              },
+              "displayName": "Extract articles",
+              "firstLoopAction": {
+                "name": "step_17",
+                "skip": false,
+                "type": "ROUTER",
+                "valid": true,
+                "children": [
+                  {
+                    "name": "step_8",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": "https://api.diffbot.com/v3/article?url={{step_4['item']['link']}}&token=REPLACE_WITH_API_KEY",
+                        "body": {},
+                        "method": "GET",
+                        "headers": {},
+                        "failsafe": false,
+                        "body_type": "none",
+                        "use_proxy": false,
+                        "queryParams": {},
+                        "proxy_settings": {}
+                      },
+                      "pieceName": "@activepieces/piece-http",
+                      "actionName": "send_request",
+                      "pieceVersion": "0.6.2",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL"
+                        },
+                        "body": {
+                          "type": "MANUAL"
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "use_proxy": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "proxy_settings": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-08-01T10:27:03.909Z",
+                        "sampleDataFileId": "aqVMSeRnQik0ovRIApT34"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_1",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['straico']}}",
+                          "model": "openai/o3-mini",
+                          "prompt": "Summarize the main ideas of the article into a single, concise, and well-structured 2-3 line paragraph within the range of 20-40 words. Eliminate filler, redundant, or non-essential language like 'Here is the article', and ensure the summary is presented in plain text without any numbering or formatting, focusing solely on clarity and coherence: {{step_8['body']['objects'][0]['text']}}"
+                        },
+                        "pieceName": "@activepieces/piece-straico",
+                        "actionName": "prompt_completion",
+                        "pieceVersion": "0.0.2",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "model": {
+                            "type": "MANUAL"
+                          },
+                          "prompt": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-08-01T10:28:04.998Z",
+                          "sampleDataFileId": "fNbae2jSRb82qHvbNfpAF",
+                          "sampleDataInputFileId": "St2rd04hgkN71t25Paf3k"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_16",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "flavor": "github",
+                            "tables": true,
+                            "markdown": "{{step_1}}",
+                            "noHeaderId": false,
+                            "headerLevelStart": 1,
+                            "simpleLineBreaks": false,
+                            "openLinksInNewWindow": false
+                          },
+                          "pieceName": "@activepieces/piece-text-helper",
+                          "actionName": "markdown_to_html",
+                          "pieceVersion": "0.2.7",
+                          "propertySettings": {
+                            "flavor": {
+                              "type": "MANUAL"
+                            },
+                            "tables": {
+                              "type": "MANUAL"
+                            },
+                            "markdown": {
+                              "type": "MANUAL"
+                            },
+                            "noHeaderId": {
+                              "type": "MANUAL"
+                            },
+                            "headerLevelStart": {
+                              "type": "MANUAL"
+                            },
+                            "simpleLineBreaks": {
+                              "type": "MANUAL"
+                            },
+                            "openLinksInNewWindow": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-08-01T10:28:19.198Z",
+                            "sampleDataFileId": "hqDNjr0ux4LP9oWRi0QGV",
+                            "sampleDataInputFileId": "i7QnHL54KZoXJqAfmX062"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_18",
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "key": "title.",
+                              "value": "{{step_8['body']['objects'][0]['title']}}",
+                              "store_scope": "RUN",
+                              "ignore_if_exists": false
+                            },
+                            "pieceName": "@activepieces/piece-store",
+                            "actionName": "add_to_list",
+                            "pieceVersion": "0.5.4",
+                            "propertySettings": {
+                              "key": {
+                                "type": "MANUAL"
+                              },
+                              "value": {
+                                "type": "MANUAL"
+                              },
+                              "store_scope": {
+                                "type": "MANUAL"
+                              },
+                              "ignore_if_exists": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {},
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_20",
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "key": "image_url.",
+                                "value": "{{step_8['body']['objects'][0]['images'][0]['url']}}",
+                                "store_scope": "RUN",
+                                "ignore_if_exists": false
+                              },
+                              "pieceName": "@activepieces/piece-store",
+                              "actionName": "add_to_list",
+                              "pieceVersion": "0.5.4",
+                              "propertySettings": {
+                                "key": {
+                                  "type": "MANUAL"
+                                },
+                                "value": {
+                                  "type": "MANUAL"
+                                },
+                                "store_scope": {
+                                  "type": "MANUAL"
+                                },
+                                "ignore_if_exists": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-08-01T10:35:18.106Z"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_21",
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "key": "page_url.",
+                                  "value": "{{step_8['body']['request']['pageUrl']}}",
+                                  "store_scope": "RUN",
+                                  "ignore_if_exists": false
+                                },
+                                "pieceName": "@activepieces/piece-store",
+                                "actionName": "add_to_list",
+                                "pieceVersion": "0.5.4",
+                                "propertySettings": {
+                                  "key": {
+                                    "type": "MANUAL"
+                                  },
+                                  "value": {
+                                    "type": "MANUAL"
+                                  },
+                                  "store_scope": {
+                                    "type": "MANUAL"
+                                  },
+                                  "ignore_if_exists": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {},
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_7",
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "key": "text_body.",
+                                    "value": "{{step_16}}",
+                                    "store_scope": "RUN",
+                                    "ignore_if_exists": false
+                                  },
+                                  "pieceName": "@activepieces/piece-store",
+                                  "actionName": "add_to_list",
+                                  "pieceVersion": "0.5.4",
+                                  "propertySettings": {
+                                    "key": {
+                                      "type": "MANUAL"
+                                    },
+                                    "value": {
+                                      "type": "MANUAL"
+                                    },
+                                    "store_scope": {
+                                      "type": "MANUAL"
+                                    },
+                                    "ignore_if_exists": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2024-11-11T13:34:16.732Z",
+                                    "sampleDataFileId": "ylL4fEJxPhItwZ4btb2uK"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "displayName": "Add To List (body)"
+                              },
+                              "displayName": "Add to List (page url)"
+                            },
+                            "displayName": "Add to List (image)"
+                          },
+                          "displayName": "Add to List (title)"
+                        },
+                        "displayName": "Markdown to HTML"
+                      },
+                      "displayName": "Summarize article content"
+                    },
+                    "displayName": "Get article content"
+                  },
+                  null
+                ],
+                "settings": {
+                  "branches": [
+                    {
+                      "branchName": "Branch 1",
+                      "branchType": "CONDITION",
+                      "conditions": [
+                        [
+                          {
+                            "operator": "NUMBER_IS_LESS_THAN",
+                            "firstValue": "{{step_4['index']}}",
+                            "secondValue": "5"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "branchName": "Otherwise",
+                      "branchType": "FALLBACK"
+                    }
+                  ],
+                  "executionType": "EXECUTE_FIRST_MATCH",
+                  "propertySettings": {},
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-08-01T10:26:11.962Z",
+                    "sampleDataFileId": "DLrOwg9KpEyiE5rwHcRZp"
+                  }
+                },
+                "displayName": "Router"
+              }
+            },
+            "displayName": "Get Publications"
+          },
+          "displayName": "Get date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

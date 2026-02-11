@@ -1,0 +1,717 @@
+﻿{
+  "name": "MSDAT Monthly Link Validation",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-http",
+    "@activepieces/piece-store",
+    "@activepieces/piece-open-router",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "IC1YH92MkveYBMw667sIY"
+  },
+  "flows": [
+    {
+      "displayName": "MSDAT Monthly Link Validation",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Month",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "day_of_the_month": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.13",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 14,
+            "day_of_the_month": 29
+          },
+          "sampleData": {},
+          "triggerName": "every_month"
+        },
+        "nextAction": {
+          "name": "step_2",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY HH:mm:ss"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "sampleData": {},
+            "pieceVersion": "0.1.19",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_1",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                "memKey": "{{step_2['result']}}",
+                "sheetId": 207872346,
+                "startRow": 1,
+                "groupSize": "10000",
+                "headerRow": 1,
+                "spreadsheetId": "1zP0wk8HfmrqocOEhJABSS8GCmHmk2vnHJaxeh3tJOi4",
+                "useHeaderNames": false,
+                "includeTeamDrives": true
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "actionName": "get_next_rows",
+              "sampleData": {},
+              "pieceVersion": "0.12.20",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "memKey": {
+                  "type": "MANUAL"
+                },
+                "sheetId": {
+                  "type": "MANUAL"
+                },
+                "startRow": {
+                  "type": "MANUAL"
+                },
+                "groupSize": {
+                  "type": "MANUAL"
+                },
+                "spreadsheetId": {
+                  "type": "MANUAL"
+                },
+                "includeTeamDrives": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_17",
+              "skip": false,
+              "type": "CODE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "linksJson": "{{step_1}}"
+                },
+                "sampleData": {},
+                "sourceCode": {
+                  "code": "export const code = async (inputs) => {\n  // Normalize input as array\n  const data = Array.isArray(inputs.linksJson)\n    ? inputs.linksJson\n    : Object.values(inputs.linksJson || {});\n\n  // Extract URLs safely\n  const urls = data\n    .map((item) => item?.values?.A)\n    .filter((url) => url && url !== \"Route URL\");\n\n  // Split into batches of 5\n  const batchSize = 5;\n  const batches = [];\n  for (let i = 0; i < urls.length; i += batchSize) {\n    const batch = urls.slice(i, i + batchSize);\n\n    // ✅ Format correctly for Apify: each URL as its own object\n    const formatted = batch.map((u) => ({ url: u }));\n\n    batches.push({ startUrls: formatted });\n  }\n\n  // Return formatted batches\n  return { batches };\n};",
+                  "packageJson": "{}"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_3",
+                "skip": false,
+                "type": "LOOP_ON_ITEMS",
+                "valid": true,
+                "settings": {
+                  "items": "{{step_17['batches']}}",
+                  "sampleData": {}
+                },
+                "nextAction": {
+                  "name": "step_7",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "checkSummary",
+                      "store_scope": "RUN",
+                      "defaultValue": "[]"
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "actionName": "get",
+                    "sampleData": {},
+                    "pieceVersion": "0.6.10",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "defaultValue": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_13",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "inputDate": "{{step_2['result']}}",
+                        "inputFormat": "MMMM DD YYYY HH:mm:ss",
+                        "unitExtract": [
+                          "monthName",
+                          "year"
+                        ]
+                      },
+                      "pieceName": "@activepieces/piece-date-helper",
+                      "actionName": "extract_date_parts",
+                      "pieceVersion": "0.1.19",
+                      "propertySettings": {
+                        "inputDate": {
+                          "type": "MANUAL"
+                        },
+                        "inputFormat": {
+                          "type": "MANUAL"
+                        },
+                        "unitExtract": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-08-25T10:59:39.616Z",
+                        "sampleDataFileId": "l83ivwjdIC8flMdg48aO8"
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_8",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['Vz40UvZXDfnI8JSP4IOyB']}}",
+                          "model": "openai/o4-mini",
+                          "prompt": "You are tasked with generating a comprehensive report on a list of links from the MSDAT Platform, using the results from the Broken Link Checker: {{step_7}}. The summaries represent batches of link checks, with each payload containing 5 URLs. Below is the complete list of links:\n{{step_1}}\n\nThe report should detail the status of all the links in the list, highlight any that were unsuccessful, and provide a summary of the overall link validation test. \n\nYour response should be in **Markdown** syntax and begin directly from the report title as: MSDAT Platform Link Validation Report for {{step_13['monthName']}} {{step_13['year']}}. Do not include filler language or introductory comments.",
+                          "temperature": "1"
+                        },
+                        "pieceName": "@activepieces/piece-open-router",
+                        "actionName": "ask-lmm",
+                        "sampleData": {},
+                        "pieceVersion": "0.0.16",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "model": {
+                            "type": "MANUAL"
+                          },
+                          "prompt": {
+                            "type": "MANUAL"
+                          },
+                          "temperature": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": true
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_10",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "flavor": "original",
+                            "tables": true,
+                            "markdown": "{{step_8}}",
+                            "noHeaderId": false,
+                            "headerLevelStart": 1,
+                            "simpleLineBreaks": false,
+                            "openLinksInNewWindow": false
+                          },
+                          "pieceName": "@activepieces/piece-text-helper",
+                          "actionName": "markdown_to_html",
+                          "pieceVersion": "0.4.9",
+                          "propertySettings": {
+                            "flavor": {
+                              "type": "MANUAL"
+                            },
+                            "tables": {
+                              "type": "MANUAL"
+                            },
+                            "markdown": {
+                              "type": "MANUAL"
+                            },
+                            "noHeaderId": {
+                              "type": "MANUAL"
+                            },
+                            "headerLevelStart": {
+                              "type": "MANUAL"
+                            },
+                            "simpleLineBreaks": {
+                              "type": "MANUAL"
+                            },
+                            "openLinksInNewWindow": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-08-25T14:55:52.534Z",
+                            "sampleDataFileId": "YeHw5CyR0LIMwE3Vh9Z5a"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_11",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n</head>\n<body>\n{{step_10}}\n</body>\n</html>",
+                              "encoding": "ascii",
+                              "fileName": "MSDAT Platform Link Validation Report for {{step_13['monthName']}} {{step_13['year']}}.docx"
+                            },
+                            "pieceName": "@activepieces/piece-file-helper",
+                            "actionName": "createFile",
+                            "pieceVersion": "0.1.14",
+                            "propertySettings": {
+                              "content": {
+                                "type": "MANUAL"
+                              },
+                              "encoding": {
+                                "type": "MANUAL"
+                              },
+                              "fileName": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-08-25T14:57:10.702Z",
+                              "sampleDataFileId": "hWqTM8plYvEDcQf6CDPN3"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_12",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['AI_google-drive']}}",
+                                "file": "{{step_11['url']}}",
+                                "fileName": "{{step_11['fileName']}}",
+                                "parentFolder": "1kl4ADdmBX8F5jDZUj8n9XnHi2Rf1aBXu",
+                                "include_team_drives": true
+                              },
+                              "pieceName": "@activepieces/piece-google-drive",
+                              "actionName": "upload_gdrive_file",
+                              "pieceVersion": "0.5.52",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "file": {
+                                  "type": "MANUAL"
+                                },
+                                "fileName": {
+                                  "type": "MANUAL"
+                                },
+                                "parentFolder": {
+                                  "type": "MANUAL"
+                                },
+                                "include_team_drives": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "sampleDataSettings": {
+                                "lastTestDate": "2025-08-25T14:57:35.867Z",
+                                "sampleDataFileId": "13Ut3FGP6SQHXnpdSi1qE"
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_14",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "markdown": "* [MSDAT Platform Link Validation Report for {{step_13['monthName']}} {{step_13['year']}}](https://docs.google.com/document/d/{{step_12['id']}}/edit?usp=sharing)"
+                                },
+                                "pieceName": "@activepieces/piece-slack",
+                                "actionName": "markdownToSlackFormat",
+                                "pieceVersion": "0.10.17",
+                                "propertySettings": {
+                                  "markdown": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2025-08-27T08:43:55.384Z",
+                                  "sampleDataFileId": "s5QKoKVkU7fP2ABb5JX3l"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_9",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "auth": "{{connections['slack']}}",
+                                    "text": "Hey! <!channel>\n\nThe MSDAT Monthly link validation Test for {{step_13['monthName']}} {{step_13['year']}} has been completed.\n\n Kindly find the document below;\n{{step_14}}",
+                                    "channel": "C013C3Y929W"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "actionName": "send_channel_message",
+                                  "pieceVersion": "0.7.15",
+                                  "propertySettings": {
+                                    "auth": {
+                                      "type": "MANUAL"
+                                    },
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "channel": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_15",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['slack']}}",
+                                      "text": "Hey! <!channel>\n\nThe MSDAT Monthly link validation Test for {{step_13['monthName']}} {{step_13['year']}} has been completed.\n\n Kindly find the document below;\n{{step_14}}",
+                                      "channel": "C07NNUA4VA5"
+                                    },
+                                    "pieceName": "@activepieces/piece-slack",
+                                    "actionName": "send_channel_message",
+                                    "pieceVersion": "0.7.15",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "text": {
+                                        "type": "MANUAL"
+                                      },
+                                      "channel": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "displayName": "Send Message To A Channel"
+                                },
+                                "displayName": "Send Message To A Channel"
+                              },
+                              "displayName": "Markdown to Slack format"
+                            },
+                            "displayName": "Upload file"
+                          },
+                          "displayName": "Create file"
+                        },
+                        "displayName": "Markdown to HTML"
+                      },
+                      "displayName": "Ask LLM"
+                    },
+                    "displayName": "Extract Date Units"
+                  },
+                  "displayName": "Get Link Summary"
+                },
+                "displayName": "Loop on Items",
+                "firstLoopAction": {
+                  "name": "step_4",
+                  "skip": false,
+                  "type": "ROUTER",
+                  "valid": true,
+                  "children": [
+                    {
+                      "name": "step_16",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "url": "https://api.apify.com/v2/acts/practicaltools~dead-link-crawler/run-sync-get-dataset-items?token=REPLACE_WITH_API_KEY",
+                          "body": {
+                            "data": "{\n  \"maxDepth\": 2,\n  \"startUrls\": {{step_3['item']['startUrls']}},\n  \"maxConcurrency\": 5\n}"
+                          },
+                          "method": "POST",
+                          "headers": {
+                            "Content-Type": "application/json"
+                          },
+                          "authType": "NONE",
+                          "body_type": "json",
+                          "use_proxy": false,
+                          "authFields": {},
+                          "failureMode": null,
+                          "queryParams": {},
+                          "proxy_settings": {},
+                          "response_is_binary": false
+                        },
+                        "pieceName": "@activepieces/piece-http",
+                        "actionName": "send_request",
+                        "sampleData": {},
+                        "pieceVersion": "0.8.7",
+                        "propertySettings": {
+                          "url": {
+                            "type": "MANUAL"
+                          },
+                          "body": {
+                            "type": "MANUAL",
+                            "schema": {
+                              "data": {
+                                "type": "JSON",
+                                "required": true,
+                                "displayName": "JSON Body"
+                              }
+                            }
+                          },
+                          "method": {
+                            "type": "MANUAL"
+                          },
+                          "headers": {
+                            "type": "MANUAL"
+                          },
+                          "authType": {
+                            "type": "MANUAL"
+                          },
+                          "body_type": {
+                            "type": "MANUAL"
+                          },
+                          "use_proxy": {
+                            "type": "MANUAL"
+                          },
+                          "authFields": {
+                            "type": "MANUAL",
+                            "schema": {}
+                          },
+                          "queryParams": {
+                            "type": "MANUAL"
+                          },
+                          "proxy_settings": {
+                            "type": "MANUAL",
+                            "schema": {}
+                          },
+                          "response_is_binary": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_6",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "checkSummary",
+                            "value": [
+                              "{{step_16['body'][0]['summary']}}"
+                            ],
+                            "store_scope": "RUN",
+                            "ignore_if_exists": false
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "add_to_list",
+                          "pieceVersion": "0.6.10",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "value": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "ignore_if_exists": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Add To List"
+                      },
+                      "displayName": "Broken Link Checker API"
+                    },
+                    null
+                  ],
+                  "settings": {
+                    "branches": [
+                      {
+                        "branchName": "Branch 1",
+                        "branchType": "CONDITION",
+                        "conditions": [
+                          [
+                            {
+                              "operator": "NUMBER_IS_GREATER_THAN",
+                              "firstValue": "{{step_3['index']}}",
+                              "secondValue": "1"
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "branchName": "Otherwise",
+                        "branchType": "FALLBACK"
+                      }
+                    ],
+                    "executionType": "EXECUTE_FIRST_MATCH",
+                    "propertySettings": {},
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-08-20T09:14:16.858Z",
+                      "sampleDataFileId": "GDDD1D48hKm9tMQmHHCfU"
+                    }
+                  },
+                  "displayName": "Router"
+                }
+              },
+              "displayName": "Batch links"
+            },
+            "displayName": "Get next row(s)"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

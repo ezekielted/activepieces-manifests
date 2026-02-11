@@ -1,0 +1,1458 @@
+﻿{
+  "name": "Daily KPI Trend Chart → Slack",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-hubspot",
+    "@activepieces/piece-store",
+    "@activepieces/piece-ai",
+    "@activepieces/piece-json",
+    "@activepieces/piece-chartly",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-stripe",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "3mk7FNNAvITnbDdRIRCek"
+  },
+  "flows": [
+    {
+      "displayName": "Daily KPI Trend Chart → Slack",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Day",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "run_on_weekends": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.16",
+          "input": {
+            "timezone": "UTC",
+            "hour_of_the_day": 14,
+            "run_on_weekends": false
+          },
+          "sampleData": {},
+          "triggerName": "every_day"
+        },
+        "nextAction": {
+          "name": "step_2",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "UTC",
+              "timeFormat": "YYYY-MM-DD"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "sampleData": {},
+            "pieceVersion": "0.1.26",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_5",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "timeZone": "UTC",
+                "inputDate": "{{step_2['result']}}",
+                "expression": "- 14 days",
+                "outputFormat": "X",
+                "useCurrentTime": false,
+                "inputDateFormat": "YYYY-MM-DD"
+              },
+              "pieceName": "@activepieces/piece-date-helper",
+              "actionName": "add_subtract_date",
+              "sampleData": {},
+              "pieceVersion": "0.1.26",
+              "propertySettings": {
+                "setTime": {
+                  "type": "MANUAL"
+                },
+                "timeZone": {
+                  "type": "MANUAL"
+                },
+                "inputDate": {
+                  "type": "MANUAL"
+                },
+                "expression": {
+                  "type": "MANUAL"
+                },
+                "outputFormat": {
+                  "type": "MANUAL"
+                },
+                "useCurrentTime": {
+                  "type": "MANUAL"
+                },
+                "inputDateFormat": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_7",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "inputDate": "{{step_5['result']}}",
+                  "inputFormat": "X",
+                  "outputFormat": "YYYY-MM-DD",
+                  "inputTimeZone": "UTC",
+                  "outputTimeZone": "UTC"
+                },
+                "pieceName": "@activepieces/piece-date-helper",
+                "actionName": "format_date",
+                "sampleData": {},
+                "pieceVersion": "0.1.26",
+                "propertySettings": {
+                  "inputDate": {
+                    "type": "MANUAL"
+                  },
+                  "inputFormat": {
+                    "type": "MANUAL"
+                  },
+                  "outputFormat": {
+                    "type": "MANUAL"
+                  },
+                  "inputTimeZone": {
+                    "type": "MANUAL"
+                  },
+                  "outputTimeZone": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_3",
+                "skip": false,
+                "type": "PIECE",
+                "valid": true,
+                "settings": {
+                  "input": {
+                    "timeZone": "UTC",
+                    "inputDate": "{{step_2['result']}}",
+                    "expression": "+ 1 day",
+                    "outputFormat": "YYYY-MM-DD",
+                    "useCurrentTime": false,
+                    "inputDateFormat": "YYYY-MM-DD"
+                  },
+                  "pieceName": "@activepieces/piece-date-helper",
+                  "actionName": "add_subtract_date",
+                  "sampleData": {},
+                  "pieceVersion": "0.1.26",
+                  "propertySettings": {
+                    "setTime": {
+                      "type": "MANUAL"
+                    },
+                    "timeZone": {
+                      "type": "MANUAL"
+                    },
+                    "inputDate": {
+                      "type": "MANUAL"
+                    },
+                    "expression": {
+                      "type": "MANUAL"
+                    },
+                    "outputFormat": {
+                      "type": "MANUAL"
+                    },
+                    "useCurrentTime": {
+                      "type": "MANUAL"
+                    },
+                    "inputDateFormat": {
+                      "type": "MANUAL"
+                    }
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_6",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "inputDate": "{{step_3['result']}}",
+                      "inputFormat": "YYYY-MM-DD",
+                      "outputFormat": "X",
+                      "inputTimeZone": "UTC",
+                      "outputTimeZone": "UTC"
+                    },
+                    "pieceName": "@activepieces/piece-date-helper",
+                    "actionName": "format_date",
+                    "sampleData": {},
+                    "pieceVersion": "0.1.26",
+                    "propertySettings": {
+                      "inputDate": {
+                        "type": "MANUAL"
+                      },
+                      "inputFormat": {
+                        "type": "MANUAL"
+                      },
+                      "outputFormat": {
+                        "type": "MANUAL"
+                      },
+                      "inputTimeZone": {
+                        "type": "MANUAL"
+                      },
+                      "outputTimeZone": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_1",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "url": {
+                          "url": "https://api.hubapi.com/crm/v3/objects/contacts/search"
+                        },
+                        "auth": "{{connections['qOMkNQN6WLxF7wVNmTkHI']}}",
+                        "body": {
+                          "data": {
+                            "limit": 100,
+                            "properties": [
+                              "email",
+                              "firstname",
+                              "lastname",
+                              "createdate"
+                            ],
+                            "filterGroups": [
+                              {
+                                "filters": [
+                                  {
+                                    "value": "{{step_7['result']}}T00:00:00Z",
+                                    "operator": "GTE",
+                                    "propertyName": "createdate"
+                                  },
+                                  {
+                                    "value": "{{step_3['result']}}T00:00:00Z",
+                                    "operator": "LT",
+                                    "propertyName": "createdate"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "method": "POST",
+                        "headers": {
+                          "Content-Type": "application/json"
+                        },
+                        "failsafe": false,
+                        "body_type": "json",
+                        "queryParams": {},
+                        "followRedirects": true,
+                        "response_is_binary": false
+                      },
+                      "pieceName": "@activepieces/piece-hubspot",
+                      "actionName": "custom_api_call",
+                      "sampleData": {},
+                      "pieceVersion": "0.8.3",
+                      "propertySettings": {
+                        "url": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "url": {
+                              "type": "SHORT_TEXT",
+                              "required": true,
+                              "description": "You can either use the full URL or the relative path to the base URL\ni.e https://api.hubapi.com/resource or /resource",
+                              "displayName": "URL",
+                              "defaultValue": "https://api.hubapi.com"
+                            }
+                          }
+                        },
+                        "body": {
+                          "type": "MANUAL",
+                          "schema": {
+                            "data": {
+                              "type": "JSON",
+                              "required": true,
+                              "displayName": "JSON Body"
+                            }
+                          }
+                        },
+                        "method": {
+                          "type": "MANUAL"
+                        },
+                        "headers": {
+                          "type": "MANUAL"
+                        },
+                        "timeout": {
+                          "type": "MANUAL"
+                        },
+                        "failsafe": {
+                          "type": "MANUAL"
+                        },
+                        "body_type": {
+                          "type": "MANUAL"
+                        },
+                        "queryParams": {
+                          "type": "MANUAL"
+                        },
+                        "followRedirects": {
+                          "type": "MANUAL"
+                        },
+                        "response_is_binary": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_8",
+                      "skip": false,
+                      "type": "LOOP_ON_ITEMS",
+                      "valid": true,
+                      "settings": {
+                        "items": "{{step_1['body']['results']}}",
+                        "sampleData": {}
+                      },
+                      "nextAction": {
+                        "name": "step_11",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "hubspot_dates_list",
+                            "store_scope": "COLLECTION",
+                            "defaultValue": "[]"
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "get",
+                          "sampleData": {},
+                          "pieceVersion": "0.6.13",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "defaultValue": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_23",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "model": "openai/gpt-5-mini",
+                              "prompt": "Given a JSON array of date strings in the format YYYY-MM-DD provided as {{step_11}}, calculate the number of occurrences for each unique date.\n\nSort the dates in ascending chronological order (earliest to latest) and return a new JSON object with the following structure:\n- \"dates_list\": an array of unique dates sorted in ascending order\n- \"uniques\": an array of integers representing the count of each corresponding date in \"dates_list\"\n\nExample input:\n{{dates_list}} = [\"2026-01-04\", \"2026-01-02\", \"2026-01-04\"]\n\nExpected output:\n{\n  \"dates_list\": [\"2026-01-02\", \"2026-01-04\"],\n  \"uniques\": [1, 2]\n}",
+                              "provider": "activepieces",
+                              "webSearch": false,
+                              "creativity": 100,
+                              "maxOutputTokens": 2000,
+                              "webSearchOptions": {}
+                            },
+                            "pieceName": "@activepieces/piece-ai",
+                            "actionName": "askAi",
+                            "sampleData": {},
+                            "pieceVersion": "0.1.5",
+                            "propertySettings": {
+                              "model": {
+                                "type": "MANUAL"
+                              },
+                              "prompt": {
+                                "type": "MANUAL"
+                              },
+                              "provider": {
+                                "type": "MANUAL"
+                              },
+                              "webSearch": {
+                                "type": "MANUAL"
+                              },
+                              "creativity": {
+                                "type": "MANUAL"
+                              },
+                              "conversationKey": {
+                                "type": "MANUAL"
+                              },
+                              "maxOutputTokens": {
+                                "type": "MANUAL"
+                              },
+                              "webSearchOptions": {
+                                "type": "MANUAL",
+                                "schema": {}
+                              }
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_22",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "text": "{{step_23}}"
+                              },
+                              "pieceName": "@activepieces/piece-json",
+                              "actionName": "convert_text_to_json",
+                              "sampleData": {},
+                              "pieceVersion": "0.1.3",
+                              "propertySettings": {
+                                "text": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_20",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['bNmoWpL2rldcVVLa4pSm6']}}",
+                                  "width": 600,
+                                  "format": "png",
+                                  "height": 400,
+                                  "labels": [
+                                    "overridden"
+                                  ],
+                                  "chart_type": "line",
+                                  "data_values": [
+                                    "overridden"
+                                  ],
+                                  "dataset_label": "Data",
+                                  "advanced_config": "{\n  \"type\": \"line\",\n  \"data\": {\n    \"labels\": {{step_22['dates_list']}},\n    \"datasets\": [\n      {\n        \"label\": \"Hubspot New Contacts\",\n        \"data\": {{step_22['uniques']}}\n      }\n    ]\n  },\n  \"options\": {\n    \"plugins\": {\n      \"title\": {\n        \"display\": true,\n        \"text\": \"Daily Signups (Last 14 days)\"\n      }\n    },\n    \"scales\": {\n      \"x\": {},\n      \"y\": {\n        \"beginAtZero\": true,\n        \"ticks\": {\n          \"stepSize\": 1,\n          \"precision\": 0\n        }\n      }\n    }\n  }\n}",
+                                  "background_color": "rgba(54, 162, 235, 0.8)",
+                                  "background_color_image": "white"
+                                },
+                                "pieceName": "@activepieces/piece-chartly",
+                                "actionName": "create_chart",
+                                "sampleData": {},
+                                "pieceVersion": "0.0.4",
+                                "propertySettings": {
+                                  "width": {
+                                    "type": "MANUAL"
+                                  },
+                                  "format": {
+                                    "type": "MANUAL"
+                                  },
+                                  "height": {
+                                    "type": "MANUAL"
+                                  },
+                                  "labels": {
+                                    "type": "MANUAL"
+                                  },
+                                  "chart_type": {
+                                    "type": "MANUAL"
+                                  },
+                                  "chart_title": {
+                                    "type": "MANUAL"
+                                  },
+                                  "data_values": {
+                                    "type": "MANUAL"
+                                  },
+                                  "dataset_label": {
+                                    "type": "MANUAL"
+                                  },
+                                  "advanced_config": {
+                                    "type": "MANUAL"
+                                  },
+                                  "background_color": {
+                                    "type": "MANUAL"
+                                  },
+                                  "background_color_image": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_26",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "text": "{{step_20['chart_url']}}",
+                                    "searchValue": "^data:image\\/[a-zA-Z+]+;base64,",
+                                    "replaceOnlyFirst": false
+                                  },
+                                  "pieceName": "@activepieces/piece-text-helper",
+                                  "actionName": "replace",
+                                  "sampleData": {},
+                                  "pieceVersion": "0.4.12",
+                                  "propertySettings": {
+                                    "text": {
+                                      "type": "MANUAL"
+                                    },
+                                    "searchValue": {
+                                      "type": "MANUAL"
+                                    },
+                                    "replaceValue": {
+                                      "type": "MANUAL"
+                                    },
+                                    "replaceOnlyFirst": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_25",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "content": "{{step_26}}",
+                                      "encoding": "base64",
+                                      "fileName": "hubspot_signups.png"
+                                    },
+                                    "pieceName": "@activepieces/piece-file-helper",
+                                    "actionName": "createFile",
+                                    "sampleData": {},
+                                    "pieceVersion": "0.1.21",
+                                    "propertySettings": {
+                                      "content": {
+                                        "type": "MANUAL"
+                                      },
+                                      "encoding": {
+                                        "type": "MANUAL"
+                                      },
+                                      "fileName": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_4",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "url": {
+                                          "url": "https://api.stripe.com/v1/customers"
+                                        },
+                                        "auth": "{{connections['r6bBtN1PIHfLiux4WATvB']}}",
+                                        "body": {},
+                                        "method": "GET",
+                                        "headers": {},
+                                        "failsafe": false,
+                                        "body_type": "none",
+                                        "queryParams": {
+                                          "created[lt]": "{{step_6['result']}}",
+                                          "created[gte]": "{{step_5['result']}}"
+                                        },
+                                        "followRedirects": true,
+                                        "response_is_binary": false
+                                      },
+                                      "pieceName": "@activepieces/piece-stripe",
+                                      "actionName": "custom_api_call",
+                                      "sampleData": {},
+                                      "pieceVersion": "0.6.4",
+                                      "propertySettings": {
+                                        "url": {
+                                          "type": "MANUAL",
+                                          "schema": {
+                                            "url": {
+                                              "type": "SHORT_TEXT",
+                                              "required": true,
+                                              "description": "You can either use the full URL or the relative path to the base URL\ni.e https://api.stripe.com/v1/resource or /resource",
+                                              "displayName": "URL",
+                                              "defaultValue": "https://api.stripe.com/v1"
+                                            }
+                                          }
+                                        },
+                                        "body": {
+                                          "type": "MANUAL",
+                                          "schema": {}
+                                        },
+                                        "method": {
+                                          "type": "MANUAL"
+                                        },
+                                        "headers": {
+                                          "type": "MANUAL"
+                                        },
+                                        "timeout": {
+                                          "type": "MANUAL"
+                                        },
+                                        "failsafe": {
+                                          "type": "MANUAL"
+                                        },
+                                        "body_type": {
+                                          "type": "MANUAL"
+                                        },
+                                        "queryParams": {
+                                          "type": "MANUAL"
+                                        },
+                                        "followRedirects": {
+                                          "type": "MANUAL"
+                                        },
+                                        "response_is_binary": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_15",
+                                      "skip": false,
+                                      "type": "LOOP_ON_ITEMS",
+                                      "valid": true,
+                                      "settings": {
+                                        "items": "{{step_4['body']['data']}}",
+                                        "sampleData": {}
+                                      },
+                                      "nextAction": {
+                                        "name": "step_18",
+                                        "skip": false,
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "key": "stripe_dates_list",
+                                            "store_scope": "COLLECTION",
+                                            "defaultValue": "[]"
+                                          },
+                                          "pieceName": "@activepieces/piece-store",
+                                          "actionName": "get",
+                                          "sampleData": {},
+                                          "pieceVersion": "0.6.13",
+                                          "propertySettings": {
+                                            "key": {
+                                              "type": "MANUAL"
+                                            },
+                                            "store_scope": {
+                                              "type": "MANUAL"
+                                            },
+                                            "defaultValue": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_13",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "model": "openai/gpt-5-mini",
+                                              "prompt": "Given a JSON array of date strings in the format YYYY-MM-DD provided as {{step_18}}, calculate the number of occurrences for each unique date.\n\nSort the dates in ascending chronological order (earliest to latest) and return a new JSON object with the following structure:\n- \"dates_list\": an array of unique dates sorted in ascending order\n- \"uniques\": an array of integers representing the count of each corresponding date in \"dates_list\"\n\nExample input:\n{{dates_list}} = [\"2026-01-04\", \"2026-01-02\", \"2026-01-04\"]\n\nExpected output:\n{\n  \"dates_list\": [\"2026-01-02\", \"2026-01-04\"],\n  \"uniques\": [1, 2]\n}",
+                                              "provider": "activepieces",
+                                              "webSearch": false,
+                                              "creativity": 100,
+                                              "maxOutputTokens": 2000,
+                                              "webSearchOptions": {}
+                                            },
+                                            "pieceName": "@activepieces/piece-ai",
+                                            "actionName": "askAi",
+                                            "sampleData": {},
+                                            "pieceVersion": "0.1.5",
+                                            "propertySettings": {
+                                              "model": {
+                                                "type": "MANUAL"
+                                              },
+                                              "prompt": {
+                                                "type": "MANUAL"
+                                              },
+                                              "provider": {
+                                                "type": "MANUAL"
+                                              },
+                                              "webSearch": {
+                                                "type": "MANUAL"
+                                              },
+                                              "creativity": {
+                                                "type": "MANUAL"
+                                              },
+                                              "conversationKey": {
+                                                "type": "MANUAL"
+                                              },
+                                              "maxOutputTokens": {
+                                                "type": "MANUAL"
+                                              },
+                                              "webSearchOptions": {
+                                                "type": "MANUAL",
+                                                "schema": {}
+                                              }
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "nextAction": {
+                                            "name": "step_14",
+                                            "skip": false,
+                                            "type": "PIECE",
+                                            "valid": true,
+                                            "settings": {
+                                              "input": {
+                                                "text": "{{step_13}}"
+                                              },
+                                              "pieceName": "@activepieces/piece-json",
+                                              "actionName": "convert_text_to_json",
+                                              "sampleData": {},
+                                              "pieceVersion": "0.1.3",
+                                              "propertySettings": {
+                                                "text": {
+                                                  "type": "MANUAL"
+                                                }
+                                              },
+                                              "errorHandlingOptions": {
+                                                "retryOnFailure": {
+                                                  "value": false
+                                                },
+                                                "continueOnFailure": {
+                                                  "value": false
+                                                }
+                                              }
+                                            },
+                                            "nextAction": {
+                                              "name": "step_24",
+                                              "skip": false,
+                                              "type": "PIECE",
+                                              "valid": true,
+                                              "settings": {
+                                                "input": {
+                                                  "auth": "{{connections['bNmoWpL2rldcVVLa4pSm6']}}",
+                                                  "width": 600,
+                                                  "format": "png",
+                                                  "height": 400,
+                                                  "labels": [
+                                                    "overridden"
+                                                  ],
+                                                  "chart_type": "line",
+                                                  "data_values": [
+                                                    "overridden"
+                                                  ],
+                                                  "dataset_label": "Data",
+                                                  "advanced_config": "{\n  \"type\": \"line\",\n  \"data\": {\n    \"labels\": {{step_14['dates_list']}},\n    \"datasets\": [\n      {\n        \"label\": \"Stripe New Customers\",\n        \"data\": {{step_14['uniques']}}\n      }\n    ]\n  },\n  \"options\": {\n    \"plugins\": {\n      \"title\": {\n        \"display\": true,\n        \"text\": \"Daily Signups (Last 14 days)\"\n      }\n    },\n    \"scales\": {\n      \"x\": {},\n      \"y\": {\n        \"beginAtZero\": true,\n        \"ticks\": {\n          \"stepSize\": 1,\n          \"precision\": 0\n        }\n      }\n    }\n  }\n}",
+                                                  "background_color": "rgba(54, 162, 235, 0.8)",
+                                                  "background_color_image": "white"
+                                                },
+                                                "pieceName": "@activepieces/piece-chartly",
+                                                "actionName": "create_chart",
+                                                "sampleData": {},
+                                                "pieceVersion": "0.0.4",
+                                                "propertySettings": {
+                                                  "width": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "format": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "height": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "labels": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "chart_type": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "chart_title": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "data_values": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "dataset_label": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "advanced_config": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "background_color": {
+                                                    "type": "MANUAL"
+                                                  },
+                                                  "background_color_image": {
+                                                    "type": "MANUAL"
+                                                  }
+                                                },
+                                                "errorHandlingOptions": {
+                                                  "retryOnFailure": {
+                                                    "value": false
+                                                  },
+                                                  "continueOnFailure": {
+                                                    "value": false
+                                                  }
+                                                }
+                                              },
+                                              "nextAction": {
+                                                "name": "step_27",
+                                                "skip": false,
+                                                "type": "PIECE",
+                                                "valid": true,
+                                                "settings": {
+                                                  "input": {
+                                                    "text": "{{step_24['chart_url']}}",
+                                                    "searchValue": "^data:image\\/[a-zA-Z+]+;base64,",
+                                                    "replaceOnlyFirst": false
+                                                  },
+                                                  "pieceName": "@activepieces/piece-text-helper",
+                                                  "actionName": "replace",
+                                                  "sampleData": {},
+                                                  "pieceVersion": "0.4.12",
+                                                  "propertySettings": {
+                                                    "text": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "searchValue": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "replaceValue": {
+                                                      "type": "MANUAL"
+                                                    },
+                                                    "replaceOnlyFirst": {
+                                                      "type": "MANUAL"
+                                                    }
+                                                  },
+                                                  "errorHandlingOptions": {
+                                                    "retryOnFailure": {
+                                                      "value": false
+                                                    },
+                                                    "continueOnFailure": {
+                                                      "value": false
+                                                    }
+                                                  }
+                                                },
+                                                "nextAction": {
+                                                  "name": "step_28",
+                                                  "skip": false,
+                                                  "type": "PIECE",
+                                                  "valid": true,
+                                                  "settings": {
+                                                    "input": {
+                                                      "content": "{{step_27}}",
+                                                      "encoding": "base64",
+                                                      "fileName": "stripe_signups.png"
+                                                    },
+                                                    "pieceName": "@activepieces/piece-file-helper",
+                                                    "actionName": "createFile",
+                                                    "sampleData": {},
+                                                    "pieceVersion": "0.1.21",
+                                                    "propertySettings": {
+                                                      "content": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "encoding": {
+                                                        "type": "MANUAL"
+                                                      },
+                                                      "fileName": {
+                                                        "type": "MANUAL"
+                                                      }
+                                                    },
+                                                    "errorHandlingOptions": {
+                                                      "retryOnFailure": {
+                                                        "value": false
+                                                      },
+                                                      "continueOnFailure": {
+                                                        "value": false
+                                                      }
+                                                    }
+                                                  },
+                                                  "nextAction": {
+                                                    "name": "step_29",
+                                                    "skip": false,
+                                                    "type": "PIECE",
+                                                    "valid": true,
+                                                    "settings": {
+                                                      "input": {
+                                                        "model": "openai/gpt-5-mini",
+                                                        "prompt": "You are an AI analyst. I will provide you with signup data for HubSpot and Stripe. Each platform has two lists: dates and counts.\nHubSpot variables:\n- hubspot_dates: a list of dates representing each day: {{step_22['dates_list']}}\n- hubspot_counts: a list of corresponding new contacts for each date: {{step_22['uniques']}}\n\n\nStripe variables:\n- stripe_dates: a list of dates representing each day: {{step_14['dates_list']}}\n- stripe_counts: a list of corresponding new customers for each date: {{step_14['uniques']}}\n\nFor each platform, write 2–3 concise insights. Additionally, “what changed since yesterday”\n\nInstruction:\n- Keep responses brief and to the point.\n- Avoid filler language and any AI-related commentary.",
+                                                        "provider": "activepieces",
+                                                        "webSearch": false,
+                                                        "creativity": 100,
+                                                        "maxOutputTokens": 2000,
+                                                        "webSearchOptions": {}
+                                                      },
+                                                      "pieceName": "@activepieces/piece-ai",
+                                                      "actionName": "askAi",
+                                                      "sampleData": {},
+                                                      "pieceVersion": "0.1.5",
+                                                      "propertySettings": {
+                                                        "model": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "prompt": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "provider": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "webSearch": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "creativity": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "conversationKey": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "maxOutputTokens": {
+                                                          "type": "MANUAL"
+                                                        },
+                                                        "webSearchOptions": {
+                                                          "type": "MANUAL",
+                                                          "schema": {}
+                                                        }
+                                                      },
+                                                      "errorHandlingOptions": {
+                                                        "retryOnFailure": {
+                                                          "value": false
+                                                        },
+                                                        "continueOnFailure": {
+                                                          "value": false
+                                                        }
+                                                      }
+                                                    },
+                                                    "nextAction": {
+                                                      "name": "step_21",
+                                                      "skip": false,
+                                                      "type": "PIECE",
+                                                      "valid": true,
+                                                      "settings": {
+                                                        "input": {
+                                                          "auth": "{{connections['artS25ankOXWQeGClYF24']}}",
+                                                          "blocks": [
+                                                            {
+                                                              "text": {
+                                                                "text": "📊 *Daily Metrics Briefing (Last 14 Days)*",
+                                                                "type": "mrkdwn"
+                                                              },
+                                                              "type": "section"
+                                                            },
+                                                            {
+                                                              "text": {
+                                                                "text": "{{step_29}}",
+                                                                "type": "mrkdwn"
+                                                              },
+                                                              "type": "section"
+                                                            },
+                                                            {
+                                                              "text": {
+                                                                "text": "*HubSpot — New Contacts*",
+                                                                "type": "mrkdwn"
+                                                              },
+                                                              "type": "section"
+                                                            },
+                                                            {
+                                                              "type": "image",
+                                                              "alt_text": "HubSpot New Contacts",
+                                                              "image_url": "{{step_25['url']}}"
+                                                            },
+                                                            {
+                                                              "text": {
+                                                                "text": "*Stripe — New Customers*",
+                                                                "type": "mrkdwn"
+                                                              },
+                                                              "type": "section"
+                                                            },
+                                                            {
+                                                              "type": "image",
+                                                              "alt_text": "Stripe New Customers",
+                                                              "image_url": "{{step_28['url']}}"
+                                                            }
+                                                          ],
+                                                          "channel": "C09K4HB7F4M",
+                                                          "sendAsBot": true,
+                                                          "unfurlLinks": true,
+                                                          "replyBroadcast": false,
+                                                          "mentionOriginFlow": false
+                                                        },
+                                                        "pieceName": "@activepieces/piece-slack",
+                                                        "actionName": "send_channel_message",
+                                                        "sampleData": {},
+                                                        "pieceVersion": "0.11.7",
+                                                        "propertySettings": {
+                                                          "file": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "info": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "text": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "blocks": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "channel": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "threadTs": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "username": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "iconEmoji": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "sendAsBot": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "unfurlLinks": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "profilePicture": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "replyBroadcast": {
+                                                            "type": "MANUAL"
+                                                          },
+                                                          "mentionOriginFlow": {
+                                                            "type": "MANUAL"
+                                                          }
+                                                        },
+                                                        "errorHandlingOptions": {
+                                                          "retryOnFailure": {
+                                                            "value": false
+                                                          },
+                                                          "continueOnFailure": {
+                                                            "value": false
+                                                          }
+                                                        }
+                                                      },
+                                                      "nextAction": {
+                                                        "name": "step_12",
+                                                        "skip": false,
+                                                        "type": "PIECE",
+                                                        "valid": true,
+                                                        "settings": {
+                                                          "input": {
+                                                            "key": "hubspot_dates_list",
+                                                            "store_scope": "COLLECTION"
+                                                          },
+                                                          "pieceName": "@activepieces/piece-store",
+                                                          "actionName": "remove_value",
+                                                          "sampleData": {},
+                                                          "pieceVersion": "0.6.13",
+                                                          "propertySettings": {
+                                                            "key": {
+                                                              "type": "MANUAL"
+                                                            },
+                                                            "store_scope": {
+                                                              "type": "MANUAL"
+                                                            }
+                                                          },
+                                                          "errorHandlingOptions": {
+                                                            "retryOnFailure": {
+                                                              "value": false
+                                                            },
+                                                            "continueOnFailure": {
+                                                              "value": false
+                                                            }
+                                                          }
+                                                        },
+                                                        "nextAction": {
+                                                          "name": "step_19",
+                                                          "skip": false,
+                                                          "type": "PIECE",
+                                                          "valid": true,
+                                                          "settings": {
+                                                            "input": {
+                                                              "key": "stripe_dates_list",
+                                                              "store_scope": "COLLECTION"
+                                                            },
+                                                            "pieceName": "@activepieces/piece-store",
+                                                            "actionName": "remove_value",
+                                                            "sampleData": {},
+                                                            "pieceVersion": "0.6.13",
+                                                            "propertySettings": {
+                                                              "key": {
+                                                                "type": "MANUAL"
+                                                              },
+                                                              "store_scope": {
+                                                                "type": "MANUAL"
+                                                              }
+                                                            },
+                                                            "errorHandlingOptions": {
+                                                              "retryOnFailure": {
+                                                                "value": false
+                                                              },
+                                                              "continueOnFailure": {
+                                                                "value": false
+                                                              }
+                                                            }
+                                                          },
+                                                          "displayName": "Remove"
+                                                        },
+                                                        "displayName": "Remove"
+                                                      },
+                                                      "displayName": "Send Message To A Channel"
+                                                    },
+                                                    "displayName": "Ask AI"
+                                                  },
+                                                  "displayName": "Create file"
+                                                },
+                                                "displayName": "Remove mimetype"
+                                              },
+                                              "displayName": "Create Chart"
+                                            },
+                                            "displayName": "Convert Text to Json"
+                                          },
+                                          "displayName": "Deduplicate list & Get count"
+                                        },
+                                        "displayName": "Get"
+                                      },
+                                      "displayName": "Loop on Items",
+                                      "firstLoopAction": {
+                                        "name": "step_16",
+                                        "skip": false,
+                                        "type": "PIECE",
+                                        "valid": true,
+                                        "settings": {
+                                          "input": {
+                                            "inputDate": "{{step_15['item']['created']}}",
+                                            "inputFormat": "X",
+                                            "outputFormat": "YYYY-MM-DD",
+                                            "inputTimeZone": "UTC",
+                                            "outputTimeZone": "UTC"
+                                          },
+                                          "pieceName": "@activepieces/piece-date-helper",
+                                          "actionName": "format_date",
+                                          "sampleData": {},
+                                          "pieceVersion": "0.1.26",
+                                          "propertySettings": {
+                                            "inputDate": {
+                                              "type": "MANUAL"
+                                            },
+                                            "inputFormat": {
+                                              "type": "MANUAL"
+                                            },
+                                            "outputFormat": {
+                                              "type": "MANUAL"
+                                            },
+                                            "inputTimeZone": {
+                                              "type": "MANUAL"
+                                            },
+                                            "outputTimeZone": {
+                                              "type": "MANUAL"
+                                            }
+                                          },
+                                          "errorHandlingOptions": {
+                                            "retryOnFailure": {
+                                              "value": false
+                                            },
+                                            "continueOnFailure": {
+                                              "value": false
+                                            }
+                                          }
+                                        },
+                                        "nextAction": {
+                                          "name": "step_17",
+                                          "skip": false,
+                                          "type": "PIECE",
+                                          "valid": true,
+                                          "settings": {
+                                            "input": {
+                                              "key": "stripe_dates_list",
+                                              "value": [
+                                                "{{step_16['result']}}"
+                                              ],
+                                              "store_scope": "COLLECTION",
+                                              "ignore_if_exists": false
+                                            },
+                                            "pieceName": "@activepieces/piece-store",
+                                            "actionName": "add_to_list",
+                                            "sampleData": {},
+                                            "pieceVersion": "0.6.13",
+                                            "propertySettings": {
+                                              "key": {
+                                                "type": "MANUAL"
+                                              },
+                                              "value": {
+                                                "type": "MANUAL"
+                                              },
+                                              "store_scope": {
+                                                "type": "MANUAL"
+                                              },
+                                              "ignore_if_exists": {
+                                                "type": "MANUAL"
+                                              }
+                                            },
+                                            "errorHandlingOptions": {
+                                              "retryOnFailure": {
+                                                "value": false
+                                              },
+                                              "continueOnFailure": {
+                                                "value": false
+                                              }
+                                            }
+                                          },
+                                          "displayName": "Add To List"
+                                        },
+                                        "displayName": "Format Date"
+                                      }
+                                    },
+                                    "displayName": "Get New Customers (last 14 days)"
+                                  },
+                                  "displayName": "Create file"
+                                },
+                                "displayName": "Remove mimetype"
+                              },
+                              "displayName": "Create Chart"
+                            },
+                            "displayName": "Convert Text to Json"
+                          },
+                          "displayName": "Deduplicate list & Get count"
+                        },
+                        "displayName": "Get"
+                      },
+                      "displayName": "Loop on Items",
+                      "firstLoopAction": {
+                        "name": "step_10",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "inputDate": "{{step_8['item']['properties']['createdate']}}",
+                            "inputFormat": "YYYY-MM-DDTHH:mm:ss",
+                            "outputFormat": "YYYY-MM-DD",
+                            "inputTimeZone": "UTC",
+                            "outputTimeZone": "UTC"
+                          },
+                          "pieceName": "@activepieces/piece-date-helper",
+                          "actionName": "format_date",
+                          "sampleData": {},
+                          "pieceVersion": "0.1.26",
+                          "propertySettings": {
+                            "inputDate": {
+                              "type": "MANUAL"
+                            },
+                            "inputFormat": {
+                              "type": "MANUAL"
+                            },
+                            "outputFormat": {
+                              "type": "MANUAL"
+                            },
+                            "inputTimeZone": {
+                              "type": "MANUAL"
+                            },
+                            "outputTimeZone": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_9",
+                          "skip": false,
+                          "type": "PIECE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "key": "hubspot_dates_list",
+                              "value": [
+                                "{{step_10['result']}}"
+                              ],
+                              "store_scope": "COLLECTION",
+                              "ignore_if_exists": false
+                            },
+                            "pieceName": "@activepieces/piece-store",
+                            "actionName": "add_to_list",
+                            "sampleData": {},
+                            "pieceVersion": "0.6.13",
+                            "propertySettings": {
+                              "key": {
+                                "type": "MANUAL"
+                              },
+                              "value": {
+                                "type": "MANUAL"
+                              },
+                              "store_scope": {
+                                "type": "MANUAL"
+                              },
+                              "ignore_if_exists": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "displayName": "Add To List"
+                        },
+                        "displayName": "Format Date"
+                      }
+                    },
+                    "displayName": "Get New Contacts (last 14 days)"
+                  },
+                  "displayName": "Format Date (to UNIX)"
+                },
+                "displayName": "Get Tomorrow's Date"
+              },
+              "displayName": "Format Date (to ISO)"
+            },
+            "displayName": "Get Date for Last 14 days"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

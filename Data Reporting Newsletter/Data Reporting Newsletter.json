@@ -1,0 +1,547 @@
+﻿{
+  "name": "MSDAT Newsletter",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-webhook",
+    "@activepieces/piece-smtp",
+    "@activepieces/piece-slack",
+    "@activepieces/piece-http",
+    "@activepieces/piece-delay"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "yeCU48XcmSX19NgpHSOz4"
+  },
+  "flows": [
+    {
+      "displayName": "MSDAT Newsletter",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Catch Webhook",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "authType": {
+              "type": "MANUAL"
+            },
+            "authFields": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-webhook",
+          "pieceVersion": "~0.1.10",
+          "input": {
+            "authType": "none",
+            "authFields": {}
+          },
+          "triggerName": "catch_webhook"
+        },
+        "nextAction": {
+          "name": "step_1",
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "cc": [
+                "ime@e4email.net",
+                "bassey.nta@e4email.net",
+                "ummi.abdulsalam@e4email.net",
+                "karl.ezeh@e4email.net",
+                "awele.ojei@e4email.net",
+                "mojubaoluwa.amakurugbonwo@e4email.net"
+              ],
+              "to": [
+                "ezekiel.tedunjaiye@e4email.net"
+              ],
+              "bcc": [],
+              "auth": "{{connections['smtp.office365.com']}}",
+              "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Helvetica, Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #fafafa;\n        }\n        .header-section {\n            text-align: left;\n            margin-bottom: 30px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); \n            padding: 20px;\n            background-color: #ffffff;\n        }\n        .header-image {\n            max-width: 200px; \n            height: auto;\n            margin: 0 0 12px 0;\n        }\n        .header-title {\n            color: #003300;\n            font-size: 20px; \n            margin: 0;\n            line-height: 1.3;\n            font-weight: bold;\n        }\n        .green-header {\n            color: #006400; \n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: center;\n            margin: 30px 0 10px;\n        }\n        .credits {\n            text-align: center; \n            display: block;\n            margin: 10px auto;\n        }\n        .section {\n            width: 100%;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 10px;\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 25px;\n            height: 25px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        .quote {\n            text-align: center;\n            margin: 20px 0;\n        }\n        .button {\n            display: inline-block;\n            padding: 8px 24px;\n            background-color: #006400;\n            color: white;\n            text-decoration: none;\n            border-radius: 4px;\n            font-weight: 500;\n            margin: 10px 0 20px;\n            border: none;\n            cursor: pointer;\n            transition: background-color 0.3s ease;\n        }\n        .button:hover {\n            background-color: #005400;\n        }\n        .button-container {\n            text-align: center;\n            margin: 20px 0;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n            .header-title {\n                font-size: 18px; \n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header-section\">\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/758ef531-0f17-44ba-9b16-dd72693e6c0f.png\" alt=\"Federal Ministry of Health\" class=\"header-image\">\n            <h1 class=\"header-title\">The Multi-Source Data Analytics and<br>Triangulation (MSDAT) Platform Update</h1>\n        </div>\n        <div class=\"section\">\n            <b class=\"green-header\"><i>Saving lives through digital health data</i></b>\n                <p>Hi [subscriber],</p>\n    <p>I trust this meets you well. We hope this message finds you well! As part of our commitment to keeping you updated, here’s a summary of the enhancements, data updates, and developments on the MSDAT platform in 2024.</p>\n    <p>This MSDAT platform was set up by the Federal Ministry of Health (FMoH) through a collaboration with eHealth4everyone. It provides a single, transparent view of key health indicators from multiple data sources.</p>\n    <p>The platform also allows the comparison of key metrics across three categories of data sources, namely; routine, surveys, and global estimates.</p>\n        </div>\n        <div class=\"main-content\">\n            <div class=\"section\">\n                <h4 class=\"green-header\">Dashboards Update</h4>\n<h2>A Recap of 2024 Updates on MSDAT</h2>\n    <h3>MSDAT Data Updates</h3>\n    <ol><li><h4>NDHS 2023 Updated on MSDAT</h4></li>\n    <p>The <b>National Demographic and Health Survey (NDHS) 2023</b> data has been updated on MSDAT. A total of <b>82 indicators</b>, including 40 new ones, have been integrated into the <b>Health Outcomes & Service Coverage</b> and <b>Demographics</b> dashboard.</p>\n    <p>New indicators include:</p>\n    <ul>\n        <li>Percentage of births occurring in a health facility</li>\n        <li>One dose of pneumococcal vaccine (PCV)</li>\n        <li>General Fertility Rate</li>\n        <li>Percentage of women taking iron supplements during pregnancy</li>\n        <li>Percentage of children fully vaccinated with basic antigens</li>\n        <li>Percentage of women who report specific ways to avoid getting malaria</li>\n    </ul>\n           <img src=\"https://i.ibb.co/Cs15Gw59/screenshot-showing-Percentage-of-young-women-with-knowledge-of-HIV-prevention-methods-NDHS-2023-data.png\" alt=\"Newsletter Image\">\n      <small><i>Img 5: screenshot showing “Percentage of young women with knowledge of HIV prevention methods” NDHS 2023 data</i></small><br><br>\n    \n    <li><h4>NHWCP 2022 Data</h4></li>\n    <p>In February 2024, the team received the National Health Workforce Profile (NHWCP) 2022. The data was extracted and pushed to the Health Workforce dashboard on MSDAT, covering <b>109</b> indicators, including:</p>\n    <ul>\n        <li>Density of medical doctors</li>\n        <li>Density of dental therapists in good standing (Licensed)</li>\n        <li>Number of dental surgery schools</li>\n        <li>Number of entrants into dental technology programmes</li>\n        <li>Number of graduates of dental technology programme</li>\n    </ul>\n           <img src=\"https://i.ibb.co/PZqjdtvb/Health-workforce-dashboard-showing-Density-of-Medical-doctors-NHWCP-2022-data.png\" alt=\"Newsletter Image\">\n      <small><i>Img 1; Health workforce dashboard showing Density of Medical doctors NHWCP 2022 data</i></small><br><br>\n     <li><h4>GRID3 Population Data!</h4></li>\n    <p>Geo-Referenced Infrastructure Demographic Data for Development(GRID) population and location data have been integrated into the <b>Demographics Dashboard</b> on MSDAT! You can now access <b>National, State, and LGA total population figures</b>, providing valuable insights for data-driven decision-making.<br><br>\nAccess the Gird3 data on the <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Demographics?indicator=62&datasource=36&location=1\" target=\"#blank\">Demographics</a> dashboard</p>\n<img src=\"https://i.ibb.co/9k0HH7Nf/Demographics-dashboard-showing-Total-Population-Grid3-data.png\" alt=\"Newsletter Image\">\n      <small><i>Img 2; Demographics dashboard showing Total Population Grid3 data</i></small><br><br>\n<li><h4>IHME 2020 & 2021 data added to the Health  Outcomes and Service Coverage and Demographics  Dashboards!</h4></li>\n    <p>Data  from the Institute of Health Metrics and Evaluation (IHME) 2020 and 2021 reports were added to MSDAT Health Outcomes and Service Coverage and Demographics Dashboards.  Over a 100 indicators from both years report were added to the dashboards some of which includes:</p>\n    <ul>\n        <li>Skilled Attendance at delivery birth</li>\n        <li>Adolescent Fertility rate</li>\n        <li>Total Fertility rate</li>\n        <li>Prevalence of children with diarrhoea</li>\n        <li>Total Population</li>\n        <li>Maternal mortality rate</li>\n        <li>Neonatal mortality rate (per 1000 live births)</li>\n        <li>Infant Mortality rate (per 1000)</li>\n    </ul>\n <p>Access the IHME indicators on the <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Health_Outcomes_and_Service_Coverage?indicator=9&datasource=8&location=1\" target=\"#blank\">Health Outcomes and Service Coverage & Demographics</a> dashboards</p><br>\n<img src=\"https://i.ibb.co/21fNprxR/Img-3-screenshot-showing-infant-mortality-rate-IHME-2021-data-on-Demographics-Dashboard.png\" alt=\"Newsletter Image\">\n<small><i>Img 3: screenshot showing infant mortality rate IHME 2021 data on Demographics Dashboard</i></small><br><br>\n<li><h4>WHO-GHO & World Bank 2022-2023 Data Now Available on MSDAT</h4></li>\n    <p>A total of 15 indicators from WHO-Global Health Observatory (WHO-GHO) 2022 and 20 indicators from World Bank 2022 have been updated on the Health Outcomes and Demographics dashboards. Additionally, 8 new indicators from WHO-GHO 2023 and World Bank 2023 have been added, further enhancing the data available on MSDAT. These indicators include:</p>\n    <ul>\n  <li>BCG Coverage</li>\n  <li>DPT 3/Penta 3 coverage</li>\n  <li>Infant Mortality rate</li>\n  <li>Measles Immunization Coverage</li>\n  <li>Neonatal mortality rate (per 1000 live births)</li>\n  <li>Percentage of households using open defecation</li>\n  <li>Percentage of households with a basic hand washing facility (soap and water)</li>\n  <li>Prevalence of HIV</li>\n  <li>Skilled attendance at delivery or birth</li>\n  <li>Under 5 Mortality rate</li>\n  <li>Population growth rate</li>\n  <li>Dependency ratio</li>\n</ul>\n<img src=\"https://i.ibb.co/cSqY7RFD/Img-4-DPT3-Penta3-Coverage-WHO-GHO-2023-data.png\" alt=\"Newsletter Image\">\n<small><i>Img 4: DPT3/Penta3 Coverage  WHO-GHO 2023 data</i></small></ol><br><br>\n    <h2>Enhancements to the Dashboards</h2>\n    <ol><li><h4>Integration of Advanced Analytics Dashboard</h4></li>\n    <p>In February 2024,  the team successfully included the advanced analytics dashboard on the MSDAT platform. This dashboard contains 6 sections which include correlation analysis, predictive analysis, indicator comparison, multi-source comparison, bubble chart and descriptive analysis. \nThe advanced analytics dashboard is built to allow users to analyse key health indicators through the power of predictive modelling to anticipate future health trends.  Each of the sections of the Advanced analytics can easily be accessed from the “ select dashboards” dropdown. This can also be accessed via this <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Advanced_Analytics?datasource=6\" target=\"#blank\">link</a>:</p>\n<img src=\"https://i.ibb.co/8LsbyTdz/Img-6-screenshot-showing-correlation-analysis-section-of-the-dashboard.png\" alt=\"Newsletter Image\">\n<small><i>Img 6: screenshot showing correlation analysis section of the dashboard</i></small><br><br>\n<li><h4>Health Service Uptake (NHMIS- Quarterly) Dashboard</h4></li>\n    <p>A Quarterly version of the monthly Health Service Uptake dashboard was developed and integrated into the MSDAT. <b>The Quarterly Health Service Uptake Dashboard</b> offers a higher-level perspective on health service utilization. This new dashboard is designed to provide users of MSDAT with aggregated, quarter-by-quarter NHMIS-DHIS 2 data trends, enabling a broader understanding of service uptake patterns over time. Access the  HSU Quarterly dashboard <a href=\"https://msdat.fmohconnect.gov.ng/health-service-uptake\" target=\"#blank\">here!</a></p>\n<img src=\"https://i.ibb.co/bM90ZVNZ/Img-7-screenshot-of-the-HSU-NHMIS-Quarterly-dashboard.png\" alt=\"Newsletter Image\">\n<small><i>Img 7: screenshot of the HSU NHMIS- Quarterly dashboard</i></small><br><br>\n<li><h4>Quarterly Performance Assessment Scorecard</h4></li>\n    <p>The <b>Quarterly Performance Assessment Scorecard</b> analyzes numerator data from the <b>NHMIS</b> on a quarterly basis and compares it to <b>MICS(Multiple Indicator Cluster Survey) and NDHS(Nigeria Demographic and Health Survey)</b>. The scorecard shows %change from Quarter to Quarter and comparison trend analysis of data from previous year and the current year.  This was developed to support the <b>SWAP</b> Ministerial team’s quarterly performance report.\nYou can  access the Scorecard dashboard <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Quarterly_Performance_Assessment_Dashboard\" target=\"#blank\">here!</a></p>\n<img src=\"https://i.ibb.co/Pzj0PQkh/Img-8-screenshot-of-the-Quarterly-Performance-Assessment-scorecard.png\" alt=\"Newsletter Image\">\n<small><i>Img 8: screenshot of the Quarterly Performance Assessment scorecard</i></small></ol><br><br>\n    <h2>Introducing New Features</h2>\n    <ol><li><h4>Indicators grouped into collapsible Program Areas</h4></li>\n    <p>Indicators on MSDAT are now properly grouped under  respective program areas in a collapsible format. Users can now click on each program area to view all the indicators under it.</p>\n<img src=\"https://i.ibb.co/1JtB3yrQ/feature.png\" alt=\"Newsletter Image\"><br><br>\n    <li><h4>Ability to Select Zones from the Location dropdown</h4></li>\n    <p>Users of MDSAT can now select zones from the location drop down across all subdashboards. This allows you to easily select and view subnational level data to support health status reports and decision making at the geopolitical zonal level.</p>\n    <li><h4>Regrouping of MSDAT Subdashboards!</h4></li>\n    <p>To allow easy access to any of the  MSDAT subdashboards, they are now regrouped under Health Outcomes, Health Input, Health Outputs, Advanced Analytics, Population, Thematic Dashboard and Other Dashboards accordingly. This can be seen when users click on the “Select Dashboard” at the Menu section and the “About” page of MSDAT.</p>\n<img src=\"https://i.ibb.co/fdRpPN7c/feature2.png\" alt=\"Newsletter Image\"><br><br>\n<div class=\"endnote\">\n    <hr>\n    <h2>What's Next?</h2>\n    <ul style=\"list-style-type: none; padding-left: 0;\">\n        <li style=\"margin-bottom: 8px;\">• Data and metadata updates across sub-dashboards</li>\n        <li style=\"margin-bottom: 8px;\">• Integration of NHFS 2023 data to the Health Facility and Health Service Access Dashboards</li>\n        <li style=\"margin-bottom: 8px;\">• Addition of indicators from the Joint Annual Report (JAR) 2024 to MSDAT</li>\n        <li style=\"margin-bottom: 8px;\">• Addition NTDs data to Health Outcomes and Demographics</li>\n        <li style=\"margin-bottom: 8px;\">• Inclusion of additional Severe Acute Malnutrition (SAM) data on MSDAT</li>\n        <li style=\"margin-bottom: 8px;\">• Health Finance Dashboard update with the latest National Health Account (NHA) data</li>\n        <li style=\"margin-bottom: 8px;\">• What's New page</li>\n    </ul><br><br>\n    <hr>\n    <p>Thank you for being part of the MSDAT community! We value your feedback and are excited to continue providing you with accurate and insightful health data analytics.</p>\n    <br>\n    <br>\n    <p style=\"display: flex; align-items: center;\">\n        <span style=\"display: inline-block; margin-right: 10px;\">\n            <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-forwardtofriend-48.png\" alt=\"Email\" width=\"24\" height=\"24\">\n        </span>\n        For suggestions, inquiries, or comments, email us at msdat@e4email.net\n    </p>\n    <p><a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Health_Outcomes_and_Service_Coverage\" target=\"_blank\">Visit MSDAT Now</a></p>\n</div>\n               \n  \n            <h4 class=\"credits\">THANKS FOR READING</h4>\n            <i class=\"credits\">Best regards,<br> MSDAT Team at The Department of Health Planning, Research & Statistics\nFederal Ministry of Health</i>\n            </div>\n            </div>\n        </div>\n        <footer class=\"footer\">\n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n                <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n                </a>\n                <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n                </a>\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) 2025 Federal Ministry of Health, All rights reserved.</i>\n            \n            <div class=\"preferences\">\n               <b>Our mailing address is:</b><br>\n               Department of Health Planning Research and Statistics (DHPRS)<br>\n               New Federal Secretariat Complex, Phase III,<br>\n               Ahmadu Bello Way, Central Business District,<br>\n               FCT Abuja, Nigeria<br><br>\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=c25e50b70a&e=[UNIQID]&c=e797a0de77\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=c25e50b70a&t=b&e=[UNIQID]&c=e797a0de77\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+              "from": "automationagent@e4email.net",
+              "subject": "This is a test sample! \nA  Recap of 2024 MSDAT Updates: New Data, Dashboards, Features & Insights!",
+              "body_type": "html",
+              "senderName": "ehealth4everyone",
+              "customHeaders": {}
+            },
+            "pieceName": "@activepieces/piece-smtp",
+            "pieceType": "OFFICIAL",
+            "actionName": "send-email",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.2.4",
+            "propertySettings": {
+              "cc": {
+                "type": "MANUAL"
+              },
+              "to": {
+                "type": "MANUAL"
+              },
+              "bcc": {
+                "type": "MANUAL"
+              },
+              "auth": {
+                "type": "MANUAL"
+              },
+              "body": {
+                "type": "MANUAL"
+              },
+              "from": {
+                "type": "MANUAL"
+              },
+              "subject": {
+                "type": "MANUAL"
+              },
+              "body_type": {
+                "type": "MANUAL"
+              },
+              "senderName": {
+                "type": "MANUAL"
+              },
+              "customHeaders": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-03-01T06:22:03.232Z",
+              "sampleDataFileId": "ZXSw5uzjL5TS3vcqd2NA7",
+              "sampleDataInputFileId": "ypUCZ9h7IhzLFB28VV5Ti"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_7",
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['slack']}}",
+                "text": "Hello there,\n\nI trust you have received the sample for the MSDAT newsletter: {{trigger['body']['data'][5]['value']}}. May I proceed with sending it out to the targeted audience?",
+                "channel": "C013C3Y929W"
+              },
+              "pieceName": "@activepieces/piece-slack",
+              "pieceType": "OFFICIAL",
+              "actionName": "request_approval_message",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.7.12",
+              "propertySettings": {
+                "auth": {
+                  "type": "MANUAL"
+                },
+                "text": {
+                  "type": "MANUAL"
+                },
+                "channel": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-01-06T15:21:59.784Z",
+                "sampleDataFileId": "8PiPlbmoRIXVufl4TnHy6"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_9",
+              "type": "ROUTER",
+              "valid": true,
+              "children": [
+                {
+                  "name": "step_28",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "url": "https://us11.api.mailchimp.com/3.0/lists/c25e50b70a/members?status=subscribed&count=1000",
+                      "body": {},
+                      "method": "GET",
+                      "headers": {
+                        "Authorization": "Basic REPLACE_WITH_API_KEY"
+                      },
+                      "failsafe": false,
+                      "body_type": "none",
+                      "use_proxy": false,
+                      "queryParams": {},
+                      "proxy_settings": {}
+                    },
+                    "pieceName": "@activepieces/piece-http",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "send_request",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.6.1",
+                    "propertySettings": {
+                      "url": {
+                        "type": "MANUAL"
+                      },
+                      "body": {
+                        "type": "MANUAL"
+                      },
+                      "method": {
+                        "type": "MANUAL"
+                      },
+                      "headers": {
+                        "type": "MANUAL"
+                      },
+                      "failsafe": {
+                        "type": "MANUAL"
+                      },
+                      "body_type": {
+                        "type": "MANUAL"
+                      },
+                      "use_proxy": {
+                        "type": "MANUAL"
+                      },
+                      "queryParams": {
+                        "type": "MANUAL"
+                      },
+                      "proxy_settings": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-01-06T15:11:47.510Z",
+                      "sampleDataFileId": "je7HPHQAB4NdlWeyyS2Ax"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_29",
+                    "type": "LOOP_ON_ITEMS",
+                    "valid": true,
+                    "settings": {
+                      "items": "{{step_28['body']['members']}}",
+                      "propertySettings": {},
+                      "sampleDataSettings": {
+                        "lastTestDate": "2024-11-29T12:59:50.956Z",
+                        "sampleDataFileId": "RQhfazlQDEkA1O6gBZnI9"
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_18",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['slack']}}",
+                          "text": "Hey! @channel\n\nThe MSDAT newsletter: {{trigger['body']['data'][5]['value']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                          "channel": "C013C3Y929W"
+                        },
+                        "pieceName": "@activepieces/piece-slack",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "send_channel_message",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.7.12",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "text": {
+                            "type": "MANUAL"
+                          },
+                          "channel": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_17",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['slack']}}",
+                            "text": "Hey! @channel\n\nThe MSDAT newsletter: {{trigger['body']['data'][5]['value']}} has been successfully sent to all targeted audiences.\n\nThanks!",
+                            "channel": "C07NNUA4VA5"
+                          },
+                          "pieceName": "@activepieces/piece-slack",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "send_channel_message",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.7.12",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "text": {
+                              "type": "MANUAL"
+                            },
+                            "channel": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2024-11-13T18:19:14.052Z",
+                            "sampleDataFileId": "XNpaxGjasms0gYbS7gZvu"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Send Message To Automation logs"
+                      },
+                      "displayName": "Send Message To Newsletter channel"
+                    },
+                    "displayName": "Send out Newsletter",
+                    "firstLoopAction": {
+                      "name": "step_6",
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "cc": [],
+                          "to": [
+                            "{{step_29['item']['email_address']}}"
+                          ],
+                          "bcc": [],
+                          "auth": "{{connections['smtp.office365.com']}}",
+                          "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Newsletter</title>\n    <style>\n        * {\n            -webkit-box-sizing: border-box;\n            -moz-box-sizing: border-box;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: Helvetica, Arial, sans-serif;\n            color: #000;\n            background-color: #f9f9f9;\n            text-align: center;\n            font-size: 16px;\n            margin: 0;\n            padding: 0;\n            line-height: 1.6;\n        }\n        .container {\n            max-width: 600px;\n            width: 100%;\n            margin: 0 auto;\n            padding: 20px;\n            background-color: #fafafa;\n        }\n        .header-section {\n            text-align: left;\n            margin-bottom: 30px;\n            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); \n            padding: 20px;\n            background-color: #ffffff;\n        }\n        .header-image {\n            max-width: 200px; \n            height: auto;\n            margin: 0 0 12px 0;\n        }\n        .header-title {\n            color: #003300;\n            font-size: 20px; \n            margin: 0;\n            line-height: 1.3;\n            font-weight: bold;\n        }\n        .green-header {\n            color: #006400; \n        }\n        h1 {\n            color: #2c3e50;\n            font-size: 28px;\n            margin: 20px 0;\n        }\n        h2 {\n            color: #2c3e50;\n            font-size: 24px;\n            margin: 30px 0 15px;\n            text-align: center;\n            line-height: 1.2;\n        }\n        h3 {\n            font-size: 20px;\n            color: #2c3e50;\n            text-align: left;\n            margin: 30px 0 10px;\n        }\n        .credits {\n            text-align: center; \n            display: block;\n            margin: 10px auto;\n        }\n        .section {\n            width: 100%;\n            line-height: 1.5;\n            text-align: left;\n        }\n        .section h2, .section h3, .section p {\n            max-width: 100%;\n            margin-left: auto;\n            margin-right: auto;\n        }\n        .sub-heading {\n            font-size: 18px;\n            text-align: center;\n            width: 100%;\n            padding: 0 0 20px;\n            margin-top: 0;\n        }\n        img {\n            max-width: 100%;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .footer {\n            width: 100%;\n            margin: 0 auto;\n            padding: 24px 0;\n            text-align: center !important;\n        }\n        .separator {\n            width: 100%;\n            height: 2px;\n            background-color: black;\n            margin: 32px auto;\n        }\n        .social-icons {\n            width: 100%;\n            text-align: center;\n            font-size: 0;\n            padding: 0;\n            margin: 16px 0;\n        }\n        .icon-link {\n            display: inline-block;\n            width: 40px;\n            height: 40px;\n            margin: 0 10px;\n            border-radius: 50%;\n            text-align: center;\n            vertical-align: middle;\n        }\n        .icon {\n            width: 25px;\n            height: 25px;\n            display: inline-block;\n            vertical-align: middle;\n        }\n        .copyright, .preferences {\n            display: block;\n            width: 100%;\n            text-align: center;\n            font-size: 13px;\n            margin: 16px 0;\n            color: #656565;\n        }\n        .mailchimp-image img {\n            max-width: 150px;\n            height: auto;\n            display: block;\n            margin: 10px auto;\n        }\n        .connect-section {\n            margin-top: 40px;\n        }\n        p {\n            margin-bottom: 20px;\n        }\n        .quote {\n            text-align: center;\n            margin: 20px 0;\n        }\n        .button {\n            display: inline-block;\n            padding: 8px 24px;\n            background-color: #006400;\n            color: white;\n            text-decoration: none;\n            border-radius: 4px;\n            font-weight: 500;\n            margin: 10px 0 20px;\n            border: none;\n            cursor: pointer;\n            transition: background-color 0.3s ease;\n        }\n        .button:hover {\n            background-color: #005400;\n        }\n        .button-container {\n            text-align: center;\n            margin: 20px 0;\n        }\n        @media only screen and (max-width: 600px) {\n            .container {\n                padding: 10px;\n            }\n            h1 {\n                font-size: 24px;\n            }\n            h2 {\n                font-size: 20px;\n            }\n            h3 {\n                font-size: 18px;\n            }\n            .section {\n                padding: 5px 0;\n            }\n            .header-title {\n                font-size: 18px; \n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header-section\">\n            <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/758ef531-0f17-44ba-9b16-dd72693e6c0f.png\" alt=\"Federal Ministry of Health\" class=\"header-image\">\n            <h1 class=\"header-title\">The Multi-Source Data Analytics and<br>Triangulation (MSDAT) Platform Update</h1>\n        </div>\n        <div class=\"section\">\n            <b class=\"green-header\"><i>Saving lives through digital health data</i></b>\n            <p>Hi {{step_29['item']['full_name']}},</p>\n            <p>I trust this meets you well.</p>\n            <p>You got this mail because you have either interacted with the MSDAT platform or the team behind it. We are excited to introduce the new MSDAT 2.6 Version</p>\n            <p>This MSDAT platform was set up by the Federal Ministry of Health (FMoH) through a collaboration with eHealth4everyone. It provides a single, transparent view of key health indicators from multiple data sources.</p>\n            <p>What this means is that you have access to different perspectives of any health indicator all in one place. By \"different perspectives,\" we mean results from various trusted health-related data collection activities that aid decision-making processes in the country.</p>\n            <p>The platform also allows the comparison of key metrics across three categories of data sources, namely; routine, surveys, and global estimates.</p>\n        </div>\n        <div class=\"main-content\">\n            <div class=\"section\">\n                <h4 class=\"green-header\">Dashboards Update</h4>\n                <p>{{trigger['body']['data'][0]['value']}} <a href=\"{{trigger['body']['data'][1]['value']}}\" target=\"#blank\">Click here.</a></p><br>\n                <img src=\"{{trigger['body']['data'][2]['value']['url']}}\" alt=\"Newsletter Image\">\n                <small class=\"credits\">{{trigger['body']['data'][3]['value']}}</small><br>\n                <h4 class=\"green-header\">Data Update</h4>\n                <p>{{trigger['body']['data'][4]['value']}}</p><br>\n                <b class=\"green-header\">Onboarding</b>\n                <p>\n                    The onboarding feature introduces you to the MSDAT and the sections of the platform. It also provides a link to a video tutorial that gives a detailed explanation of each section of the MSDAT\n                </p>\n                <div class=\"button-container\">\n                    <a href=\"https://www.youtube.com/watch?v=k75zoZ1SXgk\" class=\"button\">Watch Now</a>\n                </div>\n                <b class=\"green-header\">Tour guide</b>\n                <p>\n                    The tour guide is very interactive; it shows the basic functions and where to locate them on the platform. It usually follows after the onboarding process. However, this tour guide can be accessed at the right top corner of the page as seen below.\n                </p>\n                <img src=\"https://mcusercontent.com/a82ced1526f272950f482c0d7/images/d297d518-508f-4d8f-a54f-6a30f5618fa9.png\" alt=\"MSDAT Platform Interface\"><br><br>\n                <b class=\"green-header\">Feedback button</b>\n                <p>\n                    We love this feature, it helps us get specific feedback from users like you. The feature presents the opportunity to capture segments of the platform where you want to provide feedback. Knowing how technology can be unpredictable, it is possible users will experience unique anomalies and we would want to be able to prevent their re-occurrence. This feedback button is our mutual friend.\n                </p>\n                <div class=\"button-container\">\n                    <a href=\"https://msdat.fmohconnect.gov.ng/central_analytics\" class=\"button\">Give Feedback</a>\n                </div>\n            <div class=\"endnote\">\n             <p>In subsequent editions of this newsletter, we would discuss more features and also inform you about new developments as they are implemented on the platform. We would love to get your feedback and suggestions.\nIf you have any questions, suggestions or comments regarding the platform; or you would like to suggest the kind of content you want to see in these newsletters, kindly send an email to <a href=\"mailto:msdat@e4email.net\" target=\"_blank\">msdat@e4email.net</a></p><br>\n            <small><b>You got this mail because you either have interacted with the <a href=\"https://msdat.fmohconnect.gov.ng/dashboard/Health_Outcomes_and_Service_Coverage\" target=\"#blank\">MSDAT</a> platform or our team at a point in time.</b></small>\n            <h4 class=\"credits\">THANKS FOR READING</h4>\n            <i class=\"credits\">Best regards,<br> from the Department of Health Planning, Research and Statistics<br> for the Federal Ministry of Health</i>\n            </div>\n            </div>\n        </div>\n        <footer class=\"footer\">\n            <div class=\"separator\"></div>\n            \n            <div class=\"social-icons\">\n                <a href=\"https://twitter.com/eHealth4every1\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/twitter-filled-dark-40.png\" alt=\"Twitter\" class=\"icon\">\n                </a>\n                <a href=\"https://www.facebook.com/ehealth4everyone\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png\" alt=\"Facebook\" class=\"icon\">\n                </a>\n                <a href=\"https://www.linkedin.com/company/10109789/\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v2/color-linkedin-48.png\" alt=\"LinkedIn\" class=\"icon\">\n                </a>\n                <a href=\"https://instagram.com/official_e4e\" class=\"icon-link\">\n                    <img src=\"https://cdn-images.mailchimp.com/icons/social-block-v3/block-icons-v3/instagram-filled-dark-40.png\" alt=\"Instagram\" class=\"icon\">\n                </a>\n            </div><br>\n            \n            <i class=\"copyright\">Copyright (C) 2025 Federal Ministry of Health, All rights reserved.</i>\n            \n            <div class=\"preferences\">\n               <b>Our mailing address is:</b><br>\n               Department of Health Planning Research and Statistics (DHPRS)<br>\n               New Federal Secretariat Complex, Phase III,<br>\n               Ahmadu Bello Way, Central Business District,<br>\n               FCT Abuja, Nigeria<br><br>\n                Want to change how you receive these emails?<br>\n                You can <a href=\"https://ehealth4everyone.us11.list-manage.com/profile?u=a82ced1526f272950f482c0d7&id=c25e50b70a&e=[UNIQID]&c=e797a0de77\">update your preferences</a> or <a href=\"https://ehealth4everyone.us11.list-manage.com/unsubscribe?u=a82ced1526f272950f482c0d7&id=c25e50b70a&t=b&e=[UNIQID]&c=e797a0de77\">unsubscribe</a>\n            </div>\n            \n            <div class=\"mailchimp-image\">\n                <a href=\"http://eepurl.com/iCZabA\">\n                    <img src=\"https://cdn-images.mailchimp.com/monkey_rewards/intuit-mc-rewards-2.png\" alt=\"mailchimp Image\">\n                </a>\n            </div>\n        </footer>\n    </div>\n</body>\n</html>",
+                          "from": "automationagent@e4email.net",
+                          "subject": "{{trigger['body']['data'][5]['value']}}",
+                          "body_type": "html",
+                          "senderName": "ehealth4everyone",
+                          "customHeaders": {}
+                        },
+                        "pieceName": "@activepieces/piece-smtp",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "send-email",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.2.4",
+                        "propertySettings": {
+                          "cc": {
+                            "type": "MANUAL"
+                          },
+                          "to": {
+                            "type": "MANUAL"
+                          },
+                          "bcc": {
+                            "type": "MANUAL"
+                          },
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "body": {
+                            "type": "MANUAL"
+                          },
+                          "from": {
+                            "type": "MANUAL"
+                          },
+                          "subject": {
+                            "type": "MANUAL"
+                          },
+                          "body_type": {
+                            "type": "MANUAL"
+                          },
+                          "senderName": {
+                            "type": "MANUAL"
+                          },
+                          "customHeaders": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {},
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_22",
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "unit": "seconds",
+                            "delayFor": "2"
+                          },
+                          "pieceName": "@activepieces/piece-delay",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "delayFor",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.3.12",
+                          "propertySettings": {
+                            "unit": {
+                              "type": "MANUAL"
+                            },
+                            "delayFor": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2024-11-14T06:56:23.861Z",
+                            "sampleDataFileId": "XjmOuxjrzJ6NDvmHgLpyF"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Delay For"
+                      },
+                      "displayName": "Send Email to Audience"
+                    }
+                  },
+                  "displayName": "Retrieve Mailchimp Audience List"
+                },
+                {
+                  "name": "step_10",
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "auth": "{{connections['slack']}}",
+                      "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                      "channel": "C013C3Y929W"
+                    },
+                    "pieceName": "@activepieces/piece-slack",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "send_channel_message",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.7.12",
+                    "propertySettings": {
+                      "auth": {
+                        "type": "MANUAL"
+                      },
+                      "text": {
+                        "type": "MANUAL"
+                      },
+                      "channel": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {},
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_11",
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "auth": "{{connections['slack']}}",
+                        "text": "Hello again!\n\nThe newsletter campaign was cancelled...\nProcess exited.",
+                        "channel": "C07NNUA4VA5"
+                      },
+                      "pieceName": "@activepieces/piece-slack",
+                      "pieceType": "OFFICIAL",
+                      "actionName": "send_channel_message",
+                      "packageType": "REGISTRY",
+                      "pieceVersion": "~0.7.12",
+                      "propertySettings": {
+                        "auth": {
+                          "type": "MANUAL"
+                        },
+                        "text": {
+                          "type": "MANUAL"
+                        },
+                        "channel": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "sampleDataSettings": {},
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "displayName": "Send Message To Automation logs"
+                  },
+                  "displayName": "Send Message To Newsletter channel"
+                }
+              ],
+              "settings": {
+                "branches": [
+                  {
+                    "branchName": "Branch 1",
+                    "branchType": "CONDITION",
+                    "conditions": [
+                      [
+                        {
+                          "operator": "BOOLEAN_IS_TRUE",
+                          "firstValue": "{{step_7['approved']}}"
+                        }
+                      ]
+                    ]
+                  },
+                  {
+                    "branchName": "Otherwise",
+                    "branchType": "FALLBACK"
+                  }
+                ],
+                "executionType": "EXECUTE_FIRST_MATCH",
+                "propertySettings": {},
+                "sampleDataSettings": {
+                  "lastTestDate": "2024-11-27T11:05:21.970Z",
+                  "sampleDataFileId": "a1E55nUgxD4WWCpqnwcFQ"
+                }
+              },
+              "displayName": "Router"
+            },
+            "displayName": "Request Approval in a Channel"
+          },
+          "displayName": "Send Email to cc"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

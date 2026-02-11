@@ -1,0 +1,867 @@
+﻿{
+  "name": "Weekly Uptime Report",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-http",
+    "@activepieces/piece-google-sheets",
+    "@activepieces/piece-math-helper",
+    "@activepieces/piece-straico",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "EL8ezLlk8O4LvUNRaNYjK"
+  },
+  "flows": [
+    {
+      "displayName": "Weekly Uptime Report",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Week",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "day_of_the_week": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "~0.1.7",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "day_of_the_week": 0,
+            "hour_of_the_day": 14
+          },
+          "triggerName": "every_week"
+        },
+        "nextAction": {
+          "name": "step_9",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "url": "https://api.uptimerobot.com/v2/getMonitors",
+              "body": {
+                "data": {
+                  "logs": "1",
+                  "logs_limit": "7",
+                  "custom_uptime_ratios": "7"
+                }
+              },
+              "method": "POST",
+              "headers": {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cache-Control": "no-cache"
+              },
+              "failsafe": false,
+              "body_type": "json",
+              "use_proxy": false,
+              "queryParams": {
+                "format": "json",
+                "api_key": "u306653-ecccb7199d41624795c5dde7"
+              },
+              "proxy_settings": {}
+            },
+            "pieceName": "@activepieces/piece-http",
+            "pieceType": "OFFICIAL",
+            "actionName": "send_request",
+            "packageType": "REGISTRY",
+            "pieceVersion": "~0.6.2",
+            "propertySettings": {
+              "url": {
+                "type": "MANUAL"
+              },
+              "body": {
+                "type": "MANUAL"
+              },
+              "method": {
+                "type": "MANUAL"
+              },
+              "headers": {
+                "type": "MANUAL"
+              },
+              "failsafe": {
+                "type": "MANUAL"
+              },
+              "body_type": {
+                "type": "MANUAL"
+              },
+              "use_proxy": {
+                "type": "MANUAL"
+              },
+              "queryParams": {
+                "type": "MANUAL"
+              },
+              "proxy_settings": {
+                "type": "MANUAL"
+              }
+            },
+            "sampleDataSettings": {
+              "lastTestDate": "2025-05-27T08:57:16.854Z",
+              "sampleDataFileId": "5Z9F1N7GIdljM6D9JGFG2",
+              "sampleDataInputFileId": "MK2JqiFkktB8Tj4BsBkYX"
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_1",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "url": "https://api.uptimerobot.com/v2/getMonitors",
+                "body": {
+                  "data": {
+                    "logs": "1",
+                    "logs_limit": "7",
+                    "custom_uptime_ratios": "7"
+                  }
+                },
+                "method": "POST",
+                "headers": {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Cache-Control": "no-cache"
+                },
+                "failsafe": false,
+                "body_type": "json",
+                "use_proxy": false,
+                "queryParams": {
+                  "format": "json",
+                  "api_key": "u2320975-fe8106e36a1fdb68a5677754"
+                },
+                "proxy_settings": {}
+              },
+              "pieceName": "@activepieces/piece-http",
+              "pieceType": "OFFICIAL",
+              "actionName": "send_request",
+              "packageType": "REGISTRY",
+              "pieceVersion": "~0.6.2",
+              "propertySettings": {
+                "url": {
+                  "type": "MANUAL"
+                },
+                "body": {
+                  "type": "MANUAL"
+                },
+                "method": {
+                  "type": "MANUAL"
+                },
+                "headers": {
+                  "type": "MANUAL"
+                },
+                "failsafe": {
+                  "type": "MANUAL"
+                },
+                "body_type": {
+                  "type": "MANUAL"
+                },
+                "use_proxy": {
+                  "type": "MANUAL"
+                },
+                "queryParams": {
+                  "type": "MANUAL"
+                },
+                "proxy_settings": {
+                  "type": "MANUAL"
+                }
+              },
+              "sampleDataSettings": {
+                "lastTestDate": "2025-05-27T08:57:28.801Z",
+                "sampleDataFileId": "wz3CV2M1AdlKM7L1Wav0D",
+                "sampleDataInputFileId": "7la65Ab7xrrGkBzRCPrbF"
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_5",
+              "skip": false,
+              "type": "CODE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "uptimeJson2": "{{step_1['body']['monitors']}}",
+                  "uptimeJsonMain": "{{step_9['body']['monitors']}}"
+                },
+                "sourceCode": {
+                  "code": "export const code = async (inputs) => {\n  const { uptimeJsonMain, uptimeJson2 } = inputs;\n\n  // Combine the two arrays\n  const uptimeJson = [...uptimeJsonMain, ...uptimeJson2];\n\n  const statusMap = {\n    0: \"paused\",\n    1: \"not checked yet\",\n    2: \"up\",\n    8: \"seems down\",\n    9: \"down\"\n  };\n\n  const formatDuration = (seconds) => {\n    const days = Math.floor(seconds / 86400);\n    const hours = Math.floor((seconds % 86400) / 3600);\n    const minutes = Math.floor((seconds % 3600) / 60);\n    const secs = seconds % 60;\n\n    if (days > 0) {\n      return `${days}d`;\n    }\n\n    const parts = [];\n    if (hours > 0) parts.push(`${hours}h`);\n    if (minutes > 0) parts.push(`${minutes}m`);\n    if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);\n\n    return parts.join(' ');\n  };\n\n  let totalUptime = 0;\n  let count = 0;\n\n  const formattedJson = uptimeJson.map(item => {\n    const uptimeRatio = parseFloat(item.custom_uptime_ratio);\n    totalUptime += uptimeRatio;\n    count++;\n\n    // Extract highest-duration non-200 error log\n    let log = null;\n    let error_code = null;\n\n    if (Array.isArray(item.logs)) {\n      const errorLogs = item.logs.filter(\n        log => log.reason?.code !== \"200\"\n      );\n      if (errorLogs.length > 0) {\n        const topLog = errorLogs.reduce((max, curr) => {\n          return curr.duration > max.duration ? curr : max;\n        });\n        log = `${topLog.reason.detail}`;\n        error_code = topLog.reason.code;\n      }\n    }\n\n    const {\n      logs, // exclude logs\n      ...rest\n    } = item;\n\n    return {\n      ...rest,\n      status: statusMap[item.status] ?? item.status,\n      custom_uptime_ratio: `${uptimeRatio.toFixed(2)}%`,\n      custom_down_durations: formatDuration(parseInt(item.custom_down_durations)),\n      ...(log && { log }),\n      ...(error_code && { error_code })\n    };\n  });\n\n  const averageUptime = count > 0 ? (totalUptime / count).toFixed(2) : \"0.00\";\n\n  formattedJson.push(\n    { url: \"TOTAL\", custom_uptime_ratio: `${averageUptime}%` }\n  );\n\n  return formattedJson;\n};",
+                  "packageJson": "{}"
+                },
+                "propertySettings": {
+                  "uptimeJson2": {
+                    "type": "MANUAL"
+                  },
+                  "uptimeJsonMain": {
+                    "type": "MANUAL"
+                  }
+                },
+                "sampleDataSettings": {
+                  "lastTestDate": "2025-05-27T08:58:11.979Z",
+                  "sampleDataFileId": "qYL6d4Zc0kacXoSFOCYrl",
+                  "sampleDataInputFileId": "v8gRbF0MT4guL2xtxvLL5"
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_6",
+                "skip": false,
+                "type": "CODE",
+                "valid": true,
+                "settings": {
+                  "input": {},
+                  "sourceCode": {
+                    "code": "import { DateTime } from 'luxon';\n\nexport const code = async (inputs) => {\n  // Set current date in Africa/Lagos timezone\n  const now = DateTime.now().setZone('Africa/Lagos');\n\n  // Get the current month name\n  const month = now.toFormat('LLLL'); // e.g., \"December\"\n\n  // Get the ISO week number within the year\n  const weekNumber = now.weekNumber;\n\n  // Start of the current month\n  const startOfMonth = now.startOf('month');\n  const startWeek = startOfMonth.weekNumber;\n\n  // Determine if the first day of the month is a Sunday\n  const startsOnSunday = startOfMonth.weekday === 7;\n\n  // Determine the week number within the month\n  let weekInMonth = weekNumber - startWeek + 1;\n\n  // Adjust weekInMonth if the month starts on a Sunday\n  if (startsOnSunday) {\n    weekInMonth -= 1;\n  }\n\n  // Prevent negative or zero week number\n  if (weekInMonth <= 0) {\n    weekInMonth = 1;\n  }\n\n  const year = now.year;\n\n  const formatted = `${month} WK${weekInMonth} ${year}`;\n  return formatted;\n};",
+                    "packageJson": "{\n  \"dependencies\": {\n    \"luxon\": \"3.6.1\"\n  }\n}"
+                  },
+                  "propertySettings": {},
+                  "sampleDataSettings": {
+                    "lastTestDate": "2025-06-11T09:58:21.523Z",
+                    "sampleDataFileId": "QcMW3B2HP1dlheIxkEgmB",
+                    "sampleDataInputFileId": "EwmRzk1mqkCmqUipGDfeb"
+                  },
+                  "errorHandlingOptions": {
+                    "retryOnFailure": {
+                      "value": false
+                    },
+                    "continueOnFailure": {
+                      "value": false
+                    }
+                  }
+                },
+                "nextAction": {
+                  "name": "step_3",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                      "title": "{{step_6}} (UptimeRobot)",
+                      "headers": [
+                        "NAME",
+                        "URL",
+                        "UPTIME",
+                        "DOWNTIME DURATION",
+                        "REASON FOR DOWNTIME",
+                        "RESOLUTION STATUS",
+                        "ERROR CODE",
+                        "COMMENTS"
+                      ],
+                      "spreadsheetId": "1472IL1TehyK6NnWsGhacdE2WBs9YYvN-xA0sSjxiJow",
+                      "includeTeamDrives": true
+                    },
+                    "pieceName": "@activepieces/piece-google-sheets",
+                    "pieceType": "OFFICIAL",
+                    "actionName": "create-worksheet",
+                    "packageType": "REGISTRY",
+                    "pieceVersion": "~0.12.7",
+                    "propertySettings": {
+                      "auth": {
+                        "type": "MANUAL"
+                      },
+                      "title": {
+                        "type": "MANUAL"
+                      },
+                      "headers": {
+                        "type": "MANUAL"
+                      },
+                      "spreadsheetId": {
+                        "type": "MANUAL"
+                      },
+                      "includeTeamDrives": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "sampleDataSettings": {
+                      "lastTestDate": "2025-05-27T08:59:34.311Z",
+                      "sampleDataFileId": "caAMZAqzWpzMF4ZqoNPMu",
+                      "sampleDataInputFileId": "IlTDZsfxAylK2biY5MZ0j"
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_2",
+                    "skip": false,
+                    "type": "LOOP_ON_ITEMS",
+                    "valid": true,
+                    "settings": {
+                      "items": "{{step_5}}",
+                      "propertySettings": {},
+                      "sampleDataSettings": {
+                        "lastTestDate": "2025-05-27T09:00:11.589Z",
+                        "sampleDataFileId": "WLqzmDQjKBC2RS8T3CAic",
+                        "sampleDataInputFileId": "cbenrynK8UBiwgG4d7kEp"
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_11",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "first_number": "1",
+                          "second_number": "10000000"
+                        },
+                        "pieceName": "@activepieces/piece-math-helper",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "generateRandom_math",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.0.14",
+                        "propertySettings": {
+                          "first_number": {
+                            "type": "MANUAL"
+                          },
+                          "second_number": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-05-27T09:00:23.191Z",
+                          "sampleDataFileId": "mjVrqyfCSybIoLI8PEyO7",
+                          "sampleDataInputFileId": "oBSYH1iCskT7R6i5XcUnQ"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_10",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                            "memKey": "{{step_11}}",
+                            "sheetId": "{{step_3['id']}}",
+                            "startRow": 1,
+                            "groupSize": "10000",
+                            "spreadsheetId": "1472IL1TehyK6NnWsGhacdE2WBs9YYvN-xA0sSjxiJow",
+                            "includeTeamDrives": true
+                          },
+                          "pieceName": "@activepieces/piece-google-sheets",
+                          "pieceType": "OFFICIAL",
+                          "actionName": "get_next_rows",
+                          "packageType": "REGISTRY",
+                          "pieceVersion": "~0.12.7",
+                          "propertySettings": {
+                            "auth": {
+                              "type": "MANUAL"
+                            },
+                            "memKey": {
+                              "type": "MANUAL"
+                            },
+                            "sheetId": {
+                              "type": "DYNAMIC"
+                            },
+                            "startRow": {
+                              "type": "MANUAL"
+                            },
+                            "groupSize": {
+                              "type": "MANUAL"
+                            },
+                            "spreadsheetId": {
+                              "type": "MANUAL"
+                            },
+                            "includeTeamDrives": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "sampleDataSettings": {
+                            "lastTestDate": "2025-05-27T09:01:11.311Z",
+                            "sampleDataFileId": "r464evVTB3mEBxWlswJF9",
+                            "sampleDataInputFileId": "8pFtkflCbsienum8E23O9"
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_16",
+                          "skip": false,
+                          "type": "CODE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "jsonArray": "{{step_10}}"
+                            },
+                            "sourceCode": {
+                              "code": "export const code = async (inputs) => {\n  const data = inputs.jsonArray;\n\n  if (!Array.isArray(data) || data.length === 0) {\n    return [];\n  }\n\n  // Extract header from the first row\n  const headerRow = data[0];\n\n  // Filter rows with uptime < 100%\n  const filteredRows = data.slice(1).filter(item => {\n    const uptimeStr = item.values?.C || '';\n    const uptime = parseFloat(uptimeStr.replace('%', ''));\n    return !isNaN(uptime) && uptime < 100;\n  });\n\n  // Return header + filtered rows\n  return [headerRow, ...filteredRows];\n};",
+                              "packageJson": "{}"
+                            },
+                            "propertySettings": {
+                              "jsonArray": {
+                                "type": "MANUAL"
+                              }
+                            },
+                            "sampleDataSettings": {
+                              "lastTestDate": "2025-06-11T10:06:00.343Z",
+                              "sampleDataFileId": "By7ieBZs0gSJouaf43Sbi",
+                              "sampleDataInputFileId": "3Y9bcRJZ4W462ut8eMWIH"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_12",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "auth": "{{connections['straico']}}",
+                                "model": "openai/o3-mini-high",
+                                "prompt": "You are a Server Administrator responsible for maintaining the performance and reliability of critical web infrastructure. You have received a JSON dataset exported from Uptime Robot containing information on the health of several monitored endpoints.  This JSON only contains monitors with less than 100% Uptime ratio.\nYour task is to generate a detailed downtime report that clearly summarizes the performance, incidents, and resolutions for each monitor. \n\nWrite a professional and structured report with the following sections:\n1. Executive Summary – Briefly outline the overall downtime performance and any major incidents.\n2. Monitor-wise Breakdown – For each monitor:\n   - Name & URL\n   - Uptime Percentage\n   - Total Downtime Duration\n   - Primary Reason for Downtime\n   - Error Code & Technical Notes\n   - Resolution Status\n   - Additional Comments\n3. Incident Analysis (if applicable) – Highlight recurring or major issues, their frequency, and potential root causes.\n4. Recommendations – Suggest actionable steps to prevent similar downtimes in the future or improve current monitoring.\nKeep the tone formal and concise, use technical language appropriately, and assume the audience includes both IT managers and non-technical stakeholders. Format the report for clarity, using bullet points or tables where helpful. This uptime report is for {{step_6}}, so include an appropriate title at the top of the report. Do not use dashes to separate the sections. Your response should start directly from the report document, do not include filler language. The output should be formatted clearly and appropriately using Markdown.\n\nHere is the input JSON:  \n{{step_16}}",
+                                "fileUrls": [],
+                                "imageUrls": [],
+                                "youtubeUrls": [],
+                                "displayTranscripts": false
+                              },
+                              "pieceName": "@activepieces/piece-straico",
+                              "actionName": "prompt_completion",
+                              "pieceVersion": "~0.1.5",
+                              "propertySettings": {
+                                "auth": {
+                                  "type": "MANUAL"
+                                },
+                                "model": {
+                                  "type": "MANUAL"
+                                },
+                                "prompt": {
+                                  "type": "MANUAL"
+                                },
+                                "fileUrls": {
+                                  "type": "MANUAL"
+                                },
+                                "imageUrls": {
+                                  "type": "MANUAL"
+                                },
+                                "youtubeUrls": {
+                                  "type": "MANUAL"
+                                },
+                                "displayTranscripts": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_13",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "flavor": "github",
+                                  "tables": true,
+                                  "markdown": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n</head>\n<body>\n{{step_12['content']}}\n</body>\n</html>",
+                                  "noHeaderId": false,
+                                  "headerLevelStart": 1,
+                                  "simpleLineBreaks": false,
+                                  "openLinksInNewWindow": true
+                                },
+                                "pieceName": "@activepieces/piece-text-helper",
+                                "pieceType": "OFFICIAL",
+                                "actionName": "markdown_to_html",
+                                "packageType": "REGISTRY",
+                                "pieceVersion": "~0.4.2",
+                                "propertySettings": {
+                                  "flavor": {
+                                    "type": "MANUAL"
+                                  },
+                                  "tables": {
+                                    "type": "MANUAL"
+                                  },
+                                  "markdown": {
+                                    "type": "MANUAL"
+                                  },
+                                  "noHeaderId": {
+                                    "type": "MANUAL"
+                                  },
+                                  "headerLevelStart": {
+                                    "type": "MANUAL"
+                                  },
+                                  "simpleLineBreaks": {
+                                    "type": "MANUAL"
+                                  },
+                                  "openLinksInNewWindow": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "sampleDataSettings": {
+                                  "lastTestDate": "2025-05-27T09:39:48.679Z",
+                                  "sampleDataFileId": "tHPGnQqHxaWRbJN88E3vL",
+                                  "sampleDataInputFileId": "sIKasSWaTfPThvZ1yJ250"
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_14",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "content": "{{step_13}}",
+                                    "encoding": "utf8",
+                                    "fileName": "{{step_6}} (UptimeRobot)"
+                                  },
+                                  "pieceName": "@activepieces/piece-file-helper",
+                                  "pieceType": "OFFICIAL",
+                                  "actionName": "createFile",
+                                  "packageType": "REGISTRY",
+                                  "pieceVersion": "~0.1.9",
+                                  "propertySettings": {
+                                    "content": {
+                                      "type": "MANUAL"
+                                    },
+                                    "encoding": {
+                                      "type": "MANUAL"
+                                    },
+                                    "fileName": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "sampleDataSettings": {
+                                    "lastTestDate": "2025-05-27T09:40:01.336Z",
+                                    "sampleDataFileId": "yDBFYOFIW5XmRo729Fub9",
+                                    "sampleDataInputFileId": "xoXVGuAlXYpG461UWz1BA"
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_15",
+                                  "skip": false,
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['AI_google-drive']}}",
+                                      "file": "{{step_14['url']}}",
+                                      "fileName": "{{step_14['fileName']}}.docx",
+                                      "parentFolder": "1J7Wa1AS4LuJjZdfM8_knGjxMl4n2mzOm",
+                                      "include_team_drives": true
+                                    },
+                                    "pieceName": "@activepieces/piece-google-drive",
+                                    "pieceType": "OFFICIAL",
+                                    "actionName": "upload_gdrive_file",
+                                    "packageType": "REGISTRY",
+                                    "pieceVersion": "~0.5.47",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "file": {
+                                        "type": "MANUAL"
+                                      },
+                                      "fileName": {
+                                        "type": "MANUAL"
+                                      },
+                                      "parentFolder": {
+                                        "type": "MANUAL"
+                                      },
+                                      "include_team_drives": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "sampleDataSettings": {
+                                      "lastTestDate": "2025-05-27T09:42:56.333Z",
+                                      "sampleDataFileId": "fgGCH1V9vToKHFN69pRWZ",
+                                      "sampleDataInputFileId": "8DaIcwSqxfWpeu4o0DZC5"
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": false
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_7",
+                                    "skip": false,
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "auth": "{{connections['slack']}}",
+                                        "text": "Hey! @channel\n\nThe weekly uptime report for {{step_6}} is now available.\n\nPlease find the link to the Report and Spreadsheet below:\nUptime Report Spreadsheet: https://docs.google.com/spreadsheets/d/{{step_3['spreadsheetId']}}/edit?usp=sharing\n\nUptime report document: https://docs.google.com/document/d/{{step_15['id']}}/edit?usp=drive_link\n",
+                                        "channel": "C08PEHXTQGJ"
+                                      },
+                                      "pieceName": "@activepieces/piece-slack",
+                                      "pieceType": "OFFICIAL",
+                                      "actionName": "send_channel_message",
+                                      "packageType": "REGISTRY",
+                                      "pieceVersion": "~0.8.6",
+                                      "propertySettings": {
+                                        "auth": {
+                                          "type": "MANUAL"
+                                        },
+                                        "text": {
+                                          "type": "MANUAL"
+                                        },
+                                        "channel": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "sampleDataSettings": {
+                                        "lastTestDate": "2025-05-27T09:45:11.160Z",
+                                        "sampleDataFileId": "NOiCJoVWykBXaelNY7zIk",
+                                        "sampleDataInputFileId": "T8H0K3ir07M7i0SfwhhLb"
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": false
+                                        }
+                                      }
+                                    },
+                                    "nextAction": {
+                                      "name": "step_8",
+                                      "skip": false,
+                                      "type": "PIECE",
+                                      "valid": true,
+                                      "settings": {
+                                        "input": {
+                                          "auth": "{{connections['slack']}}",
+                                          "text": "Hey! @channel\n\nThe weekly uptime report for {{step_6}} is now available.\n\nPlease find the link to the Report and Spreadsheet below:\nUptime Report Spreadsheet: https://docs.google.com/spreadsheets/d/{{step_3['spreadsheetId']}}/edit?usp=sharing\n\nUptime report document: https://docs.google.com/document/d/{{step_15['id']}}/edit?usp=drive_link",
+                                          "channel": "C07NNUA4VA5"
+                                        },
+                                        "pieceName": "@activepieces/piece-slack",
+                                        "pieceType": "OFFICIAL",
+                                        "actionName": "send_channel_message",
+                                        "packageType": "REGISTRY",
+                                        "pieceVersion": "~0.8.6",
+                                        "propertySettings": {
+                                          "auth": {
+                                            "type": "MANUAL"
+                                          },
+                                          "text": {
+                                            "type": "MANUAL"
+                                          },
+                                          "channel": {
+                                            "type": "MANUAL"
+                                          }
+                                        },
+                                        "sampleDataSettings": {
+                                          "lastTestDate": "2025-05-27T09:45:24.944Z",
+                                          "sampleDataFileId": "TkxHCP72cUUKz5GvCk8Bh",
+                                          "sampleDataInputFileId": "P4rle1SOljO7T4iLjpPUr"
+                                        },
+                                        "errorHandlingOptions": {
+                                          "retryOnFailure": {
+                                            "value": false
+                                          },
+                                          "continueOnFailure": {
+                                            "value": false
+                                          }
+                                        }
+                                      },
+                                      "displayName": "Send Message To A Channel"
+                                    },
+                                    "displayName": "Send Message To A Channel"
+                                  },
+                                  "displayName": "Upload file"
+                                },
+                                "displayName": "Create file"
+                              },
+                              "displayName": "Markdown to HTML"
+                            },
+                            "displayName": "Ask AI"
+                          },
+                          "displayName": "Filter downtime"
+                        },
+                        "displayName": "Get Uptime Sheet"
+                      },
+                      "displayName": "Generate Random Number"
+                    },
+                    "displayName": "Loop on Items",
+                    "firstLoopAction": {
+                      "name": "step_4",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['AI-drive-GoogleSheets']}}",
+                          "values": {
+                            "values": [
+                              {
+                                "A": "{{step_2['item']['friendly_name']}}",
+                                "B": "{{step_2['item']['url']}}",
+                                "C": "{{step_2['item']['custom_uptime_ratio']}}",
+                                "D": "{{step_2['item']['custom_down_durations']}}",
+                                "E": "{{step_2['item']['log']}}",
+                                "F": "{{step_2['item']['status']}}",
+                                "G": "{{step_2['item']['error_code']}}",
+                                "H": ""
+                              }
+                            ]
+                          },
+                          "sheetId": "{{step_3['id']}}",
+                          "as_string": true,
+                          "overwrite": false,
+                          "input_type": "column_names",
+                          "spreadsheetId": "1472IL1TehyK6NnWsGhacdE2WBs9YYvN-xA0sSjxiJow",
+                          "includeTeamDrives": true,
+                          "check_for_duplicate": false,
+                          "check_for_duplicate_column": {}
+                        },
+                        "pieceName": "@activepieces/piece-google-sheets",
+                        "pieceType": "OFFICIAL",
+                        "actionName": "google-sheets-insert-multiple-rows",
+                        "packageType": "REGISTRY",
+                        "pieceVersion": "~0.12.7",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "values": {
+                            "type": "MANUAL"
+                          },
+                          "sheetId": {
+                            "type": "DYNAMIC"
+                          },
+                          "as_string": {
+                            "type": "MANUAL"
+                          },
+                          "overwrite": {
+                            "type": "MANUAL"
+                          },
+                          "input_type": {
+                            "type": "MANUAL"
+                          },
+                          "spreadsheetId": {
+                            "type": "MANUAL"
+                          },
+                          "includeTeamDrives": {
+                            "type": "MANUAL"
+                          },
+                          "check_for_duplicate": {
+                            "type": "MANUAL"
+                          },
+                          "check_for_duplicate_column": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "sampleDataSettings": {
+                          "lastTestDate": "2025-04-17T10:27:35.125Z",
+                          "sampleDataFileId": "wgm3SNwyD7rozOjcCfVM0",
+                          "sampleDataInputFileId": "drcIhfcksuasJFyZn1YgH"
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "displayName": "Insert Multiple Rows"
+                    }
+                  },
+                  "displayName": "Create Worksheet"
+                },
+                "displayName": "Get Month & Week"
+              },
+              "displayName": "Format units"
+            },
+            "displayName": "Get all Monitors 2"
+          },
+          "displayName": "Get all Monitors main"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}

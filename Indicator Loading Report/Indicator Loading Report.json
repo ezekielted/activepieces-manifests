@@ -1,0 +1,798 @@
+﻿{
+  "name": "MSDAT Indicator Loading Report",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "author": "Ezekiel Ted",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-schedule",
+    "@activepieces/piece-date-helper",
+    "@activepieces/piece-json",
+    "@activepieces/piece-http",
+    "@activepieces/piece-store",
+    "@activepieces/piece-open-router",
+    "@activepieces/piece-text-helper",
+    "@activepieces/piece-file-helper",
+    "@activepieces/piece-google-drive",
+    "@activepieces/piece-slack"
+  ],
+  "status": "PUBLISHED",
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "UTMvIXPvM8uZ3nH6VAtTa"
+  },
+  "flows": [
+    {
+      "displayName": "MSDAT Indicator Loading Report",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "Every Day",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "propertySettings": {
+            "timezone": {
+              "type": "MANUAL"
+            },
+            "hour_of_the_day": {
+              "type": "MANUAL"
+            },
+            "run_on_weekends": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-schedule",
+          "pieceVersion": "0.1.13",
+          "input": {
+            "timezone": "Africa/Lagos",
+            "hour_of_the_day": 10,
+            "run_on_weekends": true
+          },
+          "sampleData": {},
+          "triggerName": "every_day"
+        },
+        "nextAction": {
+          "name": "step_14",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "timeZone": "Africa/Lagos",
+              "timeFormat": "MMMM DD YYYY"
+            },
+            "pieceName": "@activepieces/piece-date-helper",
+            "actionName": "get_current_date",
+            "sampleData": {},
+            "pieceVersion": "0.1.19",
+            "propertySettings": {
+              "timeZone": {
+                "type": "MANUAL"
+              },
+              "timeFormat": {
+                "type": "MANUAL"
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_1",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "text": "[\n  { \"name\": \"Health facilities\", \"id\": 6 },\n  { \"name\": \"Health Financing\", \"id\": 7 },\n  { \"name\": \"Health Workforce\", \"id\": 5 },\n  { \"name\": \"Health Service Access\", \"id\": 2 },\n  { \"name\": \"Health Outcomes and Service Coverage\", \"id\": 4 },\n  { \"name\": \"Advanced Analytics\", \"id\": 367 },\n  { \"name\": \"Demographics\", \"id\": 3 },\n  { \"name\": \"GIS Mapping\", \"id\": 368 }\n]"
+              },
+              "pieceName": "@activepieces/piece-json",
+              "actionName": "convert_text_to_json",
+              "sampleData": {},
+              "pieceVersion": "0.0.9",
+              "propertySettings": {
+                "text": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_15",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "url": "https://msdat-api.fmohconnect.gov.ng/api/auth/frontend-token/",
+                  "body": {},
+                  "method": "POST",
+                  "headers": {
+                    "x-frontend-auth": "0fd1d6de7e6b5ee85ef251e788aba0a960e5b6eeaa148c94471f1dd18fe58cbf",
+                    "x-frontend-key-id": "msdat_key_v1"
+                  },
+                  "authType": "NONE",
+                  "stopFlow": false,
+                  "body_type": "none",
+                  "use_proxy": false,
+                  "authFields": {},
+                  "failureMode": "continue_none",
+                  "queryParams": {},
+                  "proxy_settings": {},
+                  "response_is_binary": false
+                },
+                "pieceName": "@activepieces/piece-http",
+                "actionName": "send_request",
+                "sampleData": {},
+                "pieceVersion": "0.9.5",
+                "propertySettings": {
+                  "url": {
+                    "type": "MANUAL"
+                  },
+                  "body": {
+                    "type": "MANUAL",
+                    "schema": {}
+                  },
+                  "method": {
+                    "type": "MANUAL"
+                  },
+                  "headers": {
+                    "type": "MANUAL"
+                  },
+                  "timeout": {
+                    "type": "MANUAL"
+                  },
+                  "authType": {
+                    "type": "MANUAL"
+                  },
+                  "stopFlow": {
+                    "type": "MANUAL"
+                  },
+                  "body_type": {
+                    "type": "MANUAL"
+                  },
+                  "use_proxy": {
+                    "type": "MANUAL"
+                  },
+                  "authFields": {
+                    "type": "MANUAL",
+                    "schema": {}
+                  },
+                  "failureMode": {
+                    "type": "MANUAL"
+                  },
+                  "queryParams": {
+                    "type": "MANUAL"
+                  },
+                  "proxy_settings": {
+                    "type": "MANUAL",
+                    "schema": {}
+                  },
+                  "response_is_binary": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "nextAction": {
+                "name": "step_2",
+                "skip": false,
+                "type": "LOOP_ON_ITEMS",
+                "valid": true,
+                "settings": {
+                  "items": "{{step_1}}",
+                  "sampleData": {}
+                },
+                "nextAction": {
+                  "name": "step_6",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "key": "missing_indicators",
+                      "store_scope": "RUN",
+                      "defaultValue": "[]"
+                    },
+                    "pieceName": "@activepieces/piece-store",
+                    "actionName": "get",
+                    "sampleData": {},
+                    "pieceVersion": "0.6.10",
+                    "propertySettings": {
+                      "key": {
+                        "type": "MANUAL"
+                      },
+                      "store_scope": {
+                        "type": "MANUAL"
+                      },
+                      "defaultValue": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_11",
+                    "skip": false,
+                    "type": "PIECE",
+                    "valid": true,
+                    "settings": {
+                      "input": {
+                        "key": "indicator_count",
+                        "store_scope": "RUN",
+                        "defaultValue": "[]"
+                      },
+                      "pieceName": "@activepieces/piece-store",
+                      "actionName": "get",
+                      "sampleData": {},
+                      "pieceVersion": "0.6.10",
+                      "propertySettings": {
+                        "key": {
+                          "type": "MANUAL"
+                        },
+                        "store_scope": {
+                          "type": "MANUAL"
+                        },
+                        "defaultValue": {
+                          "type": "MANUAL"
+                        }
+                      },
+                      "errorHandlingOptions": {
+                        "retryOnFailure": {
+                          "value": false
+                        },
+                        "continueOnFailure": {
+                          "value": false
+                        }
+                      }
+                    },
+                    "nextAction": {
+                      "name": "step_12",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "auth": "{{connections['Vz40UvZXDfnI8JSP4IOyB']}}",
+                          "model": "openai/o4-mini",
+                          "prompt": "Write a concise but comprehensive introductory paragraph summarizing the dashboards that have indicators not loading on the MSDAT platform.\nYou will be provided with pairs of dashboard names and their respective counts of indicators not loading. The inputs are found below;\n\n{{step_11}}\n\nExample format:\nThis daily report provides an overview of the indicators not loading on the MSDAT platform, organized by dashboard. The [dashboard_name] dashboard has a total of [count] indicators not loading, the [dashboard_name] dashboard has [count], and so on. The section below provides more details on the affected indicators. Relevant teams are encouraged to review and address these issues promptly to ensure data completeness.\"\n\nKeep the tone formal and concise, suitable for inclusion in a monitoring report. Do not include filler language in your response."
+                        },
+                        "pieceName": "@activepieces/piece-open-router",
+                        "actionName": "ask-lmm",
+                        "sampleData": {},
+                        "pieceVersion": "0.0.16",
+                        "propertySettings": {
+                          "auth": {
+                            "type": "MANUAL"
+                          },
+                          "topP": {
+                            "type": "MANUAL"
+                          },
+                          "model": {
+                            "type": "MANUAL"
+                          },
+                          "prompt": {
+                            "type": "MANUAL"
+                          },
+                          "maxTokens": {
+                            "type": "MANUAL"
+                          },
+                          "temperature": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_13",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "flavor": "github",
+                            "tables": true,
+                            "markdown": "{{step_12}}",
+                            "noHeaderId": false,
+                            "headerLevelStart": 1,
+                            "simpleLineBreaks": false,
+                            "openLinksInNewWindow": false
+                          },
+                          "pieceName": "@activepieces/piece-text-helper",
+                          "actionName": "markdown_to_html",
+                          "sampleData": {},
+                          "pieceVersion": "0.4.9",
+                          "propertySettings": {
+                            "flavor": {
+                              "type": "MANUAL"
+                            },
+                            "tables": {
+                              "type": "MANUAL"
+                            },
+                            "markdown": {
+                              "type": "MANUAL"
+                            },
+                            "noHeaderId": {
+                              "type": "MANUAL"
+                            },
+                            "headerLevelStart": {
+                              "type": "MANUAL"
+                            },
+                            "simpleLineBreaks": {
+                              "type": "MANUAL"
+                            },
+                            "openLinksInNewWindow": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "nextAction": {
+                          "name": "step_7",
+                          "skip": false,
+                          "type": "CODE",
+                          "valid": true,
+                          "settings": {
+                            "input": {
+                              "rawObj": "{{step_6}}"
+                            },
+                            "sampleData": {},
+                            "sourceCode": {
+                              "code": "export const code = async (inputs) => {\n  const { rawObj } = inputs;\n\n  if (!Array.isArray(rawObj)) {\n    throw new Error(\"Expected rawObj to be an array of strings.\");\n  }\n\n  const parsedData = rawObj.map((item) => {\n    try {\n      // Clean up: remove any weird trailing commas or line breaks\n      const cleaned = item\n        .trim()\n        .replace(/\\n/g, \"\")\n        .replace(/\\r/g, \"\")\n        .replace(/\\s{2,}/g, \" \")\n        // Replace unescaped inner quotes for dashboard_id JSONs\n        .replace(/\"(\\{[^}]+\\})\"/g, (match, inner) =>\n          JSON.stringify(inner.replace(/\\\\\"/g, '\"'))\n        );\n\n      // Parse outer JSON array\n      const arr = JSON.parse(cleaned);\n\n      const indicator_id =\n        arr.find((x) => x.indicator_id)?.indicator_id || \"\";\n      const indicator_name =\n        arr.find((x) => x.indicator_name)?.indicator_name || \"\";\n\n      // Parse dashboard JSON safely\n      let dashboard_id = \"\";\n      let dashboard_name =\n        arr.find((x) => x.dashboard_name)?.dashboard_name || \"\";\n\n      const dashboardRaw = arr.find((x) => x.dashboard_id)?.dashboard_id;\n      if (dashboardRaw) {\n        try {\n          const dashObj =\n            typeof dashboardRaw === \"string\"\n              ? JSON.parse(dashboardRaw)\n              : dashboardRaw;\n          dashboard_id = dashObj.id || \"\";\n          if (!dashboard_name) dashboard_name = dashObj.name || \"\";\n        } catch (e) {\n          dashboard_id = \"\";\n        }\n      }\n\n      return { dashboard_id, dashboard_name, indicator_id, indicator_name };\n    } catch (err) {\n      console.error(\"Error parsing item:\", item, err);\n      return {\n        dashboard_id: \"\",\n        dashboard_name: \"\",\n        indicator_id: \"\",\n        indicator_name: \"\",\n      };\n    }\n  });\n\n  // Build HTML table\n  const tableHeaders = `\n    <tr>\n      <th>Dashboard ID</th>\n      <th>Dashboard Name</th>\n      <th>Indicator ID</th>\n      <th>Indicator Name</th>\n    </tr>\n  `;\n\n  const tableRows = parsedData\n    .map(\n      (row) => `\n      <tr>\n        <td>${row.dashboard_id}</td>\n        <td>${row.dashboard_name}</td>\n        <td>${row.indicator_id}</td>\n        <td>${row.indicator_name}</td>\n      </tr>`\n    )\n    .join(\"\");\n\n  const htmlTable = `\n    <table border=\"1\" cellspacing=\"0\" cellpadding=\"6\" style=\"border-collapse: collapse; width: 100%;\">\n      ${tableHeaders}\n      ${tableRows}\n    </table>\n  `;\n\n  return htmlTable;\n};",
+                              "packageJson": "{}"
+                            },
+                            "errorHandlingOptions": {
+                              "retryOnFailure": {
+                                "value": false
+                              },
+                              "continueOnFailure": {
+                                "value": false
+                              }
+                            }
+                          },
+                          "nextAction": {
+                            "name": "step_8",
+                            "skip": false,
+                            "type": "PIECE",
+                            "valid": true,
+                            "settings": {
+                              "input": {
+                                "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>MSDAT Indicator Loading Report</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      text-align: justify;\n      line-height: 1.6;\n      margin: 30px;\n    }\n    h2 {\n      text-align: center;\n    }\n    p {\n      margin-bottom: 5px;\n    }\n    table {\n      width: 100%;\n      border-collapse: collapse;\n      margin-top: 10px;\n    }\n    th, td {\n      border: 1px solid #000;\n      text-align: left;\n    }\n  </style>\n</head>\n<body>\n  <h2>MSDAT Indicator Loading Report</h2>\n  <p>Date: {{step_14['result']}}</p>\n  <p>{{step_13}}</p>\n  <div>{{step_7}}</div>\n</body>\n</html>",
+                                "encoding": "utf8",
+                                "fileName": "MSDAT Indicator Loading Report ({{step_14['result']}}).docx"
+                              },
+                              "pieceName": "@activepieces/piece-file-helper",
+                              "actionName": "createFile",
+                              "sampleData": {},
+                              "pieceVersion": "0.1.14",
+                              "propertySettings": {
+                                "content": {
+                                  "type": "MANUAL"
+                                },
+                                "encoding": {
+                                  "type": "MANUAL"
+                                },
+                                "fileName": {
+                                  "type": "MANUAL"
+                                }
+                              },
+                              "errorHandlingOptions": {
+                                "retryOnFailure": {
+                                  "value": false
+                                },
+                                "continueOnFailure": {
+                                  "value": false
+                                }
+                              }
+                            },
+                            "nextAction": {
+                              "name": "step_9",
+                              "skip": false,
+                              "type": "PIECE",
+                              "valid": true,
+                              "settings": {
+                                "input": {
+                                  "auth": "{{connections['AI_google-drive']}}",
+                                  "file": "{{step_8['url']}}",
+                                  "fileName": "{{step_8['fileName']}}",
+                                  "parentFolder": "1hw6FXtL8lT90GCRsWC7EWvJJj1vROqiM",
+                                  "include_team_drives": true
+                                },
+                                "pieceName": "@activepieces/piece-google-drive",
+                                "actionName": "upload_gdrive_file",
+                                "sampleData": {},
+                                "pieceVersion": "0.5.52",
+                                "propertySettings": {
+                                  "auth": {
+                                    "type": "MANUAL"
+                                  },
+                                  "file": {
+                                    "type": "MANUAL"
+                                  },
+                                  "fileName": {
+                                    "type": "MANUAL"
+                                  },
+                                  "parentFolder": {
+                                    "type": "MANUAL"
+                                  },
+                                  "include_team_drives": {
+                                    "type": "MANUAL"
+                                  }
+                                },
+                                "errorHandlingOptions": {
+                                  "retryOnFailure": {
+                                    "value": false
+                                  },
+                                  "continueOnFailure": {
+                                    "value": false
+                                  }
+                                }
+                              },
+                              "nextAction": {
+                                "name": "step_17",
+                                "skip": false,
+                                "type": "PIECE",
+                                "valid": true,
+                                "settings": {
+                                  "input": {
+                                    "markdown": "Hello! <!channel>\n\nPlease find attached a report on the indicators not loading on the MSDAT platform.\n\n[{{step_8['fileName']}}](https://docs.google.com/document/d/{{step_9['id']}}/edit)"
+                                  },
+                                  "pieceName": "@activepieces/piece-slack",
+                                  "actionName": "markdownToSlackFormat",
+                                  "sampleData": {},
+                                  "pieceVersion": "0.10.16",
+                                  "propertySettings": {
+                                    "markdown": {
+                                      "type": "MANUAL"
+                                    }
+                                  },
+                                  "errorHandlingOptions": {
+                                    "retryOnFailure": {
+                                      "value": false
+                                    },
+                                    "continueOnFailure": {
+                                      "value": false
+                                    }
+                                  }
+                                },
+                                "nextAction": {
+                                  "name": "step_18",
+                                  "type": "PIECE",
+                                  "valid": true,
+                                  "settings": {
+                                    "input": {
+                                      "auth": "{{connections['slack']}}",
+                                      "text": "{{step_17}}",
+                                      "channel": "GHWMZQS5N",
+                                      "username": "msdat-bot"
+                                    },
+                                    "pieceName": "@activepieces/piece-slack",
+                                    "actionName": "send_channel_message",
+                                    "sampleData": {},
+                                    "pieceVersion": "0.7.15",
+                                    "propertySettings": {
+                                      "auth": {
+                                        "type": "MANUAL"
+                                      },
+                                      "text": {
+                                        "type": "MANUAL"
+                                      },
+                                      "blocks": {
+                                        "type": "DYNAMIC"
+                                      },
+                                      "channel": {
+                                        "type": "MANUAL"
+                                      },
+                                      "username": {
+                                        "type": "MANUAL"
+                                      }
+                                    },
+                                    "errorHandlingOptions": {
+                                      "retryOnFailure": {
+                                        "value": false
+                                      },
+                                      "continueOnFailure": {
+                                        "value": true
+                                      }
+                                    }
+                                  },
+                                  "nextAction": {
+                                    "name": "step_16",
+                                    "type": "PIECE",
+                                    "valid": true,
+                                    "settings": {
+                                      "input": {
+                                        "auth": "{{connections['slack']}}",
+                                        "text": "{{step_17}}",
+                                        "channel": "C07NNUA4VA5",
+                                        "username": "msdat-bot"
+                                      },
+                                      "pieceName": "@activepieces/piece-slack",
+                                      "actionName": "send_channel_message",
+                                      "sampleData": {},
+                                      "pieceVersion": "0.7.15",
+                                      "propertySettings": {
+                                        "auth": {
+                                          "type": "MANUAL"
+                                        },
+                                        "text": {
+                                          "type": "MANUAL"
+                                        },
+                                        "blocks": {
+                                          "type": "DYNAMIC"
+                                        },
+                                        "channel": {
+                                          "type": "MANUAL"
+                                        },
+                                        "username": {
+                                          "type": "MANUAL"
+                                        }
+                                      },
+                                      "errorHandlingOptions": {
+                                        "retryOnFailure": {
+                                          "value": false
+                                        },
+                                        "continueOnFailure": {
+                                          "value": true
+                                        }
+                                      }
+                                    },
+                                    "displayName": "Send Message To Automation logs"
+                                  },
+                                  "displayName": "Send Message To a Channel"
+                                },
+                                "displayName": "Markdown to Slack format"
+                              },
+                              "displayName": "Upload file"
+                            },
+                            "displayName": "Create file"
+                          },
+                          "displayName": "Generate Table"
+                        },
+                        "displayName": "Markdown to HTML"
+                      },
+                      "displayName": "Ask LLM"
+                    },
+                    "displayName": "Get Count"
+                  },
+                  "displayName": "Get Indicators"
+                },
+                "displayName": "Loop on Items",
+                "firstLoopAction": {
+                  "name": "step_3",
+                  "skip": false,
+                  "type": "PIECE",
+                  "valid": true,
+                  "settings": {
+                    "input": {
+                      "url": "https://msdat-api.fmohconnect.gov.ng/api/dashboard-data/indicators-without-data/{{step_2['item']['id']}}/",
+                      "body": {},
+                      "method": "GET",
+                      "headers": {
+                        "x-frontend-jwt": "Token {{step_15['body']['token']}}"
+                      },
+                      "authType": "NONE",
+                      "stopFlow": false,
+                      "body_type": "none",
+                      "use_proxy": false,
+                      "authFields": {},
+                      "failureMode": "continue_none",
+                      "queryParams": {},
+                      "proxy_settings": {},
+                      "response_is_binary": false
+                    },
+                    "pieceName": "@activepieces/piece-http",
+                    "actionName": "send_request",
+                    "sampleData": {},
+                    "pieceVersion": "0.9.5",
+                    "propertySettings": {
+                      "url": {
+                        "type": "MANUAL"
+                      },
+                      "body": {
+                        "type": "MANUAL",
+                        "schema": {}
+                      },
+                      "method": {
+                        "type": "MANUAL"
+                      },
+                      "headers": {
+                        "type": "MANUAL"
+                      },
+                      "timeout": {
+                        "type": "MANUAL"
+                      },
+                      "authType": {
+                        "type": "MANUAL"
+                      },
+                      "stopFlow": {
+                        "type": "MANUAL"
+                      },
+                      "body_type": {
+                        "type": "MANUAL"
+                      },
+                      "use_proxy": {
+                        "type": "MANUAL"
+                      },
+                      "authFields": {
+                        "type": "MANUAL",
+                        "schema": {}
+                      },
+                      "failureMode": {
+                        "type": "MANUAL"
+                      },
+                      "queryParams": {
+                        "type": "MANUAL"
+                      },
+                      "proxy_settings": {
+                        "type": "MANUAL",
+                        "schema": {}
+                      },
+                      "response_is_binary": {
+                        "type": "MANUAL"
+                      }
+                    },
+                    "errorHandlingOptions": {
+                      "retryOnFailure": {
+                        "value": false
+                      },
+                      "continueOnFailure": {
+                        "value": false
+                      }
+                    }
+                  },
+                  "nextAction": {
+                    "name": "step_4",
+                    "skip": false,
+                    "type": "LOOP_ON_ITEMS",
+                    "valid": true,
+                    "settings": {
+                      "items": "{{step_3['body']['indicators']}}",
+                      "sampleData": {}
+                    },
+                    "displayName": "Loop on Items",
+                    "firstLoopAction": {
+                      "name": "step_5",
+                      "skip": false,
+                      "type": "PIECE",
+                      "valid": true,
+                      "settings": {
+                        "input": {
+                          "key": "missing_indicators",
+                          "value": [
+                            "[\n  {\n    \"indicator_id\": \"{{step_4['item']['id']}}\"\n  },\n  {\n    \"indicator_name\": \"{{step_4['item']['full_name']}}\"\n  },\n  {\n    \"dashboard_id\": \"{{step_2['item']}}\"\n  },\n  {\n    \"dashboard_name\": \"{{step_2['item']['name']}}\"\n  }\n]\n"
+                          ],
+                          "store_scope": "RUN",
+                          "ignore_if_exists": true
+                        },
+                        "pieceName": "@activepieces/piece-store",
+                        "actionName": "add_to_list",
+                        "sampleData": {},
+                        "pieceVersion": "0.6.10",
+                        "propertySettings": {
+                          "key": {
+                            "type": "MANUAL"
+                          },
+                          "value": {
+                            "type": "MANUAL"
+                          },
+                          "store_scope": {
+                            "type": "MANUAL"
+                          },
+                          "ignore_if_exists": {
+                            "type": "MANUAL"
+                          }
+                        },
+                        "errorHandlingOptions": {
+                          "retryOnFailure": {
+                            "value": false
+                          },
+                          "continueOnFailure": {
+                            "value": false
+                          }
+                        }
+                      },
+                      "nextAction": {
+                        "name": "step_10",
+                        "skip": false,
+                        "type": "PIECE",
+                        "valid": true,
+                        "settings": {
+                          "input": {
+                            "key": "indicator_count",
+                            "value": [
+                              "[\n  {\n    \"dashboard_name\": \"{{step_2['item']['name']}}\"\n  },\n  {\n    \"missing_indicators_count\": \"{{step_3['body']['count']}}\"\n  }\n]"
+                            ],
+                            "store_scope": "RUN",
+                            "ignore_if_exists": true
+                          },
+                          "pieceName": "@activepieces/piece-store",
+                          "actionName": "add_to_list",
+                          "sampleData": {},
+                          "pieceVersion": "0.6.10",
+                          "propertySettings": {
+                            "key": {
+                              "type": "MANUAL"
+                            },
+                            "value": {
+                              "type": "MANUAL"
+                            },
+                            "store_scope": {
+                              "type": "MANUAL"
+                            },
+                            "ignore_if_exists": {
+                              "type": "MANUAL"
+                            }
+                          },
+                          "errorHandlingOptions": {
+                            "retryOnFailure": {
+                              "value": false
+                            },
+                            "continueOnFailure": {
+                              "value": false
+                            }
+                          }
+                        },
+                        "displayName": "Add Count to List"
+                      },
+                      "displayName": "Add Indicators to list"
+                    }
+                  },
+                  "displayName": "Send HTTP request"
+                }
+              },
+              "displayName": "Get MSDAT Token"
+            },
+            "displayName": "Dashboard ids"
+          },
+          "displayName": "Get Current Date"
+        }
+      },
+      "valid": true,
+      "schemaVersion": "16",
+      "notes": []
+    }
+  ]
+}
