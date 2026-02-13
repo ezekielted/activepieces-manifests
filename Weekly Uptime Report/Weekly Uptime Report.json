@@ -76,7 +76,7 @@
               "use_proxy": false,
               "queryParams": {
                 "format": "json",
-                "api_key": "u306653-ecccb7199d41624795c5dde7"
+                "api_key": "REPLACE_WITH_UPTIMEROBOT_API_KEY"
               },
               "proxy_settings": {}
             },
@@ -153,7 +153,7 @@
                 "use_proxy": false,
                 "queryParams": {
                   "format": "json",
-                  "api_key": "u2320975-fe8106e36a1fdb68a5677754"
+                  "api_key": "REPLACE_WITH_UPTIMEROBOT_API_KEY"
                 },
                 "proxy_settings": {}
               },

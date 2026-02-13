@@ -122,8 +122,8 @@
                   "body": {},
                   "method": "POST",
                   "headers": {
-                    "x-frontend-auth": "0fd1d6de7e6b5ee85ef251e788aba0a960e5b6eeaa148c94471f1dd18fe58cbf",
-                    "x-frontend-key-id": "msdat_key_v1"
+                    "x-frontend-auth": "REPLACE_WITH_FRONTEND_AUTH",
+                    "x-frontend-key-id": "REPLACE_WITH_FRONTEND_KEY_ID"
                   },
                   "authType": "NONE",
                   "stopFlow": false,
